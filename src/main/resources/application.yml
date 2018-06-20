@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: "CI-droid"
+  main.banner-mode: LOG
+  rabbitmq:
+      virtual-host: ${ENVNAME}
+      username: ${RABBITMQ_USER}
+      password: ${RABBITMQ_PASSWORD}
+      addresses: ${RABBITMQ_URL}
+
+  cloud:
+    stream:
+      default-binder: rabbit
+      bindings:
+        push-on-default-branch:
+          destination: ${user.name}.ci-droid.github-push-events.default-branch.v1
+          content-type: application/json
+        pull-request-event:
+          destination: ${user.name}.ci-droid.github-pull-request-events.v1
+          content-type: application/json
+        actions-to-perform:
+          destination: ${user.name}.ci-droid.actions-to-perform.v1
+          content-type: application/json
+
+#repositoriesToProcess:
+#  included:
+#    - "a-repo-to-include"
+
+
+logging:
+  level:
+      com.societegenerale.cidroid: INFO
+
+

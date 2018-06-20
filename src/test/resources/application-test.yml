@@ -1,0 +1,4 @@
+gitHub.url: "http://localhost:9900"
+
+notifiers:
+  http.targetUrl: "http://localhost:9901/notify"

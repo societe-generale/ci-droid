@@ -1,0 +1,7 @@
+spring:
+  rabbitmq:
+    addresses: your_rabbitMq_broker
+    username: guest
+    password: guest
+    virtual-host: dev
+    ssl.enabled: false

@@ -1,0 +1,25 @@
+{
+  "gitLogin": "someUserName",
+  "gitPassword": "somePassword",
+  "email": "someEmail@someDomain.com",
+  "commitMessage" : "some commit message",
+  "updateAction": {
+    "@class": "com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAction",
+    "initialValue": "from",
+    "newValue": "to"
+  },
+
+  "gitHubInteractionType": {
+    "@c":".PullRequestGitHubInteraction"
+  },
+  "resourcesToUpdate": [
+    {
+      "filePathOnRepo": "someRepo/jenkinsFile",
+      "branchName": "master"
+    },
+    {
+      "filePathOnRepo": "someRepo/jenkinsFile",
+      "branchName": "someBranch"
+    }
+  ]
+}
