@@ -1,6 +1,6 @@
-# CI-Droid tasks-consumer
+# CI-Droid
 
-[![Build Status](https://travis-ci.org/societe-generale/ci-droid.svg?branch=master)](https://travis-ci.org/societe-generale/ci-droid)
+[![Build Status](https://travis-ci.org/societe-generale/ci-droid.svg?branch=master)](https://travis-ci.org/societe-generale/ci-droid) [![Coverage Status](https://coveralls.io/repos/github/societe-generale/ci-droid/badge.svg?branch=master)](https://coveralls.io/github/societe-generale/ci-droid?branch=master)
 
 The dev team best buddy, taking care of all the housekeeping for your repositories and giving tips to developers !
 
