@@ -19,7 +19,7 @@ If it is configured to process the events (there are some filters), it then forw
 - on the default branch
 - on another branch than the default branch - typically for a PR
 
-Several instances of [CI-droid tasks-consumer](https://sgithub.fr.world.socgen/devTeamTooling/CI-droid-tasks-consumer)  service are listening and processing the events on the other side of the channels. 
+Several instances of [CI-droid tasks-consumer](https://github.com/societe-generale/ci-droid-tasks-consumer)  service are listening and processing the events on the other side of the channels. 
 
 #### push on default branch
 
