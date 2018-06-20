@@ -1,5 +1,7 @@
 # CI-Droid tasks-consumer
 
+[![Build Status](https://travis-ci.org/societe-generale/ci-droid.svg?branch=master)](https://travis-ci.org/societe-generale/ci-droid)
+
 The dev team best buddy, taking care of all the housekeeping for your repositories and giving tips to developers !
 
 ### Overall architecture
