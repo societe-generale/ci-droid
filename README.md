@@ -36,7 +36,7 @@ We configure a map associating a file pattern to a small best practice document 
 This feature makes the best practices more "alive", compared to a static document written once, refered initialy, but then rarely updated/remembered : it's very easy to add new pattern / best practice documents mapping, and to update them. 
 It also enables team to save time, as the review comment is immediate and the developer can take actions before the reviewer starts reviewing.
 
-#### adhoc actions
+#### ad-hoc "bulk" actions
 
 Especially for teams that have adopted micro-services architecture, it's not rare to have several dozens of repositories. 
 They usually follow some convention(s), but when there are changes to perform across all repositories (because we upgrade to new Docker version, or we want to upgrade the version of a plugin), making the update consistently across the organization can be a daunting task, spanning over weeks. 
@@ -49,14 +49,9 @@ CI-droid has a specific endpoint that enables the user to request a bulk update.
 - the commit message : when CI-droid is going to commit on user's behalf, what should be the commit message ?
 - if we want to create a pull request each time, what should be the branch name to create ? 
 - the list of resources to update, ie : 
-    - reository full name, ie *organization/repo*
+    - repository full name, ie *organization/repo*
     - file path on that repo
     - branch name, where to do the change
 
 When posting a message with a list of say 10 resources to update, message will be split in 10 messages of 1 resource each, and forwarded to the CI-droid tasks consumers. Each message will be processed independently, and the outcome (KO or OK, with details and link) will be emailed to the user. 
 
-#### scheduled tasks - NOT IMPLEMENTED YET - required ? 
-
-we could think of scheduled housekeeping tasks, like : 
-- closing all branches for which PR has been merged
-- sending a report with all the open PRs on all repos for the organization
