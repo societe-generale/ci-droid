@@ -17,6 +17,26 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+
+    <description>CI-droid REST API</description>
+    <url>https://github.com/societe-generale/ci-droid</url>
+
+    <developers>
+        <developer>
+            <id>vincent-fuchs</id>
+            <name>Vincent FUCHS</name>
+            <email>vincent.fuchs@gmail.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -37,6 +57,13 @@
 
     </properties>
 
+    <!-- required by maven-release-plugin -->
+    <scm>
+        <url>https://github.com/societe-generale/ci-droid</url>
+        <connection>scm:git:git@github.com:societe-generale/ci-droid.git</connection>
+        <developerConnection>scm:git:git@github.com:societe-generale/ci-droid.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencyManagement>
         <dependencies>
