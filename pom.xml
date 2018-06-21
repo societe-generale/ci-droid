@@ -4,7 +4,7 @@
 
     <groupId>com.societegenerale.cidroid</groupId>
     <artifactId>ci-droid</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>CI droid</name>
@@ -66,7 +66,7 @@
         <url>https://github.com/societe-generale/ci-droid</url>
         <connection>scm:git:git@github.com:societe-generale/ci-droid.git</connection>
         <developerConnection>scm:git:git@github.com:societe-generale/ci-droid.git</developerConnection>
-        <tag>cidroid_1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <distributionManagement>
