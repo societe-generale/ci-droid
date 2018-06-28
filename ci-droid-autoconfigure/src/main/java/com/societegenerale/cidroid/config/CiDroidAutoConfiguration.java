@@ -4,15 +4,18 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.societegenerale.cidroid.OutgoingEventsToProcess;
 import com.societegenerale.cidroid.extensions.actionToReplicate.OverwriteStaticFileAction;
 import com.societegenerale.cidroid.extensions.actionToReplicate.ReplaceMavenProfileAction;
 import com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAction;
 import com.societegenerale.cidroid.extensions.actionToReplicate.TemplateBasedContentAction;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration
+@EnableBinding(OutgoingEventsToProcess.class)
 public class CiDroidAutoConfiguration {
 
     @Bean

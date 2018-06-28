@@ -2,10 +2,8 @@ package com.societegenerale.cidroid;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.stream.annotation.EnableBinding;
 
 @SpringBootApplication
-@EnableBinding(OutgoingEventsToProcess.class)
 @SuppressWarnings("squid:S1118") //can't add a private constructor, otherwise app won't start
 public class CIdroidApplication {
 
