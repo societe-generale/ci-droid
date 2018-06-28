@@ -19,8 +19,8 @@
 
     <modules>
         <module>ci-droid-core</module>
-        <!--<module>ci-droid-autoconfigure</module>-->
-        <!--<module>ci-droid-core-starter</module>-->
+        <module>ci-droid-autoconfigure</module>
+        <module>ci-droid-starter</module>
     </modules>
 
     <description>CI-droid REST API</description>

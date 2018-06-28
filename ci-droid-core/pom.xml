@@ -16,25 +16,7 @@
         <version>1.0.1-SNAPSHOT</version>
     </parent>
 
-
     <description>CI-droid REST API core</description>
-    <url>https://github.com/societe-generale/ci-droid</url>
-
-    <developers>
-        <developer>
-            <id>vincent-fuchs</id>
-            <name>Vincent FUCHS</name>
-            <email>vincent.fuchs@gmail.com</email>
-        </developer>
-    </developers>
-
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,8 +26,6 @@
         <assertj.version>3.9.1</assertj.version>
         <lombok.version>1.16.20</lombok.version>
 
-
-
         <jacoco.version>0.8.1</jacoco.version>
 
         <ci-droid-api.version>1.0.0</ci-droid-api.version>
@@ -53,31 +33,20 @@
 
     </properties>
 
-    <issueManagement>
-        <url>https://github.com/societe-generale/ci-droid/issues</url>
-        <system>GitHub</system>
-    </issueManagement>
-
-    <!-- required by maven-release-plugin -->
-    <scm>
-        <url>https://github.com/societe-generale/ci-droid</url>
-        <connection>scm:git:git@github.com:societe-generale/ci-droid.git</connection>
-        <developerConnection>scm:git:git@github.com:societe-generale/ci-droid.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.societegenerale.ci-droid</groupId>
+            <artifactId>internal-api</artifactId>
+            <version>${ci-droid-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.societegenerale.ci-droid</groupId>
+            <artifactId>extensions</artifactId>
+            <version>${ci-droid-extensions.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
