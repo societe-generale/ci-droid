@@ -3,19 +3,17 @@ package com.societegenerale.cidroid.config;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.societegenerale.cidroid.CiDroidProperties;
 import com.societegenerale.cidroid.OutgoingEventsToProcess;
-import com.societegenerale.cidroid.extensions.actionToReplicate.OverwriteStaticFileAction;
-import com.societegenerale.cidroid.extensions.actionToReplicate.ReplaceMavenProfileAction;
-import com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAction;
-import com.societegenerale.cidroid.extensions.actionToReplicate.TemplateBasedContentAction;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration
 @EnableBinding(OutgoingEventsToProcess.class)
+@Import({CiDroidControllersConfiguration.class,CiDroidActionsConfiguration.class})
 public class CiDroidAutoConfiguration {
 
     @Bean
@@ -30,29 +28,8 @@ public class CiDroidAutoConfiguration {
     }
 
     @Bean
-    public OverwriteStaticFileAction overwriteStaticFileAction() {
-
-        return new OverwriteStaticFileAction();
+    public CiDroidProperties ciDroidProperties() {
+        return new CiDroidProperties();
     }
-
-    @Bean
-    public ReplaceMavenProfileAction replaceMavenProfileAction() {
-
-        return new ReplaceMavenProfileAction();
-    }
-
-    @Bean
-    public SimpleReplaceAction simpleReplaceAction() {
-
-        return new SimpleReplaceAction();
-    }
-
-
-    @Bean
-    public TemplateBasedContentAction templateBasedContentAction() {
-
-        return new TemplateBasedContentAction();
-    }
-
 
 }
