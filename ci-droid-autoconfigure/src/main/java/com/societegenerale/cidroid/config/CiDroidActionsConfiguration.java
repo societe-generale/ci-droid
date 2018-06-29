@@ -1,8 +1,4 @@
-package com.societegenerale.cidroid;
-
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+package com.societegenerale.cidroid.config;
 
 import com.societegenerale.cidroid.extensions.actionToReplicate.OverwriteStaticFileAction;
 import com.societegenerale.cidroid.extensions.actionToReplicate.ReplaceMavenProfileAction;
@@ -10,21 +6,9 @@ import com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAct
 import com.societegenerale.cidroid.extensions.actionToReplicate.TemplateBasedContentAction;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration
-public class CiDroidConfiguration {
-
-    @Bean
-    public MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter() {
-        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-
-        jsonConverter.setObjectMapper(objectMapper);
-        return jsonConverter;
-    }
+public class CiDroidActionsConfiguration {
 
     @Bean
     public OverwriteStaticFileAction overwriteStaticFileAction() {
@@ -44,12 +28,10 @@ public class CiDroidConfiguration {
         return new SimpleReplaceAction();
     }
 
-
     @Bean
     public TemplateBasedContentAction templateBasedContentAction() {
 
         return new TemplateBasedContentAction();
     }
-
 
 }
