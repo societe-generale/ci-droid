@@ -4,7 +4,7 @@ import com.societegenerale.cidroid.api.ResourceToUpdate;
 import com.societegenerale.cidroid.api.actionToReplicate.ActionToReplicate;
 import com.societegenerale.cidroid.api.gitHubInteractions.AbstractGitHubInteraction;
 import lombok.*;
-import org.hibernate.validator.constraints.Email;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 import javax.validation.Valid;
