@@ -5,3 +5,16 @@ script:
   - mvn verify
 after_success:
   - mvn clean test jacoco:report coveralls:report
+
+
+before_deploy:
+  - release/createReleaseProperties.sh
+  - echo $GPG_SECRET_KEYS | base64 --decode | gpg --import
+  - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
+
+deploy:
+  provider: script
+  script: mvn release:perform --settings release/mvnsettings.xml -Darguments="-DskipTests"
+  skip_cleanup: true
+  on:
+    tags: true
