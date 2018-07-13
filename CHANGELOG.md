@@ -12,6 +12,11 @@
 
 ### Fixed
 
+## [1.0.3] - 2018-07-13
+
+### Fixed
+- internal-api and extensions were declared as 1.0.1 in root pom.xml, but overridden as 1.0.0 in child pom -> removing the overriding.
+
 ## [1.0.2] - 2018-07-12
 
 ### Changed
