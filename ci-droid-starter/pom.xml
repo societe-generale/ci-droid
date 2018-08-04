@@ -43,7 +43,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.societegenerale.githubcrawler.GitHubCrawlerApplication</mainClass>
+                    <mainClass>com.societegenerale.cidroid.CIdroidApplication</mainClass>
                     <classifier>exec</classifier>
                 </configuration>
             </plugin>
