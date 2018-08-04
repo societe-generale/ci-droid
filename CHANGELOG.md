@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- upgraded dependencies to ci-droid-internal-api and extensions
 
 ### Deprecated
 
