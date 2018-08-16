@@ -1,6 +1,7 @@
-package com.societegenerale.cidroid;
+package com.societegenerale.cidroid.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.societegenerale.cidroid.CiDroidProperties;
 import com.societegenerale.cidroid.model.github.GitHubEvent;
 import com.societegenerale.cidroid.model.github.PullRequestEvent;
 import com.societegenerale.cidroid.model.github.PushEvent;

@@ -1,4 +1,4 @@
-package com.societegenerale.cidroid;
+package com.societegenerale.cidroid.controllers;
 
 import com.societegenerale.cidroid.api.ResourceToUpdate;
 import com.societegenerale.cidroid.api.actionToReplicate.ActionToReplicate;

@@ -1,5 +1,9 @@
-package com.societegenerale.cidroid;
+package com.societegenerale.cidroid.controllers;
 
+import com.societegenerale.cidroid.AdditionalTestConfig;
+import com.societegenerale.cidroid.CiDroidProperties;
+import com.societegenerale.cidroid.TestUtils;
+import com.societegenerale.cidroid.controllers.WebHookController;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
