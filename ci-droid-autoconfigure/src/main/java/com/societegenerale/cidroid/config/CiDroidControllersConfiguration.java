@@ -1,9 +1,9 @@
 package com.societegenerale.cidroid.config;
 
-import com.societegenerale.cidroid.CiDroidActionsController;
 import com.societegenerale.cidroid.CiDroidProperties;
-import com.societegenerale.cidroid.WebHookController;
 import com.societegenerale.cidroid.api.actionToReplicate.ActionToReplicate;
+import com.societegenerale.cidroid.controllers.CiDroidActionsController;
+import com.societegenerale.cidroid.controllers.WebHookController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
