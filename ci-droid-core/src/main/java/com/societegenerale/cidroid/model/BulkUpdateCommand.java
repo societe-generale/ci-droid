@@ -15,14 +15,14 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = "gitPassword")
+@ToString(exclude = "gitHubOauthToken")
 public class BulkUpdateCommand {
 
     @NotEmpty
     private String gitLogin;
 
     @NotEmpty
-    private String gitPassword;
+    private String gitHubOauthToken;
 
     @Email
     private String email;

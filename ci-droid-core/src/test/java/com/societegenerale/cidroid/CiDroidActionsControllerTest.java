@@ -42,7 +42,7 @@ public class CiDroidActionsControllerTest {
 
     private static final String SOME_USER_NAME = "someUserName";
 
-    private static final String SOME_PASSWORD = "somePassword";
+    private static final String SOME_OAUTH_TOKEN = "abcdef123456";
 
     private static final String SOME_EMAIL = "someEmail@someDomain.com";
 
@@ -64,7 +64,7 @@ public class CiDroidActionsControllerTest {
     private ActionToReplicate mockAvailableAction2;
 
     private BulkUpdateCommand.BulkUpdateCommandBuilder baseBatchUpdateCommandBuilder=BulkUpdateCommand.builder().gitLogin(SOME_USER_NAME)
-                                                                                        .gitPassword(SOME_PASSWORD)
+                                                                                        .gitHubOauthToken(SOME_OAUTH_TOKEN)
                                                                                         .email(SOME_EMAIL);
 
     private ObjectMapper objectMapper=new ObjectMapper();
@@ -106,7 +106,7 @@ public class CiDroidActionsControllerTest {
         for(BulkUpdateCommand actualBulkUpdateCommand : actualBulkUpdateCommands){
 
             assertThat(actualBulkUpdateCommand.getGitLogin()).as("login" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_USER_NAME);
-            assertThat(actualBulkUpdateCommand.getGitPassword()).as("password" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_PASSWORD);
+            assertThat(actualBulkUpdateCommand.getGitHubOauthToken()).as("OAuth token" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_OAUTH_TOKEN);
             assertThat(actualBulkUpdateCommand.getEmail()).as("email" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_EMAIL);
             assertThat(actualBulkUpdateCommand.getGitHubInteractionType()).as("gitub interaction type" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(new DirectPushGitHubInteraction());
             assertThat(actualBulkUpdateCommand.getUpdateAction()).as("updateAction" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(replaceAction);
@@ -156,7 +156,7 @@ public class CiDroidActionsControllerTest {
     public void shouldReturnBadRequestIfGitLoginIsNotProvided() throws Exception {
 
         BulkUpdateCommand invalidBulkUpdateCommand_noLogin =BulkUpdateCommand.builder()
-                .gitPassword(SOME_PASSWORD)
+                .gitHubOauthToken(SOME_OAUTH_TOKEN)
                 .email(SOME_EMAIL)
                 .build();
 
@@ -180,7 +180,7 @@ public class CiDroidActionsControllerTest {
 
         BulkUpdateCommand invalidBulkUpdateCommand_incorrectEmailFormat =BulkUpdateCommand.builder()
                 .gitLogin(SOME_USER_NAME)
-                .gitPassword(SOME_PASSWORD)
+                .gitHubOauthToken(SOME_OAUTH_TOKEN)
                 .email("some.incorrectEmail.com")
                 .build();
 

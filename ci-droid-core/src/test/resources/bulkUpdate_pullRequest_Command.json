@@ -1,6 +1,6 @@
 {
   "gitLogin": "someUserName",
-  "gitPassword": "somePassword",
+  "gitHubOauthToken": "somePassword",
   "email": "someEmail@someDomain.com",
   "commitMessage" : "some commit message",
   "updateAction": {
