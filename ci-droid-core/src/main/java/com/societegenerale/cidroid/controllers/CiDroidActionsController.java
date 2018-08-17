@@ -5,6 +5,10 @@ import com.societegenerale.cidroid.api.actionToReplicate.ActionToReplicate;
 import com.societegenerale.cidroid.api.actionToReplicate.fields.ExpectedField;
 import com.societegenerale.cidroid.model.BulkUpdateCommand;
 
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Example;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +51,9 @@ public class CiDroidActionsController {
     @PostMapping(path = "bulkUpdates")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> onBulkUpdateRequest(@RequestBody @Valid BulkUpdateCommand bulkUpdateCommand) {
+    @ApiOperation(value = "Perform an action in bulk, ie replicate it in all the resources mentioned in the command")
+    public ResponseEntity<?> onBulkUpdateRequest(@RequestBody @Valid @ApiParam(value = "The command describing the action to perform in bulk", required = true)
+            BulkUpdateCommand bulkUpdateCommand) {
 
         log.info("received a bulkUpdateCommand {}", bulkUpdateCommand);
 
@@ -73,6 +79,12 @@ public class CiDroidActionsController {
 
     @GetMapping(path = "availableActions")
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(
+            value = "List bulk actions that are available",
+            notes = "each action provides the fields that are required. It can be used by UI to build a form dynamically",
+            response = AvailableActionForUI.class,
+            responseContainer = "List"
+    )
     public @ResponseBody
     ResponseEntity<List<AvailableActionForUI>> fetchAvailableActions() {
 
@@ -85,10 +97,13 @@ public class CiDroidActionsController {
     @AllArgsConstructor
     protected static class AvailableActionForUI {
 
+        @ApiModelProperty(position = 3)
         private final List<ExpectedField> expectedFields;
 
+        @ApiModelProperty(position = 1)
         private final String actionClassToSend;
 
+        @ApiModelProperty(position = 2)
         private final String label;
 
         public static AvailableActionForUI fromAvailableAction(ActionToReplicate a) {

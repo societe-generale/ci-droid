@@ -1,22 +1,29 @@
 package com.societegenerale.cidroid.config;
 
-import com.societegenerale.cidroid.controllers.CiDroidActionsController;
+import com.fasterxml.classmate.TypeResolver;
 import com.societegenerale.cidroid.CiDroidProperties;
-import com.societegenerale.cidroid.controllers.WebHookController;
 import com.societegenerale.cidroid.api.actionToReplicate.ActionToReplicate;
+import com.societegenerale.cidroid.api.gitHubInteractions.AbstractGitHubInteraction;
+import com.societegenerale.cidroid.controllers.CiDroidActionsController;
+import com.societegenerale.cidroid.controllers.WebHookController;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.stereotype.Component;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.schema.ModelBuilderPlugin;
+import springfox.documentation.spi.schema.contexts.ModelContext;
+import springfox.documentation.spring.web.DescriptionResolver;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
-
-
 
 @Configuration
 @EnableSwagger2
@@ -48,5 +55,45 @@ public class CiDroidControllersConfiguration {
                 .build();
         return docket;
     }
+
+    @Component
+    @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + 1000)
+    public class ModelEnhancement implements ModelBuilderPlugin {
+        private final DescriptionResolver descriptions;
+
+        @Autowired
+        public ModelEnhancement(DescriptionResolver descriptions) {
+            this.descriptions = descriptions;
+        }
+
+        @Autowired
+        TypeResolver resolver;
+
+        @Override
+        public boolean supports(DocumentationType delimiter) {
+            return SwaggerPluginSupport.pluginDoesApply(delimiter);
+        }
+
+        @Override
+        public void apply(ModelContext modelContext) {
+
+            Class<?> modelClass = forClass(modelContext);
+
+            modelContext.getType();
+
+            if(modelClass.equals(AbstractGitHubInteraction.class)){
+
+                modelContext.getBuilder().discriminator("@c")
+                ;
+
+            }
+
+        }
+
+        private Class<?> forClass(ModelContext context) {
+            return resolver.resolve(context.getType()).getErasedType();
+        }
+    }
+
 
 }

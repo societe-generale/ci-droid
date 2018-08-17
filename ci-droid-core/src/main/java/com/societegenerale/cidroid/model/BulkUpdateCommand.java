@@ -19,27 +19,31 @@ import java.util.List;
 @ToString(exclude = "gitHubOauthToken")
 public class BulkUpdateCommand {
 
-    @ApiModelProperty(position = 1, value="the git login to use when we'll commit the change", required = true)
+    @ApiModelProperty(position = 1, value="the git login to use when we'll commit the change", example = "vincent-fuchs", required = true)
     @NotEmpty
     private String gitLogin;
 
-    @ApiModelProperty(position = 2, required = true)
+    @ApiModelProperty(position = 2, value="the GitHub Oauth token you've generated, to be able to commit", example = "abcdefghijklmnop", required = true)
     @NotEmpty
     private String gitHubOauthToken;
 
-    @ApiModelProperty(position = 3, required = true)
+    @ApiModelProperty(position = 3, value="your email ID, receive the notification for each resource updated", example = "firstname.lastname@gmail.com", required = true)
     @Email
     private String email;
 
-    @ApiModelProperty(position = 4, required = true)
+    @ApiModelProperty(position = 4, value="the commit message we'll use for all updated resources",
+                                    notes = "it will be suffixed by a CI-droid specific message, to identify clearly commits performed by CI-droid",
+                                    example = "change performed in bulk",
+                                    required = true)
     @NotEmpty
     private String commitMessage;
 
-    @ApiModelProperty(position = 5, required = true)
+
+    @ApiModelProperty(position = 5, value="one of the available actions, provided in the GET /cidroid-actions/availableActions endpoint", required = true)
     @NotNull
     private ActionToReplicate updateAction;
 
-    @ApiModelProperty(position = 6, required = true)
+    @ApiModelProperty(position = 6, value="do you want to commit directly or make a pull request ?", allowableValues = ".DirectPushGitHubInteraction, .PullRequestGitHubInteraction", required = true)
     @Valid
     private AbstractGitHubInteraction gitHubInteractionType;
 
