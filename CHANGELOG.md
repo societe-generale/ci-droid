@@ -12,6 +12,14 @@
 
 ### Fixed
 
+## [1.0.5] - 2018-08-17
+
+### Changed
+- now using OAuth token - related to https://github.com/societe-generale/ci-droid-tasks-consumer/issues/8 
+
+### Added
+- Swagger API documentation
+
 ## [1.0.4] - 2018-08-04
 
 ### Changed
