@@ -25,8 +25,11 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static springfox.documentation.schema.ResolvedTypes.modelRefFactory;
 
 @Configuration
@@ -58,6 +61,9 @@ public class SwaggerConfiguration {
         @Autowired
         TypeNameExtractor typeNameExtractor;
 
+        @Autowired
+        List<ActionToReplicate> availableActions;
+
         @Override
         public boolean supports(DocumentationType delimiter) {
             return SwaggerPluginSupport.pluginDoesApply(delimiter);
@@ -87,12 +93,13 @@ public class SwaggerConfiguration {
         private void actionToReplicateSpecificConfig(ModelContext modelContext) {
             Map actionToReplicateProperties = new HashMap<String, ModelProperty>();
 
+            List<String> availableActionClassNames=availableActions.stream().map(a -> a.getClass().getCanonicalName()).collect(toList());
+
             ModelProperty actionToReplicateClassNameProperty=new ModelPropertyBuilder().required(true)
                     .allowEmptyValue(false)
                     .name("fully qualified class name identifier")
                     .description("fully qualified name of the class implementing com.societegenerale.cidroid.api.actionToReplicate.ActionToReplicate")
-                    .allowableValues(new AllowableListValues(
-                            Arrays.asList("com.societegenerale.cidroid.extensions.actionToReplicate.OverwriteStaticFileAction","com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAction"),"string"))
+                    .allowableValues(new AllowableListValues(availableActionClassNames,"string"))
                     .example((Object)"com.societegenerale.cidroid.extensions.actionToReplicate.OverwriteStaticFileAction")
                     .type(resolver.resolve(String.class)).build();
             actionToReplicateClassNameProperty.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
@@ -128,13 +135,23 @@ public class SwaggerConfiguration {
             abstractGitHubInteractionClassNameProperty.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
             abstractGitHubInteractionProperties.put("@c",abstractGitHubInteractionClassNameProperty);
 
+
             ModelProperty branchNameProperty=new ModelPropertyBuilder().required(false)
                     .name("branch name in case of PR")
-                    .description("when @c=.PullRequestGitHubInteraction , then we need to provide the name of the branch in which we want to the PR")
+                    .description("when @c=.PullRequestGitHubInteraction, then we need to provide the name of the branch in which we want to the PR")
                     .example((Object)"myBranch")
                     .type(resolver.resolve(String.class)).build();
             branchNameProperty.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
             abstractGitHubInteractionProperties.put("branchNameToCreate",branchNameProperty);
+
+
+            ModelProperty prNameProperty=new ModelPropertyBuilder().required(false)
+                    .name("name of the PR")
+                    .description("when @c=.PullRequestGitHubInteraction, then we can provide a name for the PR. If not provided, the PR name will be the same as the branch name")
+                    .example((Object)"'[XYZ-123] adding a feature'")
+                    .type(resolver.resolve(String.class)).build();
+            prNameProperty.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+            abstractGitHubInteractionProperties.put("pullRequestName",prNameProperty);
 
             modelContext.getBuilder()
                     .properties(abstractGitHubInteractionProperties)
