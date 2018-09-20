@@ -5,7 +5,7 @@
 ### Added
 
 ### Changed
-- upgraded to ci-droid-internal-api 1.0.3
+- upgraded to ci-droid-internal-api 1.0.4
 - [Swagger] doc for new field (pullRequestName) in PullRequestGitHubInteraction
 - [Swagger] list of available actions is now dynamic
 
