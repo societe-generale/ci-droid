@@ -5,14 +5,20 @@
 ### Added
 
 ### Changed
-- upgraded to ci-droid-extensions 1.0.5
-- upgraded to ci-droid-internal-api 1.0.4
-- [Swagger] doc for new field (pullRequestName) in PullRequestGitHubInteraction
-- [Swagger] list of available actions is now dynamic
 
 ### Deprecated
 
 ### Removed
+
+### Fixed
+
+## [1.0.6] - 2018-09-20
+
+### Changed
+- upgraded to ci-droid-extensions 1.0.5
+- upgraded to ci-droid-internal-api 1.0.4
+- [Swagger] doc for new field (pullRequestName) in PullRequestGitHubInteraction
+- [Swagger] list of available actions is now dynamic
 
 ### Fixed
 - [Swagger] config is now included in auto-config
