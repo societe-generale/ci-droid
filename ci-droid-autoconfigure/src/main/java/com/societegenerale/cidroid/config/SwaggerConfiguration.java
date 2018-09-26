@@ -145,13 +145,13 @@ public class SwaggerConfiguration {
             abstractGitHubInteractionProperties.put("branchNameToCreate",branchNameProperty);
 
 
-            ModelProperty prNameProperty=new ModelPropertyBuilder().required(false)
-                    .name("name of the PR")
-                    .description("when @c=.PullRequestGitHubInteraction, then we can provide a name for the PR. If not provided, the PR name will be the same as the branch name")
+            ModelProperty prTitleProperty=new ModelPropertyBuilder().required(false)
+                    .name("title of the PR")
+                    .description("when @c=.PullRequestGitHubInteraction, then we can provide a title for the PR. If not provided, the PR title will be the same as the branch name")
                     .example((Object)"'[XYZ-123] adding a feature'")
                     .type(resolver.resolve(String.class)).build();
-            prNameProperty.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
-            abstractGitHubInteractionProperties.put("pullRequestName",prNameProperty);
+            prTitleProperty.updateModelRef(modelRefFactory(modelContext, typeNameExtractor));
+            abstractGitHubInteractionProperties.put("pullRequestTitle",prTitleProperty);
 
             modelContext.getBuilder()
                     .properties(abstractGitHubInteractionProperties)
