@@ -41,17 +41,64 @@ It also enables team to save time, as the review comment is immediate and the de
 Especially for teams that have adopted micro-services architecture, it's not rare to have several dozens of repositories. 
 They usually follow some convention(s), but when there are changes to perform across all repositories (because we upgrade to new Docker version, or we want to upgrade the version of a plugin), making the update consistently across the organization can be a daunting task, spanning over weeks. 
 
-CI-droid has a specific endpoint that enables the user to request a bulk update. The message has these attributes : 
-- user credentials : GIT username + password. Email address for outcome notifications
-- update type : shall we commit directly or create a pull request ?
-- the action type : do we want to replace a string in the files, overwrite the whole file, replace an XML/Yaml element in existing file ?  
-- (based on action type, additional fields will be required.) 
-- the commit message : when CI-droid is going to commit on user's behalf, what should be the commit message ?
-- if we want to create a pull request each time, what should be the branch name to create ? 
-- the list of resources to update, ie : 
-    - repository full name, ie *organization/repo*
-    - file path on that repo
-    - branch name, where to do the change
+CI-droid has a specific endpoint that enables the user to request a bulk update. Wherever you have deployed CI-Droid, you can hit the Swagger endpoint to get the API description. 
+For example, if deployed on your machine, you can open http://localhost:8080/swagger-ui.html# in your browser
 
-When posting a message with a list of say 10 resources to update, message will be split in 10 messages of 1 resource each, and forwarded to the CI-droid tasks consumers. Each message will be processed independently, and the outcome (KO or OK, with details and link) will be emailed to the user. 
+Below is a typical message you could POST on /cidroid-actions/bulkUpdates : 
+
+```json
+
+{
+  "gitLogin": "vincent-fuchs",
+  "gitHubOauthToken": "abcdef1234569687kugfwkugfewha",
+  "email": "vincent.fuchs@gmail.com",
+ 
+  "commitMessage": "updating Jenkinsfile with latest java image for build",
+
+ "updateAction": {
+    "@class": "com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAction",
+    "initialValue": "JDK1.8-20170718-121455-e2e6123",
+    "newValue": "JDK1.8-20180917-093720-5fdabcb014"
+  },
+
+  "gitHubInteractionType": {
+    "@c": ".PullRequestGitHubInteraction",
+    "branchNameToCreate": "newJavaImageForJenkinsBuild",
+    "pullRequestTitle": "Using new image for Jenkins build"
+  },
+  
+  "resourcesToUpdate": [
+  
+	{"repoFullName": "myOrga/project_A","filePathOnRepo": "Jenkinsfile","branchName": "master"},
+	{"repoFullName": "myOrga/project_B","filePathOnRepo": "Jenkinsfile","branchName": "master"},
+	{"repoFullName": "myOrga/project_C","filePathOnRepo": "Jenkinsfile","branchName": "master"},
+	{"repoFullName": "myOrga/project_D","filePathOnRepo": "Jenkinsfile","branchName": "master"}
+
+    ...some other resources if required
+
+  ]
+}
+```
+
+Explanations : 
+
+- the first 4 fields are self explanatory : credentials + the commit message to use. 
+- updateAction is one of the classes available implementing [ActionToReplicate](https://github.com/societe-generale/ci-droid-internal-api/blob/73acab2178c81803f17a542cf98b60aa3397547a/src/main/java/com/societegenerale/cidroid/api/actionToReplicate/ActionToReplicate.java) . The list of available actions is available on GET /cidroid-actions/availableActions (see swagger doc).
+It represents the action that will be performed on the resources we mention after. It will basically download the file, modify it according to the ActionToReplicate logic, and commit it if it has been modified. 
+- gitHubInteractionType represents either a direct push (.DirectPushGitHubInteraction), or a pullRequest (.PullRequestGitHubInteraction). In case of pull request, branchNameToCreate and pullRequestTitle need to be provided.
+- resourcesToUpdate is the list of resources that CI-droid will try to modify : they can be on different repositories / branches 
+
+
+When posted on the bulkUpdate endpoint, above payload will be duplicated into 4 messages, with one resource each, and passed to ci-droid-tasks-consumers. 
+  
+The consumers will then try to modify each resources on behalf of the user. In above case, it will : 
+- create a branch from master named newJavaImageForJenkinsBuild
+- download Jenkinsfile at the root of each mentioned repository (myOrga/project_A, myOrga/project_B, etc)\
+- if the file contains the string _JDK1.8-20170718-121455-e2e6123_, we replace the new value _JDK1.8-20180917-093720-5fdabcb014_ , and commit in the branch with the provided credentials and message
+- if a change was done, a PR with title _"Using new image for Jenkins build"_ gets created
+- for each resource, user will receive a status email, either KO or OK, with a link to the change.
+
+Performing bulk actions with CI-droid can literally save hours and hours of boring work by the dev team !
+
+
 
