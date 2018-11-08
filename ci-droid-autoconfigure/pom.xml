@@ -4,7 +4,7 @@
 
     <groupId>com.societegenerale.ci-droid</groupId>
     <artifactId>ci-droid-autoconfigure</artifactId>
-    <version>1.0.7-SNAPSHOT</version>
+    <version>1.0.7</version>
     <packaging>jar</packaging>
 
     <name>CI droid autoconfigure</name>
@@ -12,7 +12,7 @@
     <parent>
         <groupId>com.societegenerale.ci-droid</groupId>
         <artifactId>ci-droid-parent</artifactId>
-        <version>1.0.7-SNAPSHOT</version>
+        <version>1.0.7</version>
     </parent>
 
 
