@@ -12,6 +12,12 @@
 
 ### Fixed
 
+## [1.0.8] - 2018-11-29
+
+### Added
+- added a first version of ready to use GUI. Will be replaced in next version
+
+
 ## [1.0.7] - 2018-11-08
 
 ### Changed
