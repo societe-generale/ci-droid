@@ -4,7 +4,7 @@
 
     <groupId>com.societegenerale.ci-droid</groupId>
     <artifactId>ci-droid-starter</artifactId>
-    <version>1.0.8-SNAPSHOT</version>
+    <version>1.0.8</version>
     <packaging>jar</packaging>
 
     <name>CI droid starter</name>
@@ -12,7 +12,7 @@
     <parent>
         <groupId>com.societegenerale.ci-droid</groupId>
         <artifactId>ci-droid-parent</artifactId>
-        <version>1.0.8-SNAPSHOT</version>
+        <version>1.0.8</version>
     </parent>
 
 
