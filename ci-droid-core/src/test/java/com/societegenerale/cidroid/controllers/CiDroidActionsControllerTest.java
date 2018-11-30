@@ -46,8 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CiDroidActionsController.class)
 public class CiDroidActionsControllerTest {
 
-    private static final String SOME_USER_NAME = "someUserName";
-
     private static final String SOME_OAUTH_TOKEN = "abcdef123456";
 
     private static final String SOME_EMAIL = "someEmail@someDomain.com";
@@ -69,7 +67,7 @@ public class CiDroidActionsControllerTest {
     @MockBean(name = "mockAvailableAction2")
     private ActionToReplicate mockAvailableAction2;
 
-    private BulkUpdateCommand.BulkUpdateCommandBuilder baseBatchUpdateCommandBuilder=BulkUpdateCommand.builder().gitLogin(SOME_USER_NAME)
+    private BulkUpdateCommand.BulkUpdateCommandBuilder baseBatchUpdateCommandBuilder=BulkUpdateCommand.builder()
                                                                                         .gitHubOauthToken(SOME_OAUTH_TOKEN)
                                                                                         .email(SOME_EMAIL);
 
@@ -118,7 +116,6 @@ public class CiDroidActionsControllerTest {
 
         for(BulkUpdateCommand actualBulkUpdateCommand : actualBulkUpdateCommands){
 
-            assertThat(actualBulkUpdateCommand.getGitLogin()).as("login" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_USER_NAME);
             assertThat(actualBulkUpdateCommand.getGitHubOauthToken()).as("OAuth token" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_OAUTH_TOKEN);
             assertThat(actualBulkUpdateCommand.getEmail()).as("email" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_EMAIL);
             assertThat(actualBulkUpdateCommand.getGitHubInteractionType()).as("gitub interaction type" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(new DirectPushGitHubInteraction());
@@ -170,35 +167,31 @@ public class CiDroidActionsControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestIfGitLoginIsNotProvided() throws Exception {
+    public void shouldReturnBadRequestIfOAuthTokenIsNotProvided() throws Exception {
 
-        BulkUpdateCommand invalidBulkUpdateCommand_noLogin =BulkUpdateCommand.builder()
-                .gitHubOauthToken(SOME_OAUTH_TOKEN)
+        BulkUpdateCommand invalidBulkUpdateCommand_noToken =BulkUpdateCommand.builder()
                 .email(SOME_EMAIL)
+                .gitHubInteractionType(new DirectPushGitHubInteraction())
+                .commitMessage(COMMIT_MESSAGE)
+                .resourcesToUpdate(resourcesToUpdate)
+                .updateAction(replaceAction)
                 .build();
 
 
-        postAndAssert4xxClientError(invalidBulkUpdateCommand_noLogin);
+        postAndAssert4xxClientError(invalidBulkUpdateCommand_noToken);
     }
 
-    @Test
-    public void shouldReturnBadRequestIfGitPasswordIsNotProvided() throws Exception {
-
-        BulkUpdateCommand invalidBulkUpdateCommand_noPassword =BulkUpdateCommand.builder()
-                .gitLogin(SOME_USER_NAME)
-                .email(SOME_EMAIL)
-                .build();
-
-        postAndAssert4xxClientError(invalidBulkUpdateCommand_noPassword);
-    }
 
     @Test
     public void shouldReturnBadRequestIfEmailDoesntHaveProperFormat() throws Exception {
 
         BulkUpdateCommand invalidBulkUpdateCommand_incorrectEmailFormat =BulkUpdateCommand.builder()
-                .gitLogin(SOME_USER_NAME)
                 .gitHubOauthToken(SOME_OAUTH_TOKEN)
                 .email("some.incorrectEmail.com")
+                .gitHubInteractionType(new DirectPushGitHubInteraction())
+                .commitMessage(COMMIT_MESSAGE)
+                .resourcesToUpdate(resourcesToUpdate)
+                .updateAction(replaceAction)
                 .build();
 
         postAndAssert4xxClientError(invalidBulkUpdateCommand_incorrectEmailFormat);

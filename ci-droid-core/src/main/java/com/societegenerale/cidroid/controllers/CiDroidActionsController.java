@@ -62,7 +62,7 @@ public class CiDroidActionsController {
 
         for (ResourceToUpdate resourceToUpdate : bulkUpdateCommand.getResourcesToUpdate()) {
 
-            BulkUpdateCommand singleResourceUpdateCommand = BulkUpdateCommand.builder().gitLogin(bulkUpdateCommand.getGitLogin())
+            BulkUpdateCommand singleResourceUpdateCommand = BulkUpdateCommand.builder()
                     .gitHubOauthToken(bulkUpdateCommand.getGitHubOauthToken())
                     .email(bulkUpdateCommand.getEmail())
                     .gitHubInteractionType(bulkUpdateCommand.getGitHubInteractionType())

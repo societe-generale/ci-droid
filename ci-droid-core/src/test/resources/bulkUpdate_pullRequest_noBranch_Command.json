@@ -1,5 +1,4 @@
 {
-  "gitLogin": "someUserName",
   "gitHubOauthToken": "somePassword",
   "email": "someEmail@someDomain.com",
   "commitMessage" : "some commit message",
