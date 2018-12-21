@@ -49,7 +49,7 @@
         <spring-cloud-stream.version>Ditmars.SR3</spring-cloud-stream.version>
         <spring-cloud.version>Edgware.SR2</spring-cloud.version>
         <assertj.version>3.9.1</assertj.version>
-        <lombok.version>1.16.20</lombok.version>
+        <lombok.version>1.18.4</lombok.version>
 
         <!-- need to declare it, otherwise Spring Boot 1.5 parent pom overrides the version, and it becomes not compatible with hibernate-validator anymore -->
         <javax-validation.version>2.0.1.Final</javax-validation.version>
@@ -60,7 +60,7 @@
 
         <ci-droid-api.version>1.0.5</ci-droid-api.version>
         <ci-droid-extensions.version>1.0.6</ci-droid-extensions.version>
-
+        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
     </properties>
 
     <issueManagement>
@@ -145,7 +145,11 @@
 
     <build>
         <plugins>
-
+            <!-- JDK 11 issue : https://github.com/spring-guides/gs-maven/issues/23 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
