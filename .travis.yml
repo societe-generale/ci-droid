@@ -1,6 +1,19 @@
 language: java
 jdk:
   - oraclejdk8
+node_js:
+  - "8.11"
+addons:
+  chrome: stable
+
+before_script:
+  - yarn global add @angular/cli
+
+cache:
+  yarn: true
+  directories:
+    - ci-droid-gui/node_modules
+
 script:
   - mvn verify
 after_success:
