@@ -17,6 +17,7 @@
     </parent>
 
     <modules>
+        <module>ci-droid-gui</module>
         <module>ci-droid-core</module>
         <module>ci-droid-autoconfigure</module>
         <module>ci-droid-starter</module>
