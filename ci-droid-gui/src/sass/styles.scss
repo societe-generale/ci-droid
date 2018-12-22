@@ -1,0 +1,9 @@
+@import '~bootstrap/scss/bootstrap';
+@import 'variables';
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,800,900');
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  font-family: 'Montserrat', sans-serif;
+}
