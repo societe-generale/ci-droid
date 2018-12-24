@@ -1,0 +1,6 @@
+{
+  "/ci-droid-actions/availableActions": {
+    "target": "http://localhost:3000/availableActions",
+    "secure": false
+  }
+}
