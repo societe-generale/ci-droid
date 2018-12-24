@@ -1,0 +1,9 @@
+@import '../sass/variables';
+
+:host {
+  .app-container {
+    background-color: $red-socgen;
+    color: $grey-ultra-light;
+    opacity: .9;
+  }
+}
