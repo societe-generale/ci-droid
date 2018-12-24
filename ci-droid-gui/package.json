@@ -11,7 +11,9 @@
     "e2e": "ng e2e",
     "mock:server": "json-server --watch mock/mock-data.json",
     "start:proxy": "ng serve --proxy-config mock/proxy.config.json",
-    "start:proxy:mock:server": "concurrently --kill-others \"npm run mock:server\" \"npm run start:proxy\""
+    "start:proxy:mock:server": "concurrently --kill-others \"npm run mock:server\" \"npm run start:proxy\"",
+    "format:fix": "pretty-quick --staged",
+    "precommit": "run-s format:fix lint"
   },
   "private": true,
   "dependencies": {
@@ -40,6 +42,7 @@
     "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "concurrently": "^4.1.0",
+    "husky": "^1.2.1",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "json-server": "^0.14.0",
@@ -48,6 +51,9 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.15.3",
+    "pretty-quick": "^1.8.0",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
