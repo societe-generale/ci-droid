@@ -12,8 +12,15 @@
     "mock:server": "json-server --watch mock/mock-data.json",
     "start:proxy": "ng serve --proxy-config mock/proxy.config.json",
     "start:proxy:mock:server": "concurrently --kill-others \"npm run mock:server\" \"npm run start:proxy\"",
-    "format:fix": "pretty-quick --staged",
-    "precommit": "run-s format:fix lint"
+    "format:lint": "ng lint --fix",
+    "format:prettier": "pretty-quick --staged",
+    "format:all": "run-s format:prettier format:lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format:all",
+      "pre-push": "npm test"
+    }
   },
   "private": true,
   "dependencies": {
