@@ -1,0 +1,48 @@
+@import '../../../sass/_variables';
+
+.home-page {
+  .left {
+    flex: 2;
+    background-color: $red-socgen;
+    opacity: 0.9;
+
+    .header {
+      padding: 24px 48px;
+
+      .sg-logo {
+        max-height: 6vh;
+      }
+    }
+  }
+
+  .right {
+    flex: 3;
+    flex-direction: column;
+
+    .ci-droid-desc {
+      padding: 5%;
+      margin-top: 33%;
+      color: $grey-base;
+
+      .title {
+        font-size: 4.7vh;
+      }
+
+      .underline {
+        height: 12px;
+        background-color: $black;
+        opacity: 0.7;
+      }
+
+      .description {
+        font-size: 2.15vh;
+        padding: 1%;
+      }
+
+      .btn-started {
+        color: $white;
+        background-color: $blue-dark;
+      }
+    }
+  }
+}
