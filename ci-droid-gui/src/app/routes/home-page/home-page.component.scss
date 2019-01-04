@@ -1,0 +1,46 @@
+@import '../../../sass/_variables';
+
+:host {
+  .left {
+    flex: 2;
+    background-color: $red-socgen;
+    opacity: 0.9;
+
+    .header {
+      padding: 24px 48px;
+
+      .sg-logo {
+        max-height: 6vh;
+      }
+    }
+  }
+
+  .right {
+    flex: 3;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+
+    .ci-droid-desc {
+      padding: 5%;
+      color: $black;
+      opacity: 0.8;
+
+      .title {
+        font-size: 10vh;
+        font-weight: 700;
+      }
+
+      .description {
+        font-size: 2.15vh;
+        padding: 1%;
+      }
+
+      .btn-dark {
+        color: $white;
+        background-color: $black;
+        font-size: 2vh;
+      }
+    }
+  }
+}
