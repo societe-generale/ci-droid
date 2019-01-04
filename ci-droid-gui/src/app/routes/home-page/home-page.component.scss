@@ -1,6 +1,6 @@
 @import '../../../sass/_variables';
 
-.home-page {
+:host {
   .left {
     flex: 2;
     background-color: $red-socgen;
@@ -18,20 +18,17 @@
   .right {
     flex: 3;
     flex-direction: column;
+    display: flex;
+    justify-content: center;
 
     .ci-droid-desc {
       padding: 5%;
-      margin-top: 33%;
-      color: $grey-base;
+      color: $black;
+      opacity: 0.8;
 
       .title {
-        font-size: 4.7vh;
-      }
-
-      .underline {
-        height: 12px;
-        background-color: $black;
-        opacity: 0.7;
+        font-size: 10vh;
+        font-weight: 700;
       }
 
       .description {
@@ -39,9 +36,10 @@
         padding: 1%;
       }
 
-      .btn-started {
+      .btn-dark {
         color: $white;
-        background-color: $blue-dark;
+        background-color: $black;
+        font-size: 2vh;
       }
     }
   }
