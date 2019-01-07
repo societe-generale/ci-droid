@@ -11,8 +11,41 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$ci-droid-gui-primary: mat-palette($mat-indigo);
-$ci-droid-gui-accent: mat-palette($mat-pink, A200, A100, A400);
+$ci-droid-red: (
+  50: #ffebee,
+  100: #ffcdd2,
+  200: #ef9a9a,
+  300: #fd1a1a,
+  400: #fd1a1a,
+  500: #fd1a1a,
+  600: #fd1a1a,
+  700: #fd1a1a,
+  800: #fd1a1a,
+  900: #e60028,
+  A100: #ff8a80,
+  A200: #ff5252,
+  A400: #fd1a1a,
+  A700: #e60028,
+  contrast: (
+    50: $black-87-opacity,
+    100: $black-87-opacity,
+    200: $black-87-opacity,
+    300: $black-87-opacity,
+    400: $black-87-opacity,
+    500: white,
+    600: white,
+    700: white,
+    800: $white-87-opacity,
+    900: $white-87-opacity,
+    A100: $black-87-opacity,
+    A200: white,
+    A400: white,
+    A700: white
+  )
+);
+
+$ci-droid-gui-primary: mat-palette($ci-droid-red);
+$ci-droid-gui-accent: mat-palette($ci-droid-red, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
 $ci-droid-gui-warn: mat-palette($mat-red);
@@ -33,5 +66,9 @@ html,
 body {
   width: 100vw;
   height: 100vh;
+  font-family: 'Montserrat', sans-serif;
+}
+body [class^='mat-'],
+body [class*='mat-'] {
   font-family: 'Montserrat', sans-serif;
 }
