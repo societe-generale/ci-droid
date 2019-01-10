@@ -1,5 +1,7 @@
 package com.societegenerale.cidroid.controllers;
 
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.societegenerale.cidroid.api.ResourceToUpdate;
 import com.societegenerale.cidroid.api.actionToReplicate.ActionToReplicate;
@@ -8,10 +10,12 @@ import com.societegenerale.cidroid.api.gitHubInteractions.DirectPushGitHubIntera
 import com.societegenerale.cidroid.controllers.CiDroidActionsController;
 import com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAction;
 import com.societegenerale.cidroid.model.BulkUpdateCommand;
+import com.societegenerale.cidroid.monitoring.TestAppender;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,6 +31,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.societegenerale.cidroid.TestUtils.readFromInputStream;
+import static com.societegenerale.cidroid.monitoring.MonitoringEvents.BULK_ACTION_REQUESTED;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -83,6 +88,13 @@ public class CiDroidActionsControllerTest {
     @Test
     public void shouldSplitResourcesIntoIndividualMessages() throws Exception {
 
+        TestAppender testAppender=new TestAppender();
+
+        LoggerContext logCtx = (LoggerContext) LoggerFactory.getILoggerFactory();
+        Logger log = logCtx.getLogger("Main");
+        log.addAppender(testAppender);
+
+
         BulkUpdateCommand bulkUpdateCommand =baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
                 .commitMessage(COMMIT_MESSAGE)
                 .resourcesToUpdate(resourcesToUpdate)
@@ -121,6 +133,10 @@ public class CiDroidActionsControllerTest {
 
         assertThat(actualSentResourcesToUpdate).containsExactlyInAnyOrder(resourceToUpdateOnMaster,resourceToUpdateOnSomeBranch);
 
+
+        assertThat(testAppender.events.stream()
+                .filter(logEvent -> logEvent.getMDCPropertyMap().getOrDefault("metricName", "NOT_FOUND").equals(BULK_ACTION_REQUESTED)).count())
+                .isEqualTo(1);
     }
 
     @Test
