@@ -4,11 +4,10 @@ import com.societegenerale.cidroid.api.ResourceToUpdate;
 import com.societegenerale.cidroid.api.actionToReplicate.ActionToReplicate;
 import com.societegenerale.cidroid.api.actionToReplicate.fields.ExpectedField;
 import com.societegenerale.cidroid.model.BulkUpdateCommand;
-
+import com.societegenerale.cidroid.monitoring.Event;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.Example;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +23,8 @@ import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.societegenerale.cidroid.monitoring.MonitoringEvents.BULK_ACTION_REQUESTED;
 
 @Slf4j
 @RestController
@@ -57,6 +58,8 @@ public class CiDroidActionsController {
 
         log.info("received a bulkUpdateCommand {}", bulkUpdateCommand);
 
+        publishMonitoringEventForBulkActionRequested(bulkUpdateCommand);
+
         for (ResourceToUpdate resourceToUpdate : bulkUpdateCommand.getResourcesToUpdate()) {
 
             BulkUpdateCommand singleResourceUpdateCommand = BulkUpdateCommand.builder().gitLogin(bulkUpdateCommand.getGitLogin())
@@ -75,6 +78,17 @@ public class CiDroidActionsController {
         }
 
         return ResponseEntity.accepted().build();
+    }
+
+    private void publishMonitoringEventForBulkActionRequested(
+            @ApiParam(value = "The command describing the action to perform in bulk", required = true) @RequestBody @Valid BulkUpdateCommand bulkUpdateCommand) {
+        Event techEvent = Event.technical(BULK_ACTION_REQUESTED);
+        techEvent.addAttribute("nbResources", String.valueOf(bulkUpdateCommand.getResourcesToUpdate().size()));
+        techEvent.addAttribute("bulkActionType", bulkUpdateCommand.getUpdateAction().getClass().getCanonicalName());
+        techEvent.addAttribute("githubInteractionType", bulkUpdateCommand.getGitHubInteractionType().getClass().getCanonicalName());
+        techEvent.addAttribute("userToNotify", bulkUpdateCommand.getEmail());
+        techEvent.addAttribute("gitLogin", bulkUpdateCommand.getGitLogin());
+        techEvent.publish();
     }
 
     @GetMapping(path = "availableActions")

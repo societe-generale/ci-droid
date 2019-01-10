@@ -51,6 +51,9 @@
         <spring-cloud.version>Edgware.SR2</spring-cloud.version>
         <assertj.version>3.9.1</assertj.version>
         <lombok.version>1.18.4</lombok.version>
+        <logback-classic.version>1.2.1</logback-classic.version>
+        <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
+        <janino.version>3.0.6</janino.version>
 
         <!-- need to declare it, otherwise Spring Boot 1.5 parent pom overrides the version, and it becomes not compatible with hibernate-validator anymore -->
         <javax-validation.version>2.0.1.Final</javax-validation.version>
@@ -140,6 +143,26 @@
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${springfox.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-logback-encoder.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback-classic.version}</version>
+            </dependency>
+
+            <!-- for conditional logging with logback -->
+            <dependency>
+                <groupId>org.codehaus.janino</groupId>
+                <artifactId>janino</artifactId>
+                <version>${janino.version}</version>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

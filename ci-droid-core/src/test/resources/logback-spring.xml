@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="test" class="com.societegenerale.cidroid.monitoring.TestAppender">
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="test" />
+    </root>
+
+</configuration>
