@@ -25,8 +25,8 @@ Several instances of [CI-droid tasks-consumer](https://github.com/societe-genera
 
 The main actions that we can take care when there's a push on default branch deal with the impacts on the open pull requests for the repository :
 - notify developer if his/her PR is not mergeable anymore, following the push in default branch
-- if the PR is still mergeable, rebase the branch with latest commits from master : the goal is to keep the PR up-to-date with default branch 
-and avoid the case in which a green PR with a couple of commits from master are missing gets merged and breaks the build in default branch
+- if the PR is still mergeable, rebase the branch with latest commits from master : the goal is to keep the PR up-to-date with default branch and avoid the case in which a green PR with a couple of commits from master are missing gets merged and breaks the build in default branch
+- if some of the open pull requests are older than a defined limit (6 months by default), they will be closed
 
 #### pull request events
 
