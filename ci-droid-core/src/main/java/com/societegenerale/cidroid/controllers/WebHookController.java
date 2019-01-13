@@ -31,17 +31,17 @@ public class WebHookController {
 
     private List<String> repositoriesToInclude;
 
-    private ObjectMapper objectMapper=new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     public WebHookController(@Qualifier("push-on-default-branch") MessageChannel pushOnDefaultBranchChannel,
                              @Qualifier("pull-request-event") MessageChannel pullRequestEventChannel,
                              CiDroidProperties properties) {
-        this.pushOnDefaultBranchChannel=pushOnDefaultBranchChannel;
-        this.pullRequestEventChannel=pullRequestEventChannel;
+        this.pushOnDefaultBranchChannel = pushOnDefaultBranchChannel;
+        this.pullRequestEventChannel = pullRequestEventChannel;
 
 
-        repositoriesToExclude=properties.getExcluded();
-        repositoriesToInclude=properties.getIncluded();
+        repositoriesToExclude = properties.getExcluded();
+        repositoriesToInclude = properties.getIncluded();
     }
 
     @PostMapping(headers = "X-Github-Event=ping")
@@ -54,26 +54,25 @@ public class WebHookController {
     @PostMapping(headers = "X-Github-Event=push")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> onGitHubPushEvent(HttpEntity<String> rawPushEvent){
+    public ResponseEntity<?> onGitHubPushEvent(HttpEntity<String> rawPushEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
-        PushEvent pushEvent = mapTo(PushEvent.class,rawPushEvent);
+        PushEvent pushEvent = mapTo(PushEvent.class, rawPushEvent);
 
-        if(shouldNotProcess(pushEvent)){
+        if (shouldNotProcess(pushEvent)) {
             return ResponseEntity.accepted().build();
         }
 
         String repoDefaultBranch = pushEvent.getRepository().getDefaultBranch();
         String eventRef = pushEvent.getRef();
 
-        Message rawPushEventMessage=MessageBuilder.withPayload(rawPushEvent.getBody()).build();
+        Message rawPushEventMessage = MessageBuilder.withPayload(rawPushEvent.getBody()).build();
 
         if (eventRef.endsWith(repoDefaultBranch)) {
             log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getFullName());
 
             pushOnDefaultBranchChannel.send(rawPushEventMessage);
-        }
-        else{
+        } else {
             log.info("Not sending pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getFullName());
         }
 
@@ -83,9 +82,9 @@ public class WebHookController {
     private <T> T mapTo(Class<T> targetClass, HttpEntity<String> rawEvent) {
 
         try {
-            return objectMapper.readValue(rawEvent.getBody(),targetClass);
+            return objectMapper.readValue(rawEvent.getBody(), targetClass);
         } catch (IOException e) {
-            log.warn("unable to read the incoming {} {}",targetClass.getName(),rawEvent,e);
+            log.warn("unable to read the incoming {} {}", targetClass.getName(), rawEvent, e);
         }
 
         return null;
@@ -94,16 +93,16 @@ public class WebHookController {
     @PostMapping(headers = "X-Github-Event=pull_request")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> onGitHubPullRequestEvent(HttpEntity<String> rawPullRequestEvent){
+    public ResponseEntity<?> onGitHubPullRequestEvent(HttpEntity<String> rawPullRequestEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
-        PullRequestEvent pullRequestEvent= mapTo(PullRequestEvent.class,rawPullRequestEvent);
+        PullRequestEvent pullRequestEvent = mapTo(PullRequestEvent.class, rawPullRequestEvent);
 
-        if(shouldNotProcess(pullRequestEvent)){
+        if (shouldNotProcess(pullRequestEvent)) {
             return ResponseEntity.accepted().build();
         }
 
-        Message rawPullRequestEventMessage=MessageBuilder.withPayload(rawPullRequestEvent.getBody()).build();
+        Message rawPullRequestEventMessage = MessageBuilder.withPayload(rawPullRequestEvent.getBody()).build();
 
         log.info("sending to consumers : PullRequestEvent for PR #{} on repo {}", pullRequestEvent.getPrNumber(), pullRequestEvent.getRepository().getFullName());
 
@@ -114,17 +113,17 @@ public class WebHookController {
 
     private boolean shouldNotProcess(GitHubEvent gitHubEvent) {
 
-        if(gitHubEvent==null){
+        if (gitHubEvent == null) {
             return true;
         }
 
-        if(!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(gitHubEvent.getRepository().getName())){
-            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel",gitHubEvent.getRepository().getName());
+        if (!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(gitHubEvent.getRepository().getName())) {
+            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel", gitHubEvent.getRepository().getName());
             return true;
         }
 
-        if(!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(gitHubEvent.getRepository().getName())){
-            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel",gitHubEvent.getRepository().getName());
+        if (!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(gitHubEvent.getRepository().getName())) {
+            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel", gitHubEvent.getRepository().getName());
             return true;
         }
 

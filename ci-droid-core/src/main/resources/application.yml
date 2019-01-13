@@ -22,7 +22,7 @@ spring:
           destination: ${user.name}.ci-droid.actions-to-perform.v1
           content-type: application/json
 
-#repositoriesToProcess:
+#repositories-to-process:
 #  included:
 #    - "a-repo-to-include"
 

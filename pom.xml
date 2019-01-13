@@ -9,13 +9,6 @@
 
     <name>CI droid parent</name>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.10.RELEASE</version>
-        <relativePath /> <!-- lookup parent from repository -->
-    </parent>
-
     <modules>
         <module>ci-droid-gui</module>
         <module>ci-droid-core</module>
@@ -42,14 +35,23 @@
         </license>
     </licenses>
 
+    <repositories>
+        <repository>
+            <id>Spring milestones</id>
+            <url>https://repo.spring.io/milestone/</url>
+        </repository>
+    </repositories>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
-        <spring-cloud-stream.version>Ditmars.SR3</spring-cloud-stream.version>
-        <spring-cloud.version>Edgware.SR2</spring-cloud.version>
-        <assertj.version>3.9.1</assertj.version>
+        <spring-boot.version>2.1.2.RELEASE</spring-boot.version>
+        <spring-cloud.version>Greenwich.RC2</spring-cloud.version>
+
         <lombok.version>1.18.4</lombok.version>
         <logback-classic.version>1.2.1</logback-classic.version>
         <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
@@ -94,19 +96,10 @@
     <dependencyManagement>
         <dependencies>
 
-            <!-- this is required for Springfox / Swagger to work
-            see https://github.com/springfox/springfox/issues/2388 -->
             <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>20.0</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-stream-dependencies</artifactId>
-                <version>${spring-cloud-stream.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -117,6 +110,14 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- this is required for Springfox / Swagger to work
+            see https://github.com/springfox/springfox/issues/2388 -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>20.0</version>
             </dependency>
 
             <dependency>
@@ -136,7 +137,6 @@
                 <artifactId>springfox-swagger2</artifactId>
                 <version>${springfox.version}</version>
             </dependency>
-
 
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -162,7 +162,6 @@
                 <artifactId>janino</artifactId>
                 <version>${janino.version}</version>
             </dependency>
-
 
         </dependencies>
     </dependencyManagement>
