@@ -53,15 +53,15 @@
         <spring-cloud.version>Greenwich.RC2</spring-cloud.version>
 
         <lombok.version>1.18.4</lombok.version>
-        <logback-classic.version>1.2.1</logback-classic.version>
-        <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
+        <logback-classic.version>1.2.3</logback-classic.version>
+        <logstash-logback-encoder.version>5.2</logstash-logback-encoder.version>
         <janino.version>3.0.6</janino.version>
-        <jacoco.version>0.8.1</jacoco.version>
+        <jacoco.version>0.8.2</jacoco.version>
         <springfox.version>2.9.2</springfox.version>
-        <guava.version>20.0</guava.version>
+        <guava.version>27.0-jre</guava.version>
 
-        <ci-droid-api.version>1.0.5</ci-droid-api.version>
-        <ci-droid-extensions.version>1.0.6</ci-droid-extensions.version>
+        <ci-droid-api.version>1.0.6</ci-droid-api.version>
+        <ci-droid-extensions.version>1.0.7</ci-droid-extensions.version>
     </properties>
 
     <issueManagement>
