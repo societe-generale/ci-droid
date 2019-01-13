@@ -56,17 +56,12 @@
         <logback-classic.version>1.2.1</logback-classic.version>
         <logstash-logback-encoder.version>4.11</logstash-logback-encoder.version>
         <janino.version>3.0.6</janino.version>
-
-        <!-- need to declare it, otherwise Spring Boot 1.5 parent pom overrides the version, and it becomes not compatible with hibernate-validator anymore -->
-        <javax-validation.version>2.0.1.Final</javax-validation.version>
-
         <jacoco.version>0.8.1</jacoco.version>
-
         <springfox.version>2.9.2</springfox.version>
+        <guava.version>20.0</guava.version>
 
         <ci-droid-api.version>1.0.5</ci-droid-api.version>
         <ci-droid-extensions.version>1.0.6</ci-droid-extensions.version>
-        <maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
     </properties>
 
     <issueManagement>
@@ -117,19 +112,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>20.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.el</groupId>
-                <artifactId>javax.el-api</artifactId>
-                <version>3.0.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.web</groupId>
-                <artifactId>javax.el</artifactId>
-                <version>2.2.6</version>
+                <version>${guava.version}</version>
             </dependency>
 
             <dependency>
@@ -244,7 +227,6 @@
                 <artifactId>coveralls-maven-plugin</artifactId>
                 <version>4.3.0</version>
             </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
