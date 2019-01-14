@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ConfigurationProperties(prefix="repositoriesToProcess")
+@ConfigurationProperties(prefix="repositories-to-process")
 public class CiDroidProperties {
 
     private List<String> excluded;
