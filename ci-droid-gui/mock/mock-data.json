@@ -1,5 +1,112 @@
 {
   "availableActions": [
-
+    {
+      "expectedFields": [
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea",
+          "name": "staticContent",
+          "label": "Content to overwrite/create",
+          "fieldType": "textArea"
+        }
+      ],
+      "actionClassToSend": "com.societegenerale.cidroid.extensions.actionToReplicate.OverwriteStaticFileAction",
+      "label": "Overwrite/Create a file with the given content"
+    },
+    {
+      "expectedFields": [
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "profileName",
+          "label": "Profile name, to replace",
+          "fieldType": "textField"
+        },
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "newProfileContent",
+          "label": "New profile, starting with profile XML element",
+          "fieldType": "textField"
+        }
+      ],
+      "actionClassToSend": "com.societegenerale.cidroid.extensions.actionToReplicate.ReplaceMavenProfileAction",
+      "label": "Replace an existing Maven profile (or create it, if it doesn't exist)"
+    },
+    {
+      "expectedFields": [
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "initialValue",
+          "label": "Old value, to replace",
+          "fieldType": "textField"
+        },
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "newValue",
+          "label": "New value",
+          "fieldType": "textField"
+        }
+      ],
+      "actionClassToSend": "com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAction",
+      "label": "Simply replace a value in a file"
+    },
+    {
+      "expectedFields": [
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "elementToAdd",
+          "label": "The XML element to add",
+          "fieldType": "textField"
+        },
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "xpathUnderWhichElementNeedsToBeAdded",
+          "label": "The Xpath under which the element needs to be added",
+          "fieldType": "textField"
+        }
+      ],
+      "actionClassToSend": "com.societegenerale.cidroid.extensions.actionToReplicate.AddXmlContentAction",
+      "label": "Add some XML content under the given XPath"
+    },
+    {
+      "expectedFields": [
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "xpathElementToRemove",
+          "label": "The Xpath to be removed",
+          "fieldType": "textField"
+        }
+      ],
+      "actionClassToSend": "com.societegenerale.cidroid.extensions.actionToReplicate.RemoveXmlElementAction",
+      "label": "Remove an XML element identified by its XPath"
+    },
+    {
+      "expectedFields": [
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea",
+          "name": "templatedContent",
+          "label": "Template to use",
+          "fieldType": "textArea"
+        }
+      ],
+      "actionClassToSend": "com.societegenerale.cidroid.extensions.actionToReplicate.TemplateBasedContentAction",
+      "label": "Write a file, based on a template and placeholder value"
+    },
+    {
+      "expectedFields": [
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "artifactId",
+          "label": "The artifactId of the plugin or dependency to remove",
+          "fieldType": "textField"
+        },
+        {
+          "@class": "com.societegenerale.cidroid.api.actionToReplicate.fields.TextField",
+          "name": "groupId",
+          "label": "The groupId of the plugin or dependency to remove (optional)",
+          "fieldType": "textField"
+        }
+      ],
+      "actionClassToSend": "com.societegenerale.cidroid.extensions.actionToReplicate.RemoveMavenDependencyOrPluginAction",
+      "label": "Remove a dependency or plugin in pom.xml, depending on provided artifactId"
+    }
   ]
 }
