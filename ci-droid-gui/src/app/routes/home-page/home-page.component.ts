@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ci-home-page',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./home-page.component.scss']
 })
 export class HomePageComponent {
-  constructor() {}
+  constructor(private router: Router) {}
+
+  navigateToForm() {
+    this.router.navigate(['/form']);
+  }
 }
