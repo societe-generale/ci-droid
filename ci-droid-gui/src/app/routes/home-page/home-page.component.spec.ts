@@ -29,7 +29,7 @@ describe('HomePageComponent', () => {
   it('should be created', () => {
     expect(component).toBeTruthy();
     const element: HTMLElement = fixture.debugElement.nativeElement;
-    expect(element.querySelector('div.title').textContent).toBe('CI - DROID');
+    expect(element.querySelector('div.title').textContent).toBe('CI-DROID');
   });
 
   it('should navigate to form on clicking getting started button', () => {
