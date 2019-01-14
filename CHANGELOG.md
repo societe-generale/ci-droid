@@ -6,6 +6,8 @@
 
 ### Changed
 
+- [BREAKING] Upgrade to Spring Boot 2
+
 ### Deprecated
 
 ### Removed
