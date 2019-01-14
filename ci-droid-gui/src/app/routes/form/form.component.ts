@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
+import { CiDroidService } from '../../shared/services/ci-droid.service';
+import Action = shared.types.Action;
 
 @Component({
   selector: 'ci-form',
@@ -6,7 +9,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./form.component.scss']
 })
 export class FormComponent implements OnInit {
-  constructor() {}
+  actions: Action[];
 
-  public ngOnInit() {}
+  constructor(private ciDroidService: CiDroidService, private logger: NGXLogger) {}
+
+  public ngOnInit() {
+    this.initialiseActions();
+  }
+
+  public initialiseActions() {
+    this.ciDroidService.getActions().subscribe(
+      (response: Action[]) => {
+        this.actions = response;
+      },
+      error => {
+        this.actions = [];
+        this.logger.error('Unable to fetch Actions');
+      }
+    );
+  }
 }
