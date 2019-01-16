@@ -33,7 +33,7 @@ describe('FormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get Actions when it is initialised', () => {
+  it('should get Actions when it is initialized', () => {
     const expectedActions: Action[] = [
       {
         expectedFields: [
@@ -71,12 +71,13 @@ describe('FormComponent', () => {
   });
 
   it('should throw error when it fails to fetch actions', () => {
-    spyOn(ciDroidService, 'getActions').and.returnValue(throwError(new Error('Unable to handle')));
+    const error = new Error('Unable to handle');
+    spyOn(ciDroidService, 'getActions').and.returnValue(throwError(error));
     spyOn(logger, 'error').and.callThrough();
     expect(component.actions).toBeUndefined();
     component.ngOnInit();
     expect(ciDroidService.getActions).toHaveBeenCalled();
     expect(component.actions.length).toBe(0);
-    expect(logger.error).toHaveBeenCalledWith('Unable to fetch Actions');
+    expect(logger.error).toHaveBeenCalledWith('Unable to fetch Actions', error);
   });
 });

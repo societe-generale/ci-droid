@@ -14,17 +14,17 @@ export class FormComponent implements OnInit {
   constructor(private ciDroidService: CiDroidService, private logger: NGXLogger) {}
 
   public ngOnInit() {
-    this.initialiseActions();
+    this.initializeActions();
   }
 
-  public initialiseActions() {
+  public initializeActions() {
     this.ciDroidService.getActions().subscribe(
       (response: Action[]) => {
         this.actions = response;
       },
       error => {
         this.actions = [];
-        this.logger.error('Unable to fetch Actions');
+        this.logger.error('Unable to fetch Actions', error);
       }
     );
   }
