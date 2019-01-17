@@ -17,6 +17,8 @@
 
 ### Fixed
 
+- optimized Travis config - running Java tests only once now
+
 ## [1.0.8] - 2018-11-29
 
 ### Added
