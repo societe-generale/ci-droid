@@ -11,3 +11,10 @@ declare namespace shared.types {
     label: string;
   }
 }
+
+declare namespace shared {
+  export const enum GITHUB_INTERACTION {
+    Push = '.DirectPushGitHubInteraction',
+    PullRequest = '.PullRequestGitHubInteraction'
+  }
+}
