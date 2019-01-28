@@ -6,8 +6,9 @@ import { CiDroidService } from '../../shared/services/ci-droid.service';
 
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatSelectChange } from '@angular/material';
+import { MatRadioChange, MatSelectChange } from '@angular/material';
 import Action = shared.types.Action;
+import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 
 describe('FormComponent', () => {
   let component: FormComponent;
@@ -212,15 +213,86 @@ describe('FormComponent', () => {
     });
   });
 
-  describe('pull request or push details section', () => {
-    it('should have option field to select Push or Pull Request default being pull request', () => {
-      const prOrPushCtrl = component.ciDroidForm.get('prOrPush.option');
-      expect(prOrPushCtrl).toBeDefined();
-      expect(prOrPushCtrl).not.toBeNull();
-      expect(prOrPushCtrl.value).toBe('.PullRequestGitHubInteraction');
-      const errors = prOrPushCtrl.errors || {};
-      expect(prOrPushCtrl.valid).toBeTruthy();
+  describe('github interaction section', () => {
+    it('should have option field to select Push or Pull Request, default being pull request', () => {
+      const githubInteractionCtrl = component.ciDroidForm.get('githubInteraction.option');
+      expect(githubInteractionCtrl).toBeDefined();
+      expect(githubInteractionCtrl).not.toBeNull();
+      expect(githubInteractionCtrl.value).toBe('.PullRequestGitHubInteraction');
+      const errors = githubInteractionCtrl.errors || {};
+      expect(githubInteractionCtrl.valid).toBeTruthy();
       expect(errors['required']).toBeFalsy();
+    });
+
+    // Pull requests requires title, branch name and commit message
+    it('should validate the fields title, branch name and commit message as required when pull request is selected', () => {
+      // pull request title
+      const pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
+      expect(pullRequestTitleCtrl).toBeDefined();
+      expect(pullRequestTitleCtrl).not.toBeNull();
+      let errors = pullRequestTitleCtrl.errors || {};
+      expect(pullRequestTitleCtrl.valid).toBeFalsy();
+      expect(errors['required']).toBeTruthy();
+      // branch name
+      const branchNameCtrl = component.ciDroidForm.get('githubInteraction.branchName');
+      expect(branchNameCtrl).toBeDefined();
+      expect(branchNameCtrl).not.toBeNull();
+      errors = branchNameCtrl.errors || {};
+      expect(branchNameCtrl.valid).toBeFalsy();
+      expect(errors['required']).toBeTruthy();
+      // commit message
+      const commitMessageCtrl = component.ciDroidForm.get('githubInteraction.commitMessage');
+      expect(commitMessageCtrl).toBeDefined();
+      expect(commitMessageCtrl).not.toBeNull();
+      errors = commitMessageCtrl.errors || {};
+      expect(commitMessageCtrl.valid).toBeFalsy();
+      expect(errors['required']).toBeTruthy();
+    });
+
+    it('should validate the field commit message as required when push is selected', () => {
+      const gitHubInteractionSelected = GITHUB_INTERACTION.Push;
+      component.githubInteractionChanged(new MatRadioChange(null, gitHubInteractionSelected));
+      // should not have pull request title validator
+      const pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
+      expect(pullRequestTitleCtrl).toBeNull();
+      // should not have branch name validator
+      const branchNameCtrl = component.ciDroidForm.get('githubInteraction.branchName');
+      expect(branchNameCtrl).toBeNull();
+      // should have commit message validator
+      const commitMessageCtrl = component.ciDroidForm.get('githubInteraction.commitMessage');
+      expect(commitMessageCtrl).toBeDefined();
+      expect(commitMessageCtrl).not.toBeNull();
+      const errors = commitMessageCtrl.errors || {};
+      expect(commitMessageCtrl.valid).toBeFalsy();
+      expect(errors['required']).toBeTruthy();
+    });
+
+    it('should validate the fields title, branch name and commit message as required when selected back to pull request', () => {
+      let gitHubInteractionSelected = GITHUB_INTERACTION.Push;
+      component.githubInteractionChanged(new MatRadioChange(null, gitHubInteractionSelected));
+      // change the interaction
+      gitHubInteractionSelected = GITHUB_INTERACTION.PullRequest;
+      component.githubInteractionChanged(new MatRadioChange(null, gitHubInteractionSelected));
+      // should have pull request title validator
+      const pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
+      expect(pullRequestTitleCtrl).not.toBeNull();
+      let errors = pullRequestTitleCtrl.errors || {};
+      expect(pullRequestTitleCtrl.valid).toBeFalsy();
+      expect(errors['required']).toBeTruthy();
+      // should have branch name validator
+      const branchNameCtrl = component.ciDroidForm.get('githubInteraction.branchName');
+      expect(branchNameCtrl).toBeDefined();
+      expect(branchNameCtrl).not.toBeNull();
+      errors = branchNameCtrl.errors || {};
+      expect(branchNameCtrl.valid).toBeFalsy();
+      expect(errors['required']).toBeTruthy();
+      // should have commit message validator
+      const commitMessageCtrl = component.ciDroidForm.get('githubInteraction.commitMessage');
+      expect(commitMessageCtrl).toBeDefined();
+      expect(commitMessageCtrl).not.toBeNull();
+      errors = commitMessageCtrl.errors || {};
+      expect(commitMessageCtrl.valid).toBeFalsy();
+      expect(errors['required']).toBeTruthy();
     });
   });
 });

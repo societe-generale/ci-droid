@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSelectChange } from '@angular/material';
+import { MatRadioChange, MatSelectChange } from '@angular/material';
 import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 
@@ -44,8 +44,11 @@ export class FormComponent implements OnInit {
       action: this.formBuilder.group({
         default: ['', [Validators.required]]
       }),
-      prOrPush: this.formBuilder.group({
-        option: [GITHUB_INTERACTION.PullRequest, [Validators.required]]
+      githubInteraction: this.formBuilder.group({
+        option: [GITHUB_INTERACTION.PullRequest, [Validators.required]],
+        pullRequestTitle: ['', [Validators.required]],
+        branchName: ['', [Validators.required]],
+        commitMessage: ['', [Validators.required]]
       })
     });
   }
@@ -68,6 +71,27 @@ export class FormComponent implements OnInit {
     const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
     Object.keys(actionFormGroup.controls).forEach(key => {
       actionFormGroup.removeControl(key);
+    });
+  }
+
+  githubInteractionChanged(matSelectedGithubInteraction: MatRadioChange) {
+    this.clearGithubInteractionControls();
+    const githubIntegrationGroup = this.ciDroidForm.get('githubInteraction') as FormGroup;
+    if (matSelectedGithubInteraction.value === GITHUB_INTERACTION.Push) {
+      githubIntegrationGroup.registerControl('commitMessage', new FormControl('', [Validators.required]));
+    } else {
+      githubIntegrationGroup.registerControl('pullRequestTitle', new FormControl('', [Validators.required]));
+      githubIntegrationGroup.registerControl('branchName', new FormControl('', [Validators.required]));
+      githubIntegrationGroup.registerControl('commitMessage', new FormControl('', [Validators.required]));
+    }
+  }
+
+  private clearGithubInteractionControls() {
+    const githubInteractionForm = this.ciDroidForm.get('githubInteraction') as FormGroup;
+    Object.keys(githubInteractionForm.controls).forEach(key => {
+      if (key !== 'option') {
+        githubInteractionForm.removeControl(key);
+      }
     });
   }
 }
