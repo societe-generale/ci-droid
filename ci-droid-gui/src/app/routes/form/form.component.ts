@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSelectChange } from '@angular/material';
 import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 
@@ -40,10 +41,33 @@ export class FormComponent implements OnInit {
         password: ['', [Validators.required]]
       }),
       email: ['', [Validators.required, Validators.email]],
-      action: ['', [Validators.required]],
+      action: this.formBuilder.group({
+        dummy: ['', [Validators.required]]
+      }),
       prOrPush: this.formBuilder.group({
         option: [GITHUB_INTERACTION.PullRequest, [Validators.required]]
       })
     });
+  }
+
+  onActionChanged(matSelectedAction: MatSelectChange): void {
+    const selectedAction = this.actions.find(action => action.actionClassToSend === matSelectedAction.value);
+    this.clearActionFormControls();
+    if (selectedAction) {
+      const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
+      selectedAction.expectedFields.forEach(field => {
+        actionFormGroup.registerControl(field.name, new FormControl('', [Validators.required]));
+      });
+    } else {
+      const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
+      actionFormGroup.registerControl('dummy', new FormControl('', [Validators.required]));
+    }
+  }
+
+  private clearActionFormControls(): void {
+    const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
+    for (const controlsKey in actionFormGroup.controls) {
+      actionFormGroup.removeControl(controlsKey);
+    }
   }
 }

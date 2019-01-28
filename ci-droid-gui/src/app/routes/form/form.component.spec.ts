@@ -6,6 +6,7 @@ import { CiDroidService } from '../../shared/services/ci-droid.service';
 
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectChange } from '@angular/material';
 import Action = shared.types.Action;
 
 describe('FormComponent', () => {
@@ -39,29 +40,32 @@ describe('FormComponent', () => {
       {
         expectedFields: [
           {
-            name: 'initialValue',
-            label: 'old value, to replace',
-            fieldType: 'textField'
-          },
-          {
-            name: 'newValue',
-            label: 'new value',
-            fieldType: 'textField'
-          }
-        ],
-        actionClassToSend: 'simpleReplaceAction',
-        label: 'simple replace in the file'
-      },
-      {
-        expectedFields: [
-          {
+            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea',
             name: 'staticContent',
             label: 'content to overwrite/create',
             fieldType: 'textArea'
           }
         ],
-        actionClassToSend: 'overWriteStaticContentAction',
+        actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction',
         label: 'overwrite/create a file with given content'
+      },
+      {
+        expectedFields: [
+          {
+            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+            name: 'initialValue',
+            label: 'old value, to replace',
+            fieldType: 'textField'
+          },
+          {
+            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+            name: 'newValue',
+            label: 'new value',
+            fieldType: 'textField'
+          }
+        ],
+        actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction',
+        label: 'simple replace in the file'
       }
     ];
     spyOn(ciDroidService, 'getActions').and.returnValue(of(expectedActions));
@@ -120,13 +124,90 @@ describe('FormComponent', () => {
     });
   });
 
-  describe('action to be performed section', () => {
+  describe('action', () => {
+    let actions: Action[];
+
+    beforeEach(() => {
+      actions = [
+        {
+          expectedFields: [
+            {
+              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea',
+              name: 'staticContent',
+              label: 'content to overwrite/create',
+              fieldType: 'textArea'
+            }
+          ],
+          actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction',
+          label: 'overwrite/create a file with given content'
+        },
+        {
+          expectedFields: [
+            {
+              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+              name: 'initialValue',
+              label: 'old value, to replace',
+              fieldType: 'textField'
+            },
+            {
+              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+              name: 'newValue',
+              label: 'new value',
+              fieldType: 'textField'
+            }
+          ],
+          actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction',
+          label: 'simple replace in the file'
+        }
+      ];
+      component.actions = actions;
+    });
+
     it('should have action field with required validation', () => {
-      const actionCtrl = component.ciDroidForm.get('action');
+      // default behavior
+      const actionCtrl = component.ciDroidForm.get('action.dummy');
       expect(actionCtrl).toBeDefined();
       expect(actionCtrl).not.toBeNull();
       const errors = actionCtrl.errors || {};
       expect(actionCtrl.valid).toBeFalsy();
+      expect(errors['required']).toBeTruthy();
+    });
+
+    it('should add validations when you chose a particular action', () => {
+      function assertActionForm() {
+        const actionToCheck: Action = actions.find(action => action.actionClassToSend === selectedAction);
+        expect(component.ciDroidForm.get(`action.dummy`)).toBeNull();
+        actionToCheck.expectedFields.forEach(field => {
+          const formActionField = component.ciDroidForm.get(`action.${field.name}`);
+          expect(formActionField).toBeDefined();
+          expect(formActionField).not.toBeNull();
+          const errors = formActionField.errors || {};
+          expect(formActionField.valid).toBeFalsy();
+          expect(errors['required']).toBeTruthy();
+        });
+      }
+
+      let selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      assertActionForm();
+      // change the action
+      selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      assertActionForm();
+    });
+
+    it('should not add validation when the user chooses a wrong action', () => {
+      // chose a right action
+      let selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      // chose a wrong action
+      selectedAction = 'invalid';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      const formActionField = component.ciDroidForm.get(`action.dummy`);
+      expect(formActionField).toBeDefined();
+      expect(formActionField).not.toBeNull();
+      const errors = formActionField.errors || {};
+      expect(formActionField.valid).toBeFalsy();
       expect(errors['required']).toBeTruthy();
     });
   });

@@ -29,56 +29,32 @@ describe('CiDroidService', () => {
       {
         expectedFields: [
           {
-            name: 'initialValue',
-            label: 'old value, to replace',
-            fieldType: 'textField'
-          },
-          {
-            name: 'newValue',
-            label: 'new value',
-            fieldType: 'textField'
-          }
-        ],
-        actionClassToSend: 'simpleReplaceAction',
-        label: 'simple replace in the file'
-      },
-      {
-        expectedFields: [
-          {
+            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea',
             name: 'staticContent',
             label: 'content to overwrite/create',
             fieldType: 'textArea'
           }
         ],
-        actionClassToSend: 'overWriteStaticContentAction',
+        actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction',
         label: 'overwrite/create a file with given content'
       },
       {
         expectedFields: [
           {
-            name: 'templatedContent',
-            label: 'template to use',
-            fieldType: 'textArea'
-          }
-        ],
-        actionClassToSend: 'templateBasedContentAction',
-        label: 'overwrite a file with a template based content'
-      },
-      {
-        expectedFields: [
-          {
-            name: 'profileName',
-            label: 'profile name, to replace',
+            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+            name: 'initialValue',
+            label: 'old value, to replace',
             fieldType: 'textField'
           },
           {
-            name: 'newProfileContent',
-            label: 'new profile, starting with profile XML element',
+            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+            name: 'newValue',
+            label: 'new value',
             fieldType: 'textField'
           }
         ],
-        actionClassToSend: 'replaceMavenProfileAction',
-        label: "replace and existing Maven profile (or creates, if it doesn't exist) "
+        actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction',
+        label: 'simple replace in the file'
       }
     ];
     ciDroidService.getActions().subscribe((actualActions: Action[]) => {

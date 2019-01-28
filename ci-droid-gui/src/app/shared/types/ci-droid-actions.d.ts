@@ -3,6 +3,7 @@ declare namespace shared.types {
     name: string;
     label: string;
     fieldType: string;
+    '@class': string;
   }
 
   interface Action {
