@@ -174,6 +174,14 @@ describe('FormComponent', () => {
     });
 
     it('should add validations when you chose a particular action', () => {
+      let selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      assertActionForm();
+      // change the action
+      selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      assertActionForm();
+
       function assertActionForm() {
         const actionToCheck: Action = actions.find(action => action.actionClassToSend === selectedAction);
         expect(component.ciDroidForm.get(`action.dummy`)).toBeNull();
@@ -186,14 +194,6 @@ describe('FormComponent', () => {
           expect(errors['required']).toBeTruthy();
         });
       }
-
-      let selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction';
-      component.onActionChanged(new MatSelectChange(null, selectedAction));
-      assertActionForm();
-      // change the action
-      selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction';
-      component.onActionChanged(new MatSelectChange(null, selectedAction));
-      assertActionForm();
     });
 
     it('should not add validation when the user chooses a wrong action', () => {

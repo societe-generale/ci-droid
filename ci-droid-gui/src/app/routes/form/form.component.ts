@@ -66,8 +66,8 @@ export class FormComponent implements OnInit {
 
   private clearActionFormControls(): void {
     const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
-    for (const controlsKey in actionFormGroup.controls) {
-      actionFormGroup.removeControl(controlsKey);
-    }
+    Object.keys(actionFormGroup.controls).forEach(key => {
+      actionFormGroup.removeControl(key);
+    });
   }
 }
