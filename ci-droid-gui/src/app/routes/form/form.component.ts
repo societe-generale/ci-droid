@@ -42,7 +42,7 @@ export class FormComponent implements OnInit {
       }),
       email: ['', [Validators.required, Validators.email]],
       action: this.formBuilder.group({
-        dummy: ['', [Validators.required]]
+        default: ['', [Validators.required]]
       }),
       prOrPush: this.formBuilder.group({
         option: [GITHUB_INTERACTION.PullRequest, [Validators.required]]
@@ -60,7 +60,7 @@ export class FormComponent implements OnInit {
       });
     } else {
       const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
-      actionFormGroup.registerControl('dummy', new FormControl('', [Validators.required]));
+      actionFormGroup.registerControl('default', new FormControl('', [Validators.required]));
     }
   }
 

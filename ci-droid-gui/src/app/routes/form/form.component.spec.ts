@@ -165,7 +165,7 @@ describe('FormComponent', () => {
 
     it('should have action field with required validation', () => {
       // default behavior
-      const actionCtrl = component.ciDroidForm.get('action.dummy');
+      const actionCtrl = component.ciDroidForm.get('action.default');
       expect(actionCtrl).toBeDefined();
       expect(actionCtrl).not.toBeNull();
       const errors = actionCtrl.errors || {};
@@ -184,7 +184,7 @@ describe('FormComponent', () => {
 
       function assertActionForm() {
         const actionToCheck: Action = actions.find(action => action.actionClassToSend === selectedAction);
-        expect(component.ciDroidForm.get(`action.dummy`)).toBeNull();
+        expect(component.ciDroidForm.get(`action.default`)).toBeNull();
         actionToCheck.expectedFields.forEach(field => {
           const formActionField = component.ciDroidForm.get(`action.${field.name}`);
           expect(formActionField).toBeDefined();
@@ -203,7 +203,7 @@ describe('FormComponent', () => {
       // chose a wrong action
       selectedAction = 'invalid';
       component.onActionChanged(new MatSelectChange(null, selectedAction));
-      const formActionField = component.ciDroidForm.get(`action.dummy`);
+      const formActionField = component.ciDroidForm.get(`action.default`);
       expect(formActionField).toBeDefined();
       expect(formActionField).not.toBeNull();
       const errors = formActionField.errors || {};
