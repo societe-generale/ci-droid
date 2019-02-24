@@ -80,8 +80,7 @@ public class CiDroidActionsController {
         return ResponseEntity.accepted().build();
     }
 
-    private void publishMonitoringEventForBulkActionRequested(
-            @ApiParam(value = "The command describing the action to perform in bulk", required = true) @RequestBody @Valid BulkUpdateCommand bulkUpdateCommand) {
+    private void publishMonitoringEventForBulkActionRequested(BulkUpdateCommand bulkUpdateCommand) {
         Event techEvent = Event.technical(BULK_ACTION_REQUESTED);
         techEvent.addAttribute("nbResources", String.valueOf(bulkUpdateCommand.getResourcesToUpdate().size()));
         techEvent.addAttribute("bulkActionType", bulkUpdateCommand.getUpdateAction().getClass().getCanonicalName());
