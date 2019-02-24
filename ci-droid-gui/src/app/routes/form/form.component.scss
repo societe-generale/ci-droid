@@ -1,0 +1,36 @@
+@import '../../../sass/_variables';
+
+:host {
+  .left {
+    flex: 3;
+    background-color: $red-socgen;
+    opacity: 0.9;
+
+    .header {
+      padding: 24px 48px;
+
+      .sg-logo {
+        max-height: 4vw;
+      }
+    }
+  }
+
+  .right {
+    flex: 5;
+    flex-direction: column;
+    display: flex;
+    justify-content: flex-start;
+
+    .container-fluid {
+      .title {
+        padding: 25px 35px;
+        font-size: 3vw;
+        font-weight: 700;
+      }
+
+      .form {
+        padding: 25px;
+      }
+    }
+  }
+}

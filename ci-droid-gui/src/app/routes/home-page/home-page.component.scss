@@ -2,7 +2,7 @@
 
 :host {
   .left {
-    flex: 2;
+    flex: 3;
     background-color: $red-socgen;
     opacity: 0.9;
 
@@ -10,13 +10,13 @@
       padding: 24px 48px;
 
       .sg-logo {
-        max-height: 6vh;
+        max-height: 4vw;
       }
     }
   }
 
   .right {
-    flex: 3;
+    flex: 5;
     flex-direction: column;
     display: flex;
     justify-content: center;
@@ -27,12 +27,12 @@
       opacity: 0.8;
 
       .title {
-        font-size: 10vh;
+        font-size: 10vw;
         font-weight: 700;
       }
 
       .description {
-        font-size: 2.15vh;
+        font-size: 2.15vw;
         padding: 1%;
       }
 
