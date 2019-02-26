@@ -15,9 +15,7 @@
               <ng-template matStepLabel>GitHub Credentials</ng-template>
               <mat-form-field>
                 <input matInput placeholder="GitHub Token" formControlName="gitHubOauthToken" [type]="hide ? 'text' : 'password'" />
-                <mat-icon style="cursor: pointer" matSuffix (click)="hide = !hide">
-                  {{ hide ? 'visibility' : 'visibility_off' }}
-                </mat-icon>
+                <mat-icon style="cursor: pointer" matSuffix (click)="hide = !hide"> {{ hide ? 'visibility' : 'visibility_off' }} </mat-icon>
                 <mat-error *ngIf="ciDroidForm.get('gitHubCredentials.gitHubOauthToken').hasError('required')">
                   GitHub Token is <strong>required</strong>
                 </mat-error>
@@ -37,9 +35,7 @@
               <ng-template matStepLabel>Action to be performed</ng-template>
               <mat-form-field>
                 <mat-select placeholder="Action" (selectionChange)="onActionChanged($event)" formControlName="default">
-                  <mat-option *ngFor="let action of actions" [value]="action.actionClassToSend">
-                    {{ action.label }}
-                  </mat-option>
+                  <mat-option *ngFor="let action of actions" [value]="action.actionClassToSend"> {{ action.label }} </mat-option>
                 </mat-select>
                 <mat-error *ngIf="ciDroidForm.get('action.default')?.hasError('required')"> Action is <strong>required</strong> </mat-error>
               </mat-form-field>
@@ -89,6 +85,7 @@
             </mat-step>
             <!-- Upload CSV -->
             <mat-step>
+              <ci-upload-csv></ci-upload-csv>
               <ng-template matStepLabel>Upload CSV</ng-template>
             </mat-step>
           </mat-vertical-stepper>
