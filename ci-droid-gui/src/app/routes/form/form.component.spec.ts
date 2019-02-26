@@ -6,7 +6,16 @@ import { CiDroidService } from '../../shared/services/ci-droid.service';
 
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatRadioChange, MatSelectChange } from '@angular/material';
+import {
+  MatIconModule,
+  MatInputModule,
+  MatRadioChange,
+  MatRadioModule,
+  MatSelectChange,
+  MatSelectModule,
+  MatStepperModule
+} from '@angular/material';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 
@@ -18,7 +27,18 @@ describe('FormComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, LoggerTestingModule, FormsModule, ReactiveFormsModule],
+      imports: [
+        HttpClientTestingModule,
+        LoggerTestingModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatStepperModule,
+        MatInputModule,
+        NoopAnimationsModule,
+        MatIconModule,
+        MatSelectModule,
+        MatRadioModule
+      ],
       declarations: [FormComponent],
       providers: [CiDroidService]
     }).compileComponents();
@@ -92,17 +112,8 @@ describe('FormComponent', () => {
   });
 
   describe('github credential section', () => {
-    it('should have username field with required validation', () => {
-      const usernameCtrl = component.ciDroidForm.get('gitHubCredentials.username');
-      expect(usernameCtrl).toBeDefined();
-      expect(usernameCtrl).not.toBeNull();
-      const errors = usernameCtrl.errors || {};
-      expect(usernameCtrl.valid).toBeFalsy();
-      expect(errors['required']).toBeTruthy();
-    });
-
-    it('should have password field with required validation', () => {
-      const passwordCtrl = component.ciDroidForm.get('gitHubCredentials.password');
+    it('should have gitHubOauthToken field with required validation', () => {
+      const passwordCtrl = component.ciDroidForm.get('gitHubCredentials.gitHubOauthToken');
       expect(passwordCtrl).toBeDefined();
       expect(passwordCtrl).not.toBeNull();
       const errors = passwordCtrl.errors || {};
@@ -159,6 +170,18 @@ describe('FormComponent', () => {
           ],
           actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction',
           label: 'simple replace in the file'
+        },
+        {
+          expectedFields: [
+            {
+              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+              name: 'groupId',
+              label: 'The groupId of the plugin or dependency to remove (optional)',
+              fieldType: 'textField'
+            }
+          ],
+          actionClassToSend: 'com.societegenerale.cidroid.extensions.actionToReplicate.RemoveMavenDependencyOrPluginAction',
+          label: 'Remove a dependency or plugin in pom.xml, depending on provided artifactId'
         }
       ];
       component.actions = actions;
@@ -186,6 +209,7 @@ describe('FormComponent', () => {
       function assertActionForm() {
         const actionToCheck: Action = actions.find(action => action.actionClassToSend === selectedAction);
         expect(component.ciDroidForm.get(`action.default`)).toBeNull();
+        expect(component.fields).toBe(actionToCheck.expectedFields);
         actionToCheck.expectedFields.forEach(field => {
           const formActionField = component.ciDroidForm.get(`action.${field.name}`);
           expect(formActionField).toBeDefined();
@@ -193,6 +217,35 @@ describe('FormComponent', () => {
           const errors = formActionField.errors || {};
           expect(formActionField.valid).toBeFalsy();
           expect(errors['required']).toBeTruthy();
+        });
+      }
+    });
+
+    it('should add validations when you chose a particular action with optional field ', () => {
+      let selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      assertActionForm();
+      // change the action
+      selectedAction = 'com.societegenerale.cidroid.extensions.actionToReplicate.RemoveMavenDependencyOrPluginAction';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      assertActionForm();
+
+      function assertActionForm() {
+        const actionToCheck: Action = actions.find(action => action.actionClassToSend === selectedAction);
+        expect(component.ciDroidForm.get(`action.default`)).toBeNull();
+        expect(component.fields).toBe(actionToCheck.expectedFields);
+        actionToCheck.expectedFields.forEach(field => {
+          const formActionField = component.ciDroidForm.get(`action.${field.name}`);
+          expect(formActionField).toBeDefined();
+          expect(formActionField).not.toBeNull();
+          const errors = formActionField.errors || {};
+          if (field.label.includes('optional')) {
+            expect(formActionField.valid).toBeTruthy();
+            expect(errors['required']).toBeUndefined();
+          } else {
+            expect(formActionField.valid).toBeFalsy();
+            expect(errors['required']).toBeTruthy();
+          }
         });
       }
     });
@@ -254,15 +307,21 @@ describe('FormComponent', () => {
       component.githubInteractionChanged(new MatRadioChange(null, gitHubInteractionSelected));
       // should not have pull request title validator
       const pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
-      expect(pullRequestTitleCtrl).toBeNull();
+      let errors = pullRequestTitleCtrl.errors || {};
+      expect(pullRequestTitleCtrl.valid).toBeTruthy();
+      expect(pullRequestTitleCtrl.value).toBeNull();
+      expect(errors['required']).toBeUndefined();
       // should not have branch name validator
       const branchNameCtrl = component.ciDroidForm.get('githubInteraction.branchName');
-      expect(branchNameCtrl).toBeNull();
+      errors = branchNameCtrl.errors || {};
+      expect(branchNameCtrl.valid).toBeTruthy();
+      expect(branchNameCtrl.value).toBeNull();
+      expect(errors['required']).toBeUndefined();
       // should have commit message validator
       const commitMessageCtrl = component.ciDroidForm.get('githubInteraction.commitMessage');
       expect(commitMessageCtrl).toBeDefined();
       expect(commitMessageCtrl).not.toBeNull();
-      const errors = commitMessageCtrl.errors || {};
+      errors = commitMessageCtrl.errors || {};
       expect(commitMessageCtrl.valid).toBeFalsy();
       expect(errors['required']).toBeTruthy();
     });

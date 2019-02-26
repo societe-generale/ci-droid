@@ -8,8 +8,91 @@
     <div class="container-fluid">
       <div class="row title justify-content-end">CI-DROID</div>
       <div class="row form justify-content-start">
-        Form
-        <!-- TODO -->
+        <form [formGroup]="ciDroidForm">
+          <mat-vertical-stepper linear="true">
+            <!-- GitHub Credentials -->
+            <mat-step formGroupName="gitHubCredentials" [stepControl]="ciDroidForm.get('gitHubCredentials')">
+              <ng-template matStepLabel>GitHub Credentials</ng-template>
+              <mat-form-field>
+                <input matInput placeholder="GitHub Token" formControlName="gitHubOauthToken" [type]="hide ? 'text' : 'password'" />
+                <mat-icon style="cursor: pointer" matSuffix (click)="hide = !hide">
+                  {{ hide ? 'visibility' : 'visibility_off' }}
+                </mat-icon>
+                <mat-error *ngIf="ciDroidForm.get('gitHubCredentials.gitHubOauthToken').hasError('required')">
+                  GitHub Token is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </mat-step>
+            <!-- Email -->
+            <mat-step [stepControl]="ciDroidForm.get('email')">
+              <ng-template matStepLabel>Email for notification</ng-template>
+              <mat-form-field>
+                <input matInput placeholder="Email" formControlName="email" type="email" />
+                <mat-error *ngIf="ciDroidForm.controls['email'].hasError('required')"> Email is <strong>required</strong> </mat-error>
+                <mat-error *ngIf="ciDroidForm.controls['email'].hasError('email')"> Please enter a valid <strong>email</strong> </mat-error>
+              </mat-form-field>
+            </mat-step>
+            <!-- Action -->
+            <mat-step formGroupName="action" [stepControl]="ciDroidForm.get('action')">
+              <ng-template matStepLabel>Action to be performed</ng-template>
+              <mat-form-field>
+                <mat-select placeholder="Action" (selectionChange)="onActionChanged($event)" formControlName="default">
+                  <mat-option *ngFor="let action of actions" [value]="action.actionClassToSend">
+                    {{ action.label }}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="ciDroidForm.get('action.default')?.hasError('required')"> Action is <strong>required</strong> </mat-error>
+              </mat-form-field>
+              <!-- Action fields -->
+              <div *ngFor="let field of fields">
+                <mat-form-field *ngIf="field.fieldType === 'textField'">
+                  <input matInput [placeholder]="field.label" [formControlName]="field.name" />
+                  <mat-error *ngIf="ciDroidForm.get('action.' + field.name)?.hasError('required')">
+                    {{ field.label }} is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field *ngIf="field.fieldType === 'textArea'">
+                  <textarea matInput [placeholder]="field.label" [formControlName]="field.name"></textarea>
+                  <mat-error *ngIf="ciDroidForm.get('action.' + field.name)?.hasError('required')">
+                    {{ field.label }} is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </mat-step>
+            <!-- GitHub Interaction -->
+            <mat-step formGroupName="githubInteraction" [stepControl]="ciDroidForm.get('githubInteraction')">
+              <ng-template matStepLabel>Pull request or push</ng-template>
+              <mat-radio-group formControlName="option" (change)="githubInteractionChanged($event)">
+                <mat-radio-button [value]="pullRequest">Pull request</mat-radio-button> &nbsp;&nbsp;
+                <mat-radio-button [value]="push">Push</mat-radio-button>
+              </mat-radio-group>
+              <div *ngIf="ciDroidForm.get('githubInteraction.option').value === pullRequest">
+                <mat-form-field>
+                  <input matInput placeholder="Title" formControlName="pullRequestTitle" />
+                  <mat-error *ngIf="ciDroidForm.get('githubInteraction.pullRequestTitle').hasError('required')">
+                    Title is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+                <mat-form-field>
+                  <input matInput placeholder="Branch name" formControlName="branchName" />
+                  <mat-error *ngIf="ciDroidForm.get('githubInteraction.branchName').hasError('required')">
+                    Commit message is <strong>required</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <mat-form-field>
+                <textarea matInput placeholder="Commit message" formControlName="commitMessage"></textarea>
+                <mat-error *ngIf="ciDroidForm.get('githubInteraction.commitMessage').hasError('required')">
+                  Commit message is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+            </mat-step>
+            <!-- Upload CSV -->
+            <mat-step>
+              <ng-template matStepLabel>Upload CSV</ng-template>
+            </mat-step>
+          </mat-vertical-stepper>
+        </form>
       </div>
     </div>
   </div>
