@@ -1,5 +1,6 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatCheckboxModule, MatTableModule } from '@angular/material';
 import { UploadCsvComponent } from './upload-csv.component';
 
 describe('UploadCsvComponent', () => {
@@ -8,7 +9,9 @@ describe('UploadCsvComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [UploadCsvComponent]
+      imports: [MatTableModule, MatCheckboxModule],
+      declarations: [UploadCsvComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
@@ -20,5 +23,40 @@ describe('UploadCsvComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should erase the file on file reset', () => {
+    component.fileName = 'test-file';
+    expect(component.fileName.length).toBeGreaterThan(0);
+    component.fileReset();
+    expect(component.fileName.length).toEqual(0);
+    expect(component.resourcesToUpdate.length).toEqual(0);
+  });
+
+  it('should convert CSV to JSON', () => {
+    let sampleCSV;
+    sampleCSV = 'societe-generale/ci-droid;JenkinsFile;master';
+    expect(typeof sampleCSV === 'string').toBe(true);
+    const convertedJSON = component.CSV2JSON(sampleCSV);
+    expect(typeof convertedJSON === 'object').toBe(true);
+  });
+
+  it('should get the file content on change in the file', () => {
+    const blob = new Blob(['data'], { type: 'text/csv' });
+    const file1 = new File([blob], 'test-file1', null);
+    const file2 = new File([blob], 'test-file2', null);
+    const event = {
+      target: {
+        files: [file1]
+      },
+      dataTransfer: {
+        files: [file2]
+      },
+      type: 'drop'
+    };
+    component.onFileChange(event);
+    expect(component.fileName).toBe('test-file1');
+    component.handleDragAndDrop(event);
+    expect(component.fileName).toBe('test-file2');
   });
 });

@@ -1,0 +1,34 @@
+@import '../../../../sass/_variables';
+
+:host {
+  table {
+    width: 100%;
+    .mat-column-repoFullName {
+      max-width: 175px;
+    }
+    .mat-column-branchName {
+      max-width: 50px;
+    }
+  }
+
+  .upload-csv {
+    border: 2px dashed $grey-light;
+    padding: 10px;
+    color: $grey-light;
+    &:hover {
+      cursor: pointer;
+      border-color: $black;
+      color: $black;
+    }
+    .drag-drop-zone {
+      .input-file {
+        opacity: 0;
+        cursor: pointer;
+      }
+    }
+  }
+  .on-file-over {
+    border-color: $black;
+    color: $black;
+  }
+}
