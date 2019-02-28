@@ -41,13 +41,13 @@ export const resourcesToUpdate: ResourcesToUpdate[] = [
 })
 export class UploadCsvComponent {
   displayedColumns: string[] = ['select', 'repoFullName', 'filePathOnRepo', 'branchName'];
-  dataSource = new MatTableDataSource<ResourcesToUpdate>(resourcesToUpdate);
+  dataSource: MatTableDataSource<ResourcesToUpdate>;
   selectedResources = new SelectionModel<ResourcesToUpdate>(true, []);
   fileName;
   resourcesToUpdate: ResourcesToUpdate[] = [];
 
   constructor() {
-    this.selectAll();
+    this.dataSource = new MatTableDataSource<ResourcesToUpdate>(this.resourcesToUpdate);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
