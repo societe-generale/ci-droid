@@ -3,7 +3,15 @@ import { CommonModule } from '@angular/common';
 import { UploadCsvComponent } from '../../shared/components/upload-csv/upload-csv.component';
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconModule, MatInputModule, MatRadioModule, MatSelectModule, MatStepperModule } from '@angular/material';
+import {
+  MatIconModule,
+  MatInputModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatStepperModule,
+  MatTableModule,
+  MatCheckboxModule
+} from '@angular/material';
 
 @NgModule({
   declarations: [FormComponent, UploadCsvComponent],
@@ -15,7 +23,9 @@ import { MatIconModule, MatInputModule, MatRadioModule, MatSelectModule, MatStep
     MatInputModule,
     MatIconModule,
     MatSelectModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTableModule,
+    MatCheckboxModule
   ]
 })
 export class FormModule {}

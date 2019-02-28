@@ -11,6 +11,12 @@ declare namespace shared.types {
     actionClassToSend: string;
     label: string;
   }
+
+  interface ResourcesToUpdate {
+    repoFullName: string;
+    filePathOnRepo: string;
+    branchName: string;
+  }
 }
 
 declare namespace shared {

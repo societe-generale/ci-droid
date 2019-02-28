@@ -2,18 +2,21 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoggerTestingModule, NGXLogger, NGXLoggerMock } from 'ngx-logger';
 import { of, throwError } from 'rxjs';
+import { UploadCsvComponent } from '../../shared/components/upload-csv/upload-csv.component';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatCheckboxModule,
   MatIconModule,
   MatInputModule,
   MatRadioChange,
   MatRadioModule,
   MatSelectChange,
   MatSelectModule,
-  MatStepperModule
+  MatStepperModule,
+  MatTableModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import Action = shared.types.Action;
@@ -37,9 +40,11 @@ describe('FormComponent', () => {
         NoopAnimationsModule,
         MatIconModule,
         MatSelectModule,
-        MatRadioModule
+        MatRadioModule,
+        MatTableModule,
+        MatCheckboxModule
       ],
-      declarations: [FormComponent],
+      declarations: [FormComponent, UploadCsvComponent],
       providers: [CiDroidService]
     }).compileComponents();
   }));
