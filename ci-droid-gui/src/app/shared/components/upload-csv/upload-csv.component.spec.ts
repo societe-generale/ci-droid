@@ -28,7 +28,7 @@ describe('UploadCsvComponent', () => {
   it('should erase the file on file reset', () => {
     component.fileName = 'test-file';
     expect(component.fileName.length).toBeGreaterThan(0);
-    component.fileReset();
+    component.resetFile();
     expect(component.fileName.length).toEqual(0);
     expect(component.resourcesToUpdate.length).toEqual(0);
   });

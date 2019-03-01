@@ -5,35 +5,6 @@ import ResourcesToUpdate = shared.types.ResourcesToUpdate;
 
 const SEMICOLON = ';';
 
-export const resourcesToUpdate: ResourcesToUpdate[] = [
-  {
-    repoFullName: 'ItecFccOsd/financing-platform-lso-syn-type-batch',
-    filePathOnRepo: 'Jenkinsfile',
-    branchName: 'master'
-  },
-  { repoFullName: 'ItecFccOsd/financing-platform-ifrs9-analytics', filePathOnRepo: 'Jenkinsfile', branchName: 'master' },
-  { repoFullName: 'ItecFccOsd/financing-platform-tcl-analytics', filePathOnRepo: 'Jenkinsfile', branchName: 'master' },
-  { repoFullName: 'ItecFccOsd/financing-platform-cache-server', filePathOnRepo: 'Jenkinsfile', branchName: 'master' },
-  {
-    repoFullName: 'ItecFccOsd/financing-platform-declarative-process-nightly',
-    filePathOnRepo: 'Jenkinsfile',
-    branchName: 'master'
-  },
-  {
-    repoFullName: 'ItecFccOsd/financing-platform-liquidity-performance',
-    filePathOnRepo: 'Jenkinsfile',
-    branchName: 'master'
-  },
-  { repoFullName: 'ItecFccOsd/financing-platform-deal-support', filePathOnRepo: 'Jenkinsfile', branchName: 'master' },
-  { repoFullName: 'ItecFccOsd/financing-platform-credapp', filePathOnRepo: 'Jenkinsfile', branchName: 'master' },
-  { repoFullName: 'ItecFccOsd/financing-platform-particles', filePathOnRepo: 'Jenkinsfile', branchName: 'master' },
-  {
-    repoFullName: 'ItecFccOsd/financing-platform-credit-approval-integration',
-    filePathOnRepo: 'Jenkinsfile',
-    branchName: 'master'
-  }
-];
-
 @Component({
   selector: 'ci-upload-csv',
   templateUrl: './upload-csv.component.html',
@@ -114,7 +85,7 @@ export class UploadCsvComponent {
     return result;
   }
 
-  fileReset() {
+  resetFile() {
     this.fileName = '';
     this.resourcesToUpdate = [];
     this.selectedResources.clear();
