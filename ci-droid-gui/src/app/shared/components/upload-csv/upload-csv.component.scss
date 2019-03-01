@@ -1,0 +1,27 @@
+@import '../../../../sass/_variables';
+
+:host {
+  .upload-csv {
+    border: 2px dashed $grey-light;
+    padding: 10px;
+    color: $grey-light;
+
+    &:hover {
+      cursor: pointer;
+      border-color: $black;
+      color: $black;
+    }
+
+    .drag-drop-zone {
+      .input-file {
+        opacity: 0;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .on-file-over {
+    border-color: $black;
+    color: $black;
+  }
+}

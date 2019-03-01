@@ -1,0 +1,42 @@
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <!-- Checkbox Column -->
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox
+        (change)="$event ? selectAll() : null"
+        [checked]="selectedResources.hasValue() && isAllSelected()"
+        [indeterminate]="selectedResources.hasValue() && !isAllSelected()"
+      >
+      </mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox
+        (click)="$event.stopPropagation()"
+        (change)="$event ? selectedResources.toggle(row) : null"
+        [checked]="selectedResources.isSelected(row)"
+      >
+      </mat-checkbox>
+    </td>
+  </ng-container>
+
+  <!-- RepoFullName Column -->
+  <ng-container matColumnDef="repoFullName">
+    <th mat-header-cell *matHeaderCellDef>RepoFullName</th>
+    <td mat-cell *matCellDef="let resource">{{ resource.repoFullName }}</td>
+  </ng-container>
+
+  <!-- FilePathOnRepo Column -->
+  <ng-container matColumnDef="filePathOnRepo">
+    <th mat-header-cell *matHeaderCellDef>FilePathOnRepo</th>
+    <td mat-cell *matCellDef="let resource">{{ resource.filePathOnRepo }}</td>
+  </ng-container>
+
+  <!-- BranchName Column -->
+  <ng-container matColumnDef="branchName">
+    <th mat-header-cell *matHeaderCellDef>BranchName</th>
+    <td mat-cell *matCellDef="let resource">{{ resource.branchName }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selectedResources.toggle(row)"></tr>
+</table>

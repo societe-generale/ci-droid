@@ -1,0 +1,23 @@
+<div
+  class="upload-csv text-center"
+  (dragover)="handleDragAndDrop($event)"
+  (dragleave)="handleDragAndDrop($event)"
+  (drop)="handleDragAndDrop($event)"
+>
+  <ng-template [ngIf]="!fileName" [ngIfElse]="fileContent">
+    <div class="drag-drop-zone position-relative">
+      <input class="input-file w-100 d-block position-absolute" type="file" (change)="onFileChange($event)" accept=".csv" />
+      <span> Drag & drop your file or click here </span>
+    </div>
+  </ng-template>
+
+  <ng-template #fileContent>
+    <div class="d-flex justify-content-between align-items-center">
+      <mat-icon>file_copy</mat-icon>
+      <span> {{ fileName }} </span>
+      <mat-icon (click)="resetFile()">cancel</mat-icon>
+    </div>
+  </ng-template>
+</div>
+<br />
+<ci-preview-upload *ngIf="resourcesToUpdate.length" [resourcesToUpdate]="resourcesToUpdate"></ci-preview-upload>
