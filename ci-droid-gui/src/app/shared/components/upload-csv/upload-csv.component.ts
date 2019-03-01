@@ -1,6 +1,4 @@
-import { SelectionModel } from '@angular/cdk/collections';
 import { Component } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
 import ResourcesToUpdate = shared.types.ResourcesToUpdate;
 
 const SEMICOLON = ';';
@@ -11,34 +9,15 @@ const SEMICOLON = ';';
   styleUrls: ['./upload-csv.component.scss']
 })
 export class UploadCsvComponent {
-  displayedColumns: string[] = ['select', 'repoFullName', 'filePathOnRepo', 'branchName'];
-  dataSource: MatTableDataSource<ResourcesToUpdate>;
-  selectedResources = new SelectionModel<ResourcesToUpdate>(true, []);
   fileName;
   resourcesToUpdate: ResourcesToUpdate[] = [];
 
-  constructor() {
-    this.dataSource = new MatTableDataSource<ResourcesToUpdate>(this.resourcesToUpdate);
-  }
-
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selectedResources.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selectedResources. */
-  selectAll() {
-    this.isAllSelected() ? this.selectedResources.clear() : this.dataSource.data.forEach(row => this.selectedResources.select(row));
-  }
+  constructor() {}
 
   onReaderLoad = event => {
     const csvData = event.target.result;
     this.resourcesToUpdate = this.CSV2JSON(csvData);
     this.resourcesToUpdate = this.resourcesToUpdate.filter(obj => obj.repoFullName !== '');
-    this.dataSource = new MatTableDataSource<ResourcesToUpdate>(this.resourcesToUpdate);
-    this.selectAll();
   };
 
   handleDragAndDrop(event) {
@@ -67,12 +46,13 @@ export class UploadCsvComponent {
   }
 
   CSV2JSON(csv) {
+    const displayedColumns = ['select', 'repoFullName', 'filePathOnRepo', 'branchName'];
     const rows = csv.split('\r\n');
     const result = [];
     let headers = rows[0].split(SEMICOLON);
-    const position = JSON.stringify(this.displayedColumns.slice(1, 4)) === JSON.stringify(headers) ? 1 : 0;
+    const position = JSON.stringify(displayedColumns.slice(1, 4)) === JSON.stringify(headers) ? 1 : 0;
     if (position === 0) {
-      headers = this.displayedColumns.slice(1, 4);
+      headers = displayedColumns.slice(1, 4);
     }
     rows.slice(position, rows.length).forEach(row => {
       const obj = {};
@@ -88,7 +68,5 @@ export class UploadCsvComponent {
   resetFile() {
     this.fileName = '';
     this.resourcesToUpdate = [];
-    this.selectedResources.clear();
-    this.dataSource = new MatTableDataSource<ResourcesToUpdate>([]);
   }
 }

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { PreviewUploadComponent } from '../../shared/components/preview-upload/preview-upload.component';
 import { UploadCsvComponent } from '../../shared/components/upload-csv/upload-csv.component';
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +15,7 @@ import {
 } from '@angular/material';
 
 @NgModule({
-  declarations: [FormComponent, UploadCsvComponent],
+  declarations: [FormComponent, UploadCsvComponent, PreviewUploadComponent],
   imports: [
     CommonModule,
     FormsModule,

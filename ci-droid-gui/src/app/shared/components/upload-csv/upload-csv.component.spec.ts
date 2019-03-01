@@ -1,6 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCheckboxModule, MatTableModule } from '@angular/material';
+import { PreviewUploadComponent } from '../preview-upload/preview-upload.component';
 import { UploadCsvComponent } from './upload-csv.component';
 
 describe('UploadCsvComponent', () => {
@@ -10,7 +11,7 @@ describe('UploadCsvComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MatTableModule, MatCheckboxModule],
-      declarations: [UploadCsvComponent],
+      declarations: [UploadCsvComponent, PreviewUploadComponent],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
@@ -36,9 +37,14 @@ describe('UploadCsvComponent', () => {
   it('should convert CSV to JSON', () => {
     let sampleCSV;
     sampleCSV = 'societe-generale/ci-droid;JenkinsFile;master';
-    expect(typeof sampleCSV === 'string').toBe(true);
-    const convertedJSON = component.CSV2JSON(sampleCSV);
-    expect(typeof convertedJSON === 'object').toBe(true);
+    const event = {
+      target: {
+        result: sampleCSV
+      }
+    };
+    component.onReaderLoad(event);
+    fixture.detectChanges();
+    expect(component.resourcesToUpdate.length).toEqual(1);
   });
 
   it('should get the file content on change in the file', () => {

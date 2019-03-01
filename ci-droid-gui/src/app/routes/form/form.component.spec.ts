@@ -2,6 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoggerTestingModule, NGXLogger, NGXLoggerMock } from 'ngx-logger';
 import { of, throwError } from 'rxjs';
+import { PreviewUploadComponent } from '../../shared/components/preview-upload/preview-upload.component';
 import { UploadCsvComponent } from '../../shared/components/upload-csv/upload-csv.component';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 
@@ -44,7 +45,7 @@ describe('FormComponent', () => {
         MatTableModule,
         MatCheckboxModule
       ],
-      declarations: [FormComponent, UploadCsvComponent],
+      declarations: [FormComponent, UploadCsvComponent, PreviewUploadComponent],
       providers: [CiDroidService]
     }).compileComponents();
   }));
