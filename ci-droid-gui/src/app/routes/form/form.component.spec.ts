@@ -22,6 +22,7 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
+import { MdePopoverModule } from '@material-extended/mde';
 
 describe('FormComponent', () => {
   let component: FormComponent;
@@ -43,7 +44,8 @@ describe('FormComponent', () => {
         MatSelectModule,
         MatRadioModule,
         MatTableModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MdePopoverModule
       ],
       declarations: [FormComponent, UploadCsvComponent, PreviewUploadComponent],
       providers: [CiDroidService]
@@ -214,7 +216,6 @@ describe('FormComponent', () => {
 
       function assertActionForm() {
         const actionToCheck: Action = actions.find(action => action.actionClassToSend === selectedAction);
-        expect(component.ciDroidForm.get(`action.default`)).toBeNull();
         expect(component.fields).toBe(actionToCheck.expectedFields);
         actionToCheck.expectedFields.forEach(field => {
           const formActionField = component.ciDroidForm.get(`action.${field.name}`);
@@ -238,7 +239,6 @@ describe('FormComponent', () => {
 
       function assertActionForm() {
         const actionToCheck: Action = actions.find(action => action.actionClassToSend === selectedAction);
-        expect(component.ciDroidForm.get(`action.default`)).toBeNull();
         expect(component.fields).toBe(actionToCheck.expectedFields);
         actionToCheck.expectedFields.forEach(field => {
           const formActionField = component.ciDroidForm.get(`action.${field.name}`);

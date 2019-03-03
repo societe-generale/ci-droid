@@ -9,10 +9,15 @@
       <div class="row title justify-content-end">CI-DROID</div>
       <div class="row form justify-content-start">
         <form [formGroup]="ciDroidForm">
-          <mat-vertical-stepper linear="true">
+          <mat-vertical-stepper linear="true" #stepper>
             <!-- GitHub Credentials -->
             <mat-step formGroupName="gitHubCredentials" [stepControl]="ciDroidForm.get('gitHubCredentials')">
-              <ng-template matStepLabel>GitHub Credentials</ng-template>
+              <ng-template matStepLabel>
+                GitHub Credentials
+                <span *ngIf="stepper.selectedIndex !== 0 && ciDroidForm.get('gitHubCredentials').valid" class="mat-step-label-value">
+                  <mat-icon>visibility_off</mat-icon>
+                </span>
+              </ng-template>
               <mat-form-field>
                 <input matInput placeholder="GitHub Token" formControlName="gitHubOauthToken" [type]="hide ? 'text' : 'password'" />
                 <mat-icon style="cursor: pointer" matSuffix (click)="hide = !hide"> {{ hide ? 'visibility' : 'visibility_off' }} </mat-icon>
@@ -20,24 +25,54 @@
                   GitHub Token is <strong>required</strong>
                 </mat-error>
               </mat-form-field>
+              <div class="btn-action">
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+              </div>
             </mat-step>
             <!-- Email -->
             <mat-step [stepControl]="ciDroidForm.get('email')">
-              <ng-template matStepLabel>Email for notification</ng-template>
+              <ng-template matStepLabel>
+                Email for notification
+                <span *ngIf="stepper.selectedIndex !== 1" class="mat-step-label-value">
+                  {{ ciDroidForm.get('email').value }}
+                </span>
+              </ng-template>
               <mat-form-field>
                 <input matInput placeholder="Email" formControlName="email" type="email" />
-                <mat-error *ngIf="ciDroidForm.controls['email'].hasError('required')"> Email is <strong>required</strong> </mat-error>
-                <mat-error *ngIf="ciDroidForm.controls['email'].hasError('email')"> Please enter a valid <strong>email</strong> </mat-error>
+                <mat-error *ngIf="ciDroidForm.controls['email'].hasError('required')"> Email is <strong>required</strong></mat-error>
+                <mat-error *ngIf="ciDroidForm.controls['email'].hasError('email')">
+                  Please enter a valid
+                  <strong>email</strong>
+                </mat-error>
               </mat-form-field>
+              <div class="btn-action">
+                <button mat-raised-button matStepperPrevious class="btn-previous">Back</button>
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+              </div>
             </mat-step>
             <!-- Action -->
             <mat-step formGroupName="action" [stepControl]="ciDroidForm.get('action')">
-              <ng-template matStepLabel>Action to be performed</ng-template>
+              <ng-template matStepLabel>
+                Action to be performed
+                <span *ngIf="stepper.selectedIndex !== 2 && ciDroidForm.get('action').valid" class="mat-step-label-value">
+                  <mat-icon [mdePopoverTriggerFor]="actionDetailsPopover" [mdePopoverTargetAt]="action" mdePopoverTriggerOn="hover" #action
+                    >info</mat-icon
+                  >
+                  <mde-popover
+                    #actionDetailsPopover="mdePopover"
+                    [mdePopoverOverlapTrigger]="false"
+                    mdePopoverArrowColor="#FFFFFF"
+                    [mdePopoverCloseOnClick]="false"
+                  >
+                    <h1>todo 1</h1>
+                  </mde-popover>
+                </span>
+              </ng-template>
               <mat-form-field>
                 <mat-select placeholder="Action" (selectionChange)="onActionChanged($event)" formControlName="default">
                   <mat-option *ngFor="let action of actions" [value]="action.actionClassToSend"> {{ action.label }} </mat-option>
                 </mat-select>
-                <mat-error *ngIf="ciDroidForm.get('action.default')?.hasError('required')"> Action is <strong>required</strong> </mat-error>
+                <mat-error *ngIf="ciDroidForm.get('action.default')?.hasError('required')"> Action is <strong>required</strong></mat-error>
               </mat-form-field>
               <!-- Action fields -->
               <div *ngFor="let field of fields">
@@ -54,10 +89,33 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+              <div class="btn-action">
+                <button mat-raised-button matStepperPrevious class="btn-previous">Back</button>
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+              </div>
             </mat-step>
             <!-- GitHub Interaction -->
             <mat-step formGroupName="githubInteraction" [stepControl]="ciDroidForm.get('githubInteraction')">
-              <ng-template matStepLabel>Pull request or push</ng-template>
+              <ng-template matStepLabel>
+                Pull request or push
+                <span *ngIf="stepper.selectedIndex !== 3 && ciDroidForm.get('githubInteraction').valid" class="mat-step-label-value">
+                  <mat-icon
+                    [mdePopoverTriggerFor]="githubInteractionPopover"
+                    [mdePopoverTargetAt]="githubInteraction"
+                    mdePopoverTriggerOn="hover"
+                    #githubInteraction
+                    >info</mat-icon
+                  >
+                  <mde-popover
+                    #githubInteractionPopover="mdePopover"
+                    [mdePopoverOverlapTrigger]="false"
+                    mdePopoverArrowColor="#FFFFFF"
+                    [mdePopoverCloseOnClick]="false"
+                  >
+                    <h1>todo 2</h1>
+                  </mde-popover>
+                </span>
+              </ng-template>
               <mat-radio-group formControlName="option" (change)="githubInteractionChanged($event)">
                 <mat-radio-button [value]="pullRequest">Pull request</mat-radio-button> &nbsp;&nbsp;
                 <mat-radio-button [value]="push">Push</mat-radio-button>
@@ -82,11 +140,18 @@
                   Commit message is <strong>required</strong>
                 </mat-error>
               </mat-form-field>
+              <div class="btn-action">
+                <button mat-raised-button matStepperPrevious class="btn-previous">Back</button>
+                <button mat-raised-button color="primary" matStepperNext>Next</button>
+              </div>
             </mat-step>
             <!-- Upload CSV -->
             <mat-step>
-              <ci-upload-csv></ci-upload-csv>
               <ng-template matStepLabel>Upload CSV</ng-template>
+              <ci-upload-csv></ci-upload-csv>
+              <div class="btn-action">
+                <button mat-raised-button matStepperPrevious class="btn-previous">Back</button>
+              </div>
             </mat-step>
           </mat-vertical-stepper>
         </form>

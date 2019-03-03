@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatRadioChange, MatSelectChange } from '@angular/material';
+import { MatRadioChange, MatSelectChange, MatStepper } from '@angular/material';
 import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 import Field = shared.types.Field;
@@ -17,6 +17,7 @@ export class FormComponent implements OnInit {
   ciDroidForm: FormGroup;
   hide = false;
   fields: Field[];
+  @ViewChild('stepper') stepper: MatStepper;
 
   readonly pullRequest = shared.GITHUB_INTERACTION.PullRequest;
   readonly push = shared.GITHUB_INTERACTION.Push;
@@ -77,7 +78,11 @@ export class FormComponent implements OnInit {
   private clearActionFormControls(): void {
     const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
     Object.keys(actionFormGroup.controls).forEach(key => {
-      actionFormGroup.removeControl(key);
+      if (key !== 'default') {
+        actionFormGroup.controls[key].setValue(null);
+        actionFormGroup.controls[key].setValidators([]);
+        actionFormGroup.controls[key].updateValueAndValidity();
+      }
     });
   }
 

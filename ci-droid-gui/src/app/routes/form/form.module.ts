@@ -5,14 +5,17 @@ import { UploadCsvComponent } from '../../shared/components/upload-csv/upload-cs
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatButtonModule,
+  MatCheckboxModule,
   MatIconModule,
   MatInputModule,
   MatRadioModule,
   MatSelectModule,
   MatStepperModule,
   MatTableModule,
-  MatCheckboxModule
+  MatTooltipModule
 } from '@angular/material';
+import { MdePopoverModule } from '@material-extended/mde';
 
 @NgModule({
   declarations: [FormComponent, UploadCsvComponent, PreviewUploadComponent],
@@ -26,7 +29,10 @@ import {
     MatSelectModule,
     MatRadioModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatButtonModule,
+    MatTooltipModule,
+    MdePopoverModule
   ]
 })
 export class FormModule {}
