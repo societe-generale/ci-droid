@@ -9,6 +9,7 @@ import { CiDroidService } from '../../shared/services/ci-droid.service';
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatCardModule,
   MatCheckboxModule,
   MatIconModule,
   MatInputModule,
@@ -20,9 +21,12 @@ import {
   MatTableModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MdePopoverModule } from '@material-extended/mde';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
-import { MdePopoverModule } from '@material-extended/mde';
+import { PreviewActionComponent } from './preview-action/preview-action.component';
+import { PreviewGithubInteractionComponent } from './preview-github-interaction/preview-github-interaction.component';
 
 describe('FormComponent', () => {
   let component: FormComponent;
@@ -45,10 +49,12 @@ describe('FormComponent', () => {
         MatRadioModule,
         MatTableModule,
         MatCheckboxModule,
-        MdePopoverModule
+        MdePopoverModule,
+        MatCardModule
       ],
-      declarations: [FormComponent, UploadCsvComponent, PreviewUploadComponent],
-      providers: [CiDroidService]
+      declarations: [FormComponent, UploadCsvComponent, PreviewUploadComponent, PreviewActionComponent, PreviewGithubInteractionComponent],
+      providers: [CiDroidService],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
   }));
 
