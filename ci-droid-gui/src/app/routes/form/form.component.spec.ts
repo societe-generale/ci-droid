@@ -2,23 +2,20 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoggerTestingModule, NGXLogger, NGXLoggerMock } from 'ngx-logger';
 import { of, throwError } from 'rxjs';
-import { PreviewUploadComponent } from '../../shared/components/preview-upload/preview-upload.component';
-import { UploadCsvComponent } from '../../shared/components/upload-csv/upload-csv.component';
+import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
-  MatCheckboxModule,
   MatIconModule,
   MatInputModule,
   MatRadioChange,
   MatRadioModule,
   MatSelectChange,
   MatSelectModule,
-  MatStepperModule,
-  MatTableModule
+  MatStepperModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MdePopoverModule } from '@material-extended/mde';
@@ -41,18 +38,17 @@ describe('FormComponent', () => {
         LoggerTestingModule,
         FormsModule,
         ReactiveFormsModule,
+        FileUploadModule,
         MatStepperModule,
         MatInputModule,
         NoopAnimationsModule,
         MatIconModule,
         MatSelectModule,
         MatRadioModule,
-        MatTableModule,
-        MatCheckboxModule,
         MdePopoverModule,
         MatCardModule
       ],
-      declarations: [FormComponent, UploadCsvComponent, PreviewUploadComponent, PreviewActionComponent, PreviewGithubInteractionComponent],
+      declarations: [FormComponent, PreviewActionComponent, PreviewGithubInteractionComponent],
       providers: [CiDroidService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();
