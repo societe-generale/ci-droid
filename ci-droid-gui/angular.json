@@ -81,7 +81,7 @@
             "scripts": [],
             "assets": ["src/favicon.ico", "src/assets"],
             "codeCoverage": true,
-            "codeCoverageExclude": ["/src/test.ts", "/src/polyfills.ts"],
+            "codeCoverageExclude": ["/src/test.ts", "/src/polyfills.ts", "/src/testing/**/*"],
             "sourceMap": true
           }
         },

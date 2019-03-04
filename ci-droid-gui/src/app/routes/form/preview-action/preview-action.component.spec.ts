@@ -1,31 +1,72 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { PreviewActionComponent } from './preview-action.component';
 import { MatCardModule } from '@angular/material';
+import { Component } from '@angular/core';
+import { initContext, TestContext } from '../../../../testing/test.context';
+
+@Component({
+  template: `
+    <ci-preview-action [selectedAction]="selectedAction" [fields]="fields"></ci-preview-action>
+  `
+})
+class TesteePreviewActionComponent {
+  selectedAction = 'Content to overwrite/create';
+  fields = [
+    {
+      value: 'staticContent',
+      label: 'content to overwrite/create'
+    }
+  ];
+}
 
 describe('PreviewActionComponent', () => {
-  let component: PreviewActionComponent;
-  let fixture: ComponentFixture<PreviewActionComponent>;
+  // PreviewActionComponent - testedComponent
+  // TesteePreviewAction - hostComponent
+  type Context = TestContext<PreviewActionComponent, TesteePreviewActionComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [MatCardModule],
-      declarations: [PreviewActionComponent]
-    }).compileComponents();
-  }));
+  const moduleMetaData = {
+    imports: [MatCardModule]
+  };
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PreviewActionComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  initContext(PreviewActionComponent, TesteePreviewActionComponent, moduleMetaData);
+
+  it('should create', function(this: Context) {
+    this.detectChanges();
+    expect(this.hostComponent).toBeTruthy();
+    expect(this.testedComponent).toBeTruthy();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should have an input for the selected action and the content of the action to be performed ', () => {
-    expect(component.selectedAction).toBeUndefined();
-    expect(component.content).toBeUndefined();
+  it('should have an input for the selected action and the content of the action to be performed ', function(this: Context) {
+    this.detectChanges();
+    expect(this.testedComponent.selectedAction).toBe('Content to overwrite/create');
+    expect(this.testedComponent.fields).toEqual([
+      {
+        value: 'staticContent',
+        label: 'content to overwrite/create'
+      }
+    ]);
+    // change the host
+    this.hostComponent.selectedAction = 'simple replace in the file';
+    this.hostComponent.fields = [
+      {
+        value: 'initialValue',
+        label: 'old value, to replace'
+      },
+      {
+        value: 'newValue',
+        label: 'new value'
+      }
+    ];
+    this.detectChanges();
+    expect(this.testedComponent.selectedAction).toBe('simple replace in the file');
+    expect(this.testedComponent.fields).toEqual([
+      {
+        value: 'initialValue',
+        label: 'old value, to replace'
+      },
+      {
+        value: 'newValue',
+        label: 'new value'
+      }
+    ]);
   });
 });

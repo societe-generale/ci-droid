@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import SelectedField = shared.types.SelectedField;
 
 @Component({
   selector: 'ci-preview-action',
@@ -6,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./preview-action.component.scss']
 })
 export class PreviewActionComponent implements OnInit {
-  selectedAction: string;
-  content: string;
+  @Input() selectedAction: string;
+  @Input() fields: SelectedField[];
 
   constructor() {}
 

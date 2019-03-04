@@ -64,7 +64,10 @@
                     mdePopoverArrowColor="#FFFFFF"
                     [mdePopoverCloseOnClick]="false"
                   >
-                    <ci-preview-action></ci-preview-action>
+                    <ci-preview-action
+                      [selectedAction]="getSelectedActionLabel(ciDroidForm.get('action.default')?.value)"
+                      [fields]="getSelectedFields(ciDroidForm.get('action.default')?.value)"
+                    ></ci-preview-action>
                   </mde-popover>
                 </span>
               </ng-template>
