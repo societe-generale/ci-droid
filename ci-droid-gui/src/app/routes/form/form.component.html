@@ -115,7 +115,15 @@
                     mdePopoverArrowColor="#FFFFFF"
                     [mdePopoverCloseOnClick]="false"
                   >
-                    <ci-preview-github-interaction></ci-preview-github-interaction>
+                    <ci-preview-github-interaction
+                      [githubInteraction]="
+                        ciDroidForm.get('githubInteraction.option').value === '.PullRequestGitHubInteraction' ? 'Pull request' : 'Push'
+                      "
+                      [title]="ciDroidForm.get('githubInteraction.pullRequestTitle')?.value"
+                      [branchName]="ciDroidForm.get('githubInteraction.branchName')?.value"
+                      [commitMessage]="ciDroidForm.get('githubInteraction.commitMessage').value"
+                    >
+                    </ci-preview-github-interaction>
                   </mde-popover>
                 </span>
               </ng-template>
