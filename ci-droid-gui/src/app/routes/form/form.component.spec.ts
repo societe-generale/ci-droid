@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoggerTestingModule, NGXLogger, NGXLoggerMock } from 'ngx-logger';
 import { of, throwError } from 'rxjs';
 import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
+import { StatusModule } from '../../shared/modules/status/status.module';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 
 import { FormComponent } from './form.component';
@@ -39,6 +40,7 @@ describe('FormComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         FileUploadModule,
+        StatusModule,
         MatStepperModule,
         MatInputModule,
         NoopAnimationsModule,

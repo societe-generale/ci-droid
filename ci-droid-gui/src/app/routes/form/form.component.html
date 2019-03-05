@@ -7,9 +7,10 @@
   <div class="right">
     <div class="container-fluid">
       <div class="row title justify-content-end">CI-DROID</div>
-      <div class="row form justify-content-start">
+      <button class="btn btn-success" (click)="showIcons()">Show Status</button>
+      <div class="row form justify-content-start" *ngIf="!showStatus">
         <form [formGroup]="ciDroidForm">
-          <mat-vertical-stepper linear="true" #stepper>
+          <mat-vertical-stepper #stepper>
             <!-- GitHub Credentials -->
             <mat-step formGroupName="gitHubCredentials" [stepControl]="ciDroidForm.get('gitHubCredentials')">
               <ng-template matStepLabel>
@@ -155,6 +156,9 @@
             </mat-step>
           </mat-vertical-stepper>
         </form>
+      </div>
+      <div class="row justify-content-center mt-5" *ngIf="showStatus">
+        <ci-status [success]="true"></ci-status>
       </div>
     </div>
   </div>
