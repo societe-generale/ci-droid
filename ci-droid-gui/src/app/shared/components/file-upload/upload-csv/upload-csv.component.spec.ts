@@ -49,8 +49,8 @@ describe('UploadCsvComponent', () => {
 
   it('should get the file content on change in the file', () => {
     const blob = new Blob(['data'], { type: 'text/csv' });
-    const file1 = new File([blob], 'test-file1', null);
-    const file2 = new File([blob], 'test-file2', null);
+    const file1 = new File([blob], 'test-file1.csv', null);
+    const file2 = new File([blob], 'test-file2.csv', null);
     const event = {
       target: {
         files: [file1]
@@ -61,8 +61,14 @@ describe('UploadCsvComponent', () => {
       type: 'drop'
     };
     component.onFileChange(event);
-    expect(component.fileName).toBe('test-file1');
+    expect(component.fileName).toBe('test-file1.csv');
     component.handleDragAndDrop(event);
-    expect(component.fileName).toBe('test-file2');
+    expect(component.fileName).toBe('test-file2.csv');
+    event.type = 'dragover';
+    component.handleDragAndDrop(event);
+    expect(document.querySelector('div.upload-csv').classList).toContain('on-file-over');
+    event.type = 'dragleave';
+    component.handleDragAndDrop(event);
+    expect(document.querySelector('div.upload-csv').classList).not.toContain('on-file-over');
   });
 });
