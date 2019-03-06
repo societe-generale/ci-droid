@@ -64,7 +64,6 @@
         </button>
         <form [formGroup]="ciDroidForm">
           <ng-template [ngIf]="!enablePreview" [ngIfElse]="showPreview">
-            {{ resources.length }}
             <mat-vertical-stepper #stepper>
               <!-- GitHub Credentials -->
               <mat-step formGroupName="gitHubCredentials" [stepControl]="ciDroidForm.get('gitHubCredentials')">
