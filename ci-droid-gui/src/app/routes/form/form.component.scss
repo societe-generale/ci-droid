@@ -22,7 +22,12 @@
       padding: 10px;
     }
 
-    pre {
+    .margin-bt-15 {
+      margin-bottom: 15px;
+    }
+
+    pre,
+    .section-value {
       font-size: 0.7em;
       white-space: pre-wrap;
       background: #a50000;
@@ -30,15 +35,10 @@
       padding: 5px;
       width: 100%;
 
-      code {
+      code,
+      samp {
         color: white;
       }
-    }
-
-    samp {
-      font-size: 0.7em;
-      white-space: pre-wrap;
-      color: white;
     }
   }
 

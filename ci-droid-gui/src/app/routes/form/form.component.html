@@ -3,35 +3,41 @@
     <div class="header">
       <a href="/"><img class="sg-logo" src="assets/img/sg_logo.png" alt="sg_logo"/></a>
     </div>
-    <div class="h-100 d-flex align-items-center color-white">
+    <div class="h-100 d-flex align-items-center color-white" *ngIf="ciDroidForm.get('githubInteraction').valid">
       <div class="container-fluid">
-        <div class="row pad-10" *ngIf="ciDroidForm.get('githubInteraction').valid">
+        <div class="row pad-10">
+          <h5>Send email to</h5>
+          <div class="w-100">
+            {{ ciDroidForm.get('email').value }}
+          </div>
+        </div>
+        <div class="row pad-10">
           <h5>{{ getSelectedActionLabel(ciDroidForm.get('action.default')?.value) }}</h5>
           <div class="w-100" *ngFor="let field of getSelectedFields(ciDroidForm.get('action.default')?.value)">
             {{ field.label }}
-            <pre style="" class="pre-scrollable">
-              <code>
-{{ field.value }}
-              </code>
-            </pre>
+            <pre class="pre-scrollable"><code>{{ field.value }}</code></pre>
           </div>
         </div>
-        <div class="row pad-10" *ngIf="ciDroidForm.get('githubInteraction').valid">
+        <div class="row pad-10">
           <h5>{{ ciDroidForm.get('githubInteraction.option')?.value === '.PullRequestGitHubInteraction' ? 'Pull request' : 'Push' }}</h5>
-          <div class="col-12" style="margin-bottom: 15px" *ngIf="ciDroidForm.get('githubInteraction.pullRequestTitle')">
+          <div class="col-12 margin-bt-15" *ngIf="ciDroidForm.get('githubInteraction.pullRequestTitle')">
             <div class="row">
               Title
             </div>
             <div class="row">
-              <samp>{{ ciDroidForm.get('githubInteraction.pullRequestTitle')?.value.trim() }}</samp>
+              <div class="section-value">
+                <samp>{{ ciDroidForm.get('githubInteraction.pullRequestTitle')?.value.trim() }}</samp>
+              </div>
             </div>
           </div>
-          <div class="col-12" style="margin-bottom: 15px" *ngIf="ciDroidForm.get('githubInteraction.branchName')">
+          <div class="col-12 margin-bt-15" *ngIf="ciDroidForm.get('githubInteraction.branchName')">
             <div class="row">
               Branch name
             </div>
             <div class="row">
-              <samp>{{ ciDroidForm.get('githubInteraction.branchName')?.value.trim() }}</samp>
+              <div class="section-value">
+                <samp>{{ ciDroidForm.get('githubInteraction.branchName')?.value.trim() }}</samp>
+              </div>
             </div>
           </div>
           <div class="col-12" *ngIf="ciDroidForm.get('githubInteraction.commitMessage')">
@@ -39,7 +45,9 @@
               Commit message
             </div>
             <div class="row">
-              <samp>{{ ciDroidForm.get('githubInteraction.commitMessage')?.value.trim() }}</samp>
+              <div class="section-value">
+                <samp>{{ ciDroidForm.get('githubInteraction.commitMessage')?.value.trim() }}</samp>
+              </div>
             </div>
           </div>
         </div>

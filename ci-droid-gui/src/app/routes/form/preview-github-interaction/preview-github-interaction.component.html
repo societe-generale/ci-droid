@@ -5,30 +5,24 @@
       <div>
         Title
       </div>
-      <div>
-        <code>
-          {{ title }}
-        </code>
+      <div class="section-value">
+        <samp>{{ title }}</samp>
       </div>
     </div>
     <div *ngIf="branchName" class="section-block">
       <div>
         Branch name
       </div>
-      <div>
-        <code>
-          {{ branchName }}
-        </code>
+      <div class="section-value">
+        <samp>{{ branchName }}</samp>
       </div>
     </div>
     <div class="section-block">
       <div>
         Commit message
       </div>
-      <div>
-        <code>
-          {{ commitMessage }}
-        </code>
+      <div class="section-value">
+        <samp>{{ commitMessage }}</samp>
       </div>
     </div>
   </mat-card-content>

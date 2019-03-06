@@ -8,5 +8,18 @@
     .section-block {
       padding-top: 5px;
     }
+
+    .section-value {
+      font-size: 0.7em;
+      white-space: pre-wrap;
+      background: #cccccc;
+      border-radius: 5px;
+      padding: 5px;
+      width: 100%;
+
+      samp {
+        color: black;
+      }
+    }
   }
 }
