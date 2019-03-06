@@ -6,6 +6,7 @@ import { MatRadioChange, MatSelectChange, MatStepper } from '@angular/material';
 import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 import Field = shared.types.Field;
+import SelectedField = shared.types.SelectedField;
 
 @Component({
   selector: 'ci-form',
@@ -112,5 +113,27 @@ export class FormComponent implements OnInit {
   private setRequiredValidator(control: AbstractControl): void {
     control.setValidators([Validators.required]);
     control.updateValueAndValidity();
+  }
+
+  public getSelectedActionLabel(value: string): string {
+    const selectedAction = this.actions.find(action => action.actionClassToSend === value);
+    return selectedAction ? selectedAction.label : '';
+  }
+
+  public getSelectedFields(selectedActionStr: string): SelectedField[] {
+    const value: SelectedField[] = [];
+    const selectedAction = this.actions.find(action => action.actionClassToSend === selectedActionStr);
+    selectedAction.expectedFields.forEach(field => {
+      value.push({
+        label: field.label,
+        value: this.getFieldValue(field.name)
+      });
+    });
+    return value;
+  }
+
+  private getFieldValue(fieldName: string): string {
+    const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
+    return actionFormGroup.controls[fieldName].value;
   }
 }

@@ -17,6 +17,11 @@ declare namespace shared.types {
     filePathOnRepo: string;
     branchName: string;
   }
+
+  interface SelectedField {
+    label: string;
+    value: string;
+  }
 }
 
 declare namespace shared {

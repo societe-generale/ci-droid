@@ -13,6 +13,33 @@
         max-height: 4vw;
       }
     }
+
+    .color-white {
+      color: white;
+    }
+
+    .pad-10 {
+      padding: 10px;
+    }
+
+    .margin-bt-15 {
+      margin-bottom: 15px;
+    }
+
+    pre,
+    .section-value {
+      font-size: 0.7em;
+      white-space: pre-wrap;
+      background: #a50000;
+      border-radius: 5px;
+      padding: 5px;
+      width: 100%;
+
+      code,
+      samp {
+        color: white;
+      }
+    }
   }
 
   .right {

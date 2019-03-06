@@ -7,7 +7,7 @@ import { StatusModule } from '../../shared/modules/status/status.module';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 
 import { FormComponent } from './form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
   MatIconModule,
@@ -21,10 +21,10 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MdePopoverModule } from '@material-extended/mde';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import Action = shared.types.Action;
-import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 import { PreviewActionComponent } from './preview-action/preview-action.component';
 import { PreviewGithubInteractionComponent } from './preview-github-interaction/preview-github-interaction.component';
+import Action = shared.types.Action;
+import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 
 describe('FormComponent', () => {
   let component: FormComponent;
@@ -362,6 +362,46 @@ describe('FormComponent', () => {
       errors = commitMessageCtrl.errors || {};
       expect(commitMessageCtrl.valid).toBeFalsy();
       expect(errors['required']).toBeTruthy();
+    });
+  });
+
+  describe('preview action', () => {
+    let actions: Action[];
+
+    beforeEach(() => {
+      actions = [
+        {
+          expectedFields: [
+            {
+              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea',
+              name: 'staticContent',
+              label: 'content to overwrite/create',
+              fieldType: 'textArea'
+            }
+          ],
+          actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction',
+          label: 'overwrite/create a file with given content'
+        }
+      ];
+      component.actions = actions;
+    });
+
+    it('should get me the selected action label', () => {
+      let actionLabel = component.getSelectedActionLabel('com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction');
+      expect(actionLabel).toBe('overwrite/create a file with given content');
+      actionLabel = component.getSelectedActionLabel('undefined');
+      expect(actionLabel).toBe('');
+    });
+
+    it('should get me the selected fields', () => {
+      const selectedAction = 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction';
+      component.onActionChanged(new MatSelectChange(null, selectedAction));
+      const actionFormGroup = component.ciDroidForm.get('action') as FormGroup;
+      actionFormGroup.controls['staticContent'].setValue('test');
+
+      const selectedFields = component.getSelectedFields(selectedAction);
+      expect(selectedFields[0].label).toBe('content to overwrite/create');
+      expect(selectedFields[0].value).toBe('test');
     });
   });
 });
