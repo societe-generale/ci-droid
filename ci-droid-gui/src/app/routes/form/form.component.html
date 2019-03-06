@@ -3,51 +3,54 @@
     <div class="header">
       <a href="/"><img class="sg-logo" src="assets/img/sg_logo.png" alt="sg_logo"/></a>
     </div>
-    <div class="d-flex color-white form-details" *ngIf="ciDroidForm.get('githubInteraction').valid">
+    <div
+      class="d-flex color-white form-details"
+      *ngIf="ciDroidForm.get('githubInteraction').valid && uploadCsvComponent.resourcesToUpdate.length"
+    >
       <div class="pad-10">
         <div class="row pad-10 justify-content-center"><h3>Preview</h3></div>
         <div class="row pad-10">
           <h5>Send email to</h5>
           <div class="w-100">
-            {{ ciDroidForm.get('email').value }}
+            {{ email.value }}
           </div>
         </div>
         <div class="row pad-10">
-          <h5>{{ getSelectedActionLabel(ciDroidForm.get('action.default')?.value) }}</h5>
-          <div class="w-100" *ngFor="let field of getSelectedFields(ciDroidForm.get('action.default')?.value)">
+          <h5>{{ getSelectedActionLabel(defaultAction?.value) }}</h5>
+          <div class="w-100" *ngFor="let field of getSelectedFields(defaultAction?.value)">
             {{ field.label }}
             <pre class="pre-scrollable"><code>{{ field.value }}</code></pre>
           </div>
         </div>
         <div class="row pad-10">
-          <h5>{{ ciDroidForm.get('githubInteraction.option')?.value === '.PullRequestGitHubInteraction' ? 'Pull request' : 'Push' }}</h5>
-          <div class="col-12 margin-bt-15" *ngIf="ciDroidForm.get('githubInteraction.pullRequestTitle')">
+          <h5>{{ option?.value === '.PullRequestGitHubInteraction' ? 'Pull request' : 'Push' }}</h5>
+          <div class="col-12 margin-bt-15" *ngIf="option.value === '.PullRequestGitHubInteraction' && pullRequestTitle">
             <div class="row">
               Title
             </div>
             <div class="row">
               <div class="section-value">
-                <samp>{{ ciDroidForm.get('githubInteraction.pullRequestTitle')?.value.trim() }}</samp>
+                <samp>{{ pullRequestTitle?.value.trim() }}</samp>
               </div>
             </div>
           </div>
-          <div class="col-12 margin-bt-15" *ngIf="ciDroidForm.get('githubInteraction.branchName')">
+          <div class="col-12 margin-bt-15" *ngIf="option.value === '.PullRequestGitHubInteraction' && branchName">
             <div class="row">
               Branch name
             </div>
             <div class="row">
               <div class="section-value">
-                <samp>{{ ciDroidForm.get('githubInteraction.branchName')?.value.trim() }}</samp>
+                <samp>{{ branchName?.value.trim() }}</samp>
               </div>
             </div>
           </div>
-          <div class="col-12" *ngIf="ciDroidForm.get('githubInteraction.commitMessage')">
+          <div class="col-12" *ngIf="commitMessage">
             <div class="row">
               Commit message
             </div>
             <div class="row">
               <div class="section-value">
-                <samp>{{ ciDroidForm.get('githubInteraction.commitMessage')?.value.trim() }}</samp>
+                <samp>{{ commitMessage?.value.trim() }}</samp>
               </div>
             </div>
           </div>
@@ -60,7 +63,7 @@
       <div class="row title justify-content-end">CI-DROID</div>
       <div class="row form justify-content-start">
         <form [formGroup]="ciDroidForm">
-          <mat-vertical-stepper linear="true" #stepper>
+          <mat-vertical-stepper [linear]="true" #stepper>
             <!-- GitHub Credentials -->
             <mat-step formGroupName="gitHubCredentials" [stepControl]="ciDroidForm.get('gitHubCredentials')">
               <ng-template matStepLabel>
@@ -71,27 +74,25 @@
               </ng-template>
               <mat-form-field>
                 <input matInput placeholder="GitHub Token" formControlName="gitHubOauthToken" [type]="hide ? 'text' : 'password'" />
-                <mat-icon style="cursor: pointer" matSuffix (click)="hide = !hide"> {{ hide ? 'visibility' : 'visibility_off' }} </mat-icon>
-                <mat-error *ngIf="ciDroidForm.get('gitHubCredentials.gitHubOauthToken').hasError('required')">
-                  GitHub Token is <strong>required</strong>
-                </mat-error>
+                <mat-icon matSuffix (click)="hide = !hide"> {{ hide ? 'visibility' : 'visibility_off' }} </mat-icon>
+                <mat-error *ngIf="token.hasError('required')"> GitHub Token is <strong>required</strong> </mat-error>
               </mat-form-field>
               <div class="btn-action">
                 <button mat-raised-button color="primary" matStepperNext>Next</button>
               </div>
             </mat-step>
             <!-- Email -->
-            <mat-step [stepControl]="ciDroidForm.get('email')">
+            <mat-step [stepControl]="email">
               <ng-template matStepLabel>
                 Email for notification
                 <span *ngIf="stepper.selectedIndex !== 1" class="mat-step-label-value">
-                  {{ ciDroidForm.get('email').value }}
+                  {{ email.value }}
                 </span>
               </ng-template>
               <mat-form-field>
                 <input matInput placeholder="Email" formControlName="email" type="email" />
-                <mat-error *ngIf="ciDroidForm.controls['email'].hasError('required')"> Email is <strong>required</strong></mat-error>
-                <mat-error *ngIf="ciDroidForm.controls['email'].hasError('email')">
+                <mat-error *ngIf="email.hasError('required')"> Email is <strong>required</strong></mat-error>
+                <mat-error *ngIf="email.hasError('email')">
                   Please enter a valid
                   <strong>email</strong>
                 </mat-error>
@@ -116,8 +117,8 @@
                     [mdePopoverCloseOnClick]="false"
                   >
                     <ci-preview-action
-                      [selectedAction]="getSelectedActionLabel(ciDroidForm.get('action.default')?.value)"
-                      [fields]="getSelectedFields(ciDroidForm.get('action.default')?.value)"
+                      [selectedAction]="getSelectedActionLabel(defaultAction?.value)"
+                      [fields]="getSelectedFields(defaultAction?.value)"
                     ></ci-preview-action>
                   </mde-popover>
                 </span>
@@ -126,7 +127,7 @@
                 <mat-select placeholder="Action" (selectionChange)="onActionChanged($event)" formControlName="default">
                   <mat-option *ngFor="let action of actions" [value]="action.actionClassToSend"> {{ action.label }} </mat-option>
                 </mat-select>
-                <mat-error *ngIf="ciDroidForm.get('action.default')?.hasError('required')"> Action is <strong>required</strong></mat-error>
+                <mat-error *ngIf="defaultAction?.hasError('required')"> Action is <strong>required</strong></mat-error>
               </mat-form-field>
               <!-- Action fields -->
               <div *ngFor="let field of fields">
@@ -167,12 +168,10 @@
                     [mdePopoverCloseOnClick]="false"
                   >
                     <ci-preview-github-interaction
-                      [githubInteraction]="
-                        ciDroidForm.get('githubInteraction.option').value === '.PullRequestGitHubInteraction' ? 'Pull request' : 'Push'
-                      "
-                      [title]="ciDroidForm.get('githubInteraction.pullRequestTitle')?.value"
-                      [branchName]="ciDroidForm.get('githubInteraction.branchName')?.value"
-                      [commitMessage]="ciDroidForm.get('githubInteraction.commitMessage').value"
+                      [githubInteraction]="option.value === '.PullRequestGitHubInteraction' ? 'Pull request' : 'Push'"
+                      [title]="branchName?.value"
+                      [branchName]="branchName?.value"
+                      [commitMessage]="commitMessage.value"
                     >
                     </ci-preview-github-interaction>
                   </mde-popover>
@@ -182,25 +181,19 @@
                 <mat-radio-button [value]="pullRequest">Pull request</mat-radio-button> &nbsp;&nbsp;
                 <mat-radio-button [value]="push">Push</mat-radio-button>
               </mat-radio-group>
-              <div *ngIf="ciDroidForm.get('githubInteraction.option').value === pullRequest">
+              <div *ngIf="option.value === pullRequest">
                 <mat-form-field>
                   <input matInput placeholder="Title" formControlName="pullRequestTitle" />
-                  <mat-error *ngIf="ciDroidForm.get('githubInteraction.pullRequestTitle').hasError('required')">
-                    Title is <strong>required</strong>
-                  </mat-error>
+                  <mat-error *ngIf="pullRequestTitle.hasError('required')"> Title is <strong>required</strong> </mat-error>
                 </mat-form-field>
                 <mat-form-field>
                   <input matInput placeholder="Branch name" formControlName="branchName" />
-                  <mat-error *ngIf="ciDroidForm.get('githubInteraction.branchName').hasError('required')">
-                    Commit message is <strong>required</strong>
-                  </mat-error>
+                  <mat-error *ngIf="branchName.hasError('required')"> Commit message is <strong>required</strong> </mat-error>
                 </mat-form-field>
               </div>
               <mat-form-field>
                 <textarea matInput placeholder="Commit message" formControlName="commitMessage"></textarea>
-                <mat-error *ngIf="ciDroidForm.get('githubInteraction.commitMessage').hasError('required')">
-                  Commit message is <strong>required</strong>
-                </mat-error>
+                <mat-error *ngIf="commitMessage.hasError('required')"> Commit message is <strong>required</strong> </mat-error>
               </mat-form-field>
               <div class="btn-action">
                 <button mat-raised-button matStepperPrevious class="btn-previous">Back</button>
