@@ -19,8 +19,10 @@ export class FormComponent implements OnInit {
   ciDroidForm: FormGroup;
   hide = false;
   fields: Field[];
-  @ViewChild('stepper') stepper: MatStepper;
+  enablePreview = false;
   @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
+  @ViewChild('stepper') stepper: MatStepper;
+  resources = [];
 
   readonly pullRequest = shared.GITHUB_INTERACTION.PullRequest;
   readonly push = shared.GITHUB_INTERACTION.Push;
@@ -165,5 +167,10 @@ export class FormComponent implements OnInit {
   private getFieldValue(fieldName: string): string {
     const actionFormGroup = this.ciDroidForm.get('action') as FormGroup;
     return actionFormGroup.controls[fieldName].value;
+  }
+
+  updateResources(resources) {
+    this.resources = resources;
+    this.enablePreview = true;
   }
 }
