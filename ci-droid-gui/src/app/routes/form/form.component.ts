@@ -20,7 +20,7 @@ export class FormComponent implements OnInit {
   hide = false;
   fields: Field[];
   @ViewChild('stepper') stepper: MatStepper;
-  @ViewChild(UploadCsvComponent) private uploadCsvComponent: UploadCsvComponent;
+  @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
 
   readonly pullRequest = shared.GITHUB_INTERACTION.PullRequest;
   readonly push = shared.GITHUB_INTERACTION.Push;
