@@ -1,6 +1,7 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FileUploadModule } from '../../shared/components/file-upload/file-upload.module';
+import { StatusModule } from '../../shared/modules/status/status.module';
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -24,6 +25,7 @@ import { PreviewGithubInteractionComponent } from './preview-github-interaction/
     FormsModule,
     ReactiveFormsModule,
     FileUploadModule,
+    StatusModule,
     MatStepperModule,
     MatInputModule,
     MatIconModule,
@@ -34,6 +36,7 @@ import { PreviewGithubInteractionComponent } from './preview-github-interaction/
     MdePopoverModule,
     MatCardModule
   ],
-  exports: [FormComponent, PreviewActionComponent, PreviewGithubInteractionComponent]
+  exports: [FormComponent, PreviewActionComponent, PreviewGithubInteractionComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FormModule {}
