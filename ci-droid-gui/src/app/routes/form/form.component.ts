@@ -17,7 +17,6 @@ export class FormComponent implements OnInit {
   ciDroidForm: FormGroup;
   hide = false;
   fields: Field[];
-  showStatus = false;
   @ViewChild('stepper') stepper: MatStepper;
 
   readonly pullRequest = shared.GITHUB_INTERACTION.PullRequest;
@@ -40,13 +39,6 @@ export class FormComponent implements OnInit {
         this.logger.error('Unable to fetch Actions', error);
       }
     );
-  }
-
-  showIcons() {
-    this.showStatus = !this.showStatus;
-    setTimeout(() => {
-      this.showStatus = !this.showStatus;
-    }, 5000);
   }
 
   private createForm() {
