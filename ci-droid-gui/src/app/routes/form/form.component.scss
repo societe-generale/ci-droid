@@ -47,6 +47,7 @@
     flex-direction: column;
     display: flex;
     justify-content: flex-start;
+    overflow-y: auto;
 
     .container-fluid {
       .title {
