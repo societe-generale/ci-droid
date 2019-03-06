@@ -1,6 +1,11 @@
 @import '../../../sass/_variables';
 
 :host ::ng-deep {
+  .pre-scrollable {
+    overflow-y: auto;
+    max-height: 100px;
+  }
+
   .left {
     flex: 3;
     background-color: $red-socgen;
@@ -11,6 +16,15 @@
 
       .sg-logo {
         max-height: 4vw;
+      }
+    }
+
+    .form-details {
+      flex-direction: row;
+      overflow-y: auto;
+
+      h3 {
+        font-weight: 700;
       }
     }
 
@@ -34,6 +48,8 @@
       border-radius: 5px;
       padding: 5px;
       width: 100%;
+      max-height: 100px;
+      overflow-y: auto;
 
       code,
       samp {
