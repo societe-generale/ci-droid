@@ -3,10 +3,7 @@
     <div class="header">
       <a href="/"><img class="sg-logo" src="assets/img/sg_logo.png" alt="sg_logo"/></a>
     </div>
-    <div
-      class="d-flex color-white form-details"
-      *ngIf="ciDroidForm.get('githubInteraction').valid && uploadCsvComponent.resourcesToUpdate.length"
-    >
+    <div class="d-flex color-white form-details" *ngIf="ciDroidForm.valid && uploadCsvComponent.resourcesToUpdate.length">
       <div class="pad-10">
         <div class="row pad-10 justify-content-center"><h3>Preview</h3></div>
         <div class="row pad-10">
@@ -63,7 +60,7 @@
       <div class="row title justify-content-end">CI-DROID</div>
       <div class="row form justify-content-start">
         <form [formGroup]="ciDroidForm">
-          <mat-vertical-stepper [linear]="true" #stepper>
+          <mat-vertical-stepper linear="true" #stepper>
             <!-- GitHub Credentials -->
             <mat-step formGroupName="gitHubCredentials" [stepControl]="ciDroidForm.get('gitHubCredentials')">
               <ng-template matStepLabel>
