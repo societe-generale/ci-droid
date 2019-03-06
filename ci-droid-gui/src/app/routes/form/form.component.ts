@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { UploadCsvComponent } from '../../shared/components/file-upload/upload-csv/upload-csv.component';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatRadioChange, MatSelectChange, MatStepper } from '@angular/material';
@@ -19,6 +20,7 @@ export class FormComponent implements OnInit {
   hide = false;
   fields: Field[];
   @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
 
   readonly pullRequest = shared.GITHUB_INTERACTION.PullRequest;
   readonly push = shared.GITHUB_INTERACTION.Push;
@@ -58,6 +60,34 @@ export class FormComponent implements OnInit {
         commitMessage: ['', [Validators.required]]
       })
     });
+  }
+
+  get token() {
+    return this.ciDroidForm.get('gitHubCredentials.gitHubOauthToken') as FormGroup;
+  }
+
+  get email() {
+    return this.ciDroidForm.get('email') as FormGroup;
+  }
+
+  get defaultAction() {
+    return this.ciDroidForm.get('action.default') as FormGroup;
+  }
+
+  get option() {
+    return this.ciDroidForm.get('githubInteraction.option') as FormGroup;
+  }
+
+  get pullRequestTitle() {
+    return this.ciDroidForm.get('githubInteraction.pullRequestTitle') as FormGroup;
+  }
+
+  get branchName() {
+    return this.ciDroidForm.get('githubInteraction.branchName') as FormGroup;
+  }
+
+  get commitMessage() {
+    return this.ciDroidForm.get('githubInteraction.commitMessage') as FormGroup;
   }
 
   onActionChanged(matSelectedAction: MatSelectChange): void {
