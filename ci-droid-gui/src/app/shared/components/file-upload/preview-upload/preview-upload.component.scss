@@ -1,4 +1,9 @@
 :host {
+  .resources {
+    height: 650px;
+    overflow: auto;
+  }
+
   table {
     width: 100%;
     .mat-column-repoFullName {
