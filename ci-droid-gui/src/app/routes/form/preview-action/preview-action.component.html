@@ -2,7 +2,7 @@
   <mat-card-subtitle>{{ selectedAction }}</mat-card-subtitle>
   <mat-card-content>
     <div class="w-100" *ngFor="let field of fields">
-      {{ field.label }}
+      <h6>{{ field.label }}</h6>
       <pre class="pre-scrollable"><code>{{ field.value }}</code></pre>
     </div>
   </mat-card-content>

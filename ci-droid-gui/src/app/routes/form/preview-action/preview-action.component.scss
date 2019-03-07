@@ -5,6 +5,11 @@
   }
 
   mat-card-content {
+    h6 {
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
     pre {
       font-size: 0.7em;
       white-space: pre-wrap;

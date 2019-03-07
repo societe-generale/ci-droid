@@ -23,8 +23,33 @@
       flex-direction: row;
       overflow-y: auto;
 
-      h3 {
-        font-weight: 700;
+      .preview {
+        margin-top: 1rem;
+
+        .header-title {
+          flex: 2;
+        }
+
+        .header-border {
+          border-bottom: 5px solid white;
+          width: 9rem;
+          margin-bottom: 1rem;
+        }
+
+        h3 {
+          font-weight: 700;
+          padding-left: 10px;
+        }
+
+        h5 {
+          font-size: 1.2rem;
+          font-weight: 700;
+        }
+
+        h6 {
+          font-size: 0.9rem;
+          font-weight: 700;
+        }
       }
     }
 
