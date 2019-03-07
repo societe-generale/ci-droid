@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 import static com.societegenerale.cidroid.monitoring.MonitoringEvents.BULK_ACTION_REQUESTED;
 
 @Slf4j
-@RestController
 @RequestMapping(value = "/cidroid-actions")
+@RestController
 public class CiDroidActionsController {
 
     private MessageChannel ciDroidActionsChannel;
