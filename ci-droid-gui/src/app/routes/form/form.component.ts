@@ -9,7 +9,6 @@ import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 import Field = shared.types.Field;
 import SelectedField = shared.types.SelectedField;
 import BulkUpdateRequest = shared.types.BulkUpdateRequest;
-import AbstractGitHubInteraction = shared.types.AbstractGitHubInteraction;
 
 @Component({
   selector: 'ci-form',
@@ -181,16 +180,28 @@ export class FormComponent implements OnInit {
       gitHubOauthToken: this.token.value,
       email: this.email.value,
       commitMessage: this.commitMessage.value,
-      updateAction: null,
+      updateAction: this.updatedActionFields,
       gitHubInteractionType: this.gitHubInteractionType,
       resourcesToUpdate: this.resources
     } as BulkUpdateRequest;
   }
 
-  get gitHubInteractionType(): AbstractGitHubInteraction {
-    let abstractGitHubInteraction = {
-      '@c': this.option.value
-    };
+  get updatedActionFields() {
+    let updateAction = {};
+    const actionClassToSend = this.ciDroidForm.controls['action'].value;
+    updateAction['@class'] = actionClassToSend.default;
+    const selectedAction = this.actions.find(action => action.actionClassToSend === actionClassToSend.default);
+    if (selectedAction) {
+      selectedAction.expectedFields.forEach(field => {
+        updateAction[field.name] = actionClassToSend[field.name];
+      });
+    }
+    return updateAction;
+  }
+
+  get gitHubInteractionType() {
+    let abstractGitHubInteraction = {};
+    abstractGitHubInteraction['@c'] = this.option.value;
     if (this.option.value === GITHUB_INTERACTION.PullRequest) {
       abstractGitHubInteraction['branchNameToCreate'] = this.branchName.value;
       abstractGitHubInteraction['pullRequestTitle'] = this.pullRequestTitle.value;

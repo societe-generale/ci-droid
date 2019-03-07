@@ -417,5 +417,21 @@ describe('FormComponent', () => {
       ]);
       expect(component.resources.length).toEqual(1);
     });
+
+    it('should create the request for bulk update', () => {
+      let tokenCtrl = component.ciDroidForm.get('gitHubCredentials.gitHubOauthToken');
+      tokenCtrl.setValue('#ABCD1234');
+      let emailCtrl = component.ciDroidForm.get('email');
+      emailCtrl.setValue('dileep.jami@gmail.com');
+      let pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
+      pullRequestTitleCtrl.setValue('test title');
+      let branchNameCtrl = component.ciDroidForm.get('githubInteraction.branchName');
+      branchNameCtrl.setValue('feature/test');
+      let commitMessageCtrl = component.ciDroidForm.get('githubInteraction.commitMessage');
+      commitMessageCtrl.setValue('test commit');
+      let actionCtrl = component.ciDroidForm.get('action');
+      actionCtrl.setValue({ default: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction' });
+      expect(component.createUpdateRequest().email).toBe('dileep.jami@gmail.com');
+    });
   });
 });
