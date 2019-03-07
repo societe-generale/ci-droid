@@ -10,7 +10,7 @@
           <div class="justify-content-end">
             <button
               mat-icon-button
-              [matTooltip]="enablePreview ? 'edit' : 'menu'"
+              [matTooltip]="enablePreview ? 'edit' : 'show grid'"
               matTooltipPosition="left"
               class="m-2"
               (click)="enablePreview = !enablePreview"
@@ -74,8 +74,8 @@
       <div class="row title justify-content-end">CI-DROID</div>
       <div class="row form justify-content-start">
         <form [formGroup]="ciDroidForm">
-          <ng-template [ngIf]="!enablePreview" [ngIfElse]="showPreview">
-            <mat-vertical-stepper #stepper>
+          <div [ngClass]="{ 'd-none': enablePreview }">
+            <mat-vertical-stepper linear="true" #stepper>
               <!-- GitHub Credentials -->
               <mat-step formGroupName="gitHubCredentials" [stepControl]="ciDroidForm.get('gitHubCredentials')">
                 <ng-template matStepLabel>
@@ -225,10 +225,10 @@
                 </div>
               </mat-step>
             </mat-vertical-stepper>
-          </ng-template>
-          <ng-template #showPreview>
+          </div>
+          <div [ngClass]="{ 'd-none': !enablePreview }">
             <ci-preview-upload *ngIf="enablePreview" [resourcesToUpdate]="resources"></ci-preview-upload>
-          </ng-template>
+          </div>
         </form>
       </div>
     </div>

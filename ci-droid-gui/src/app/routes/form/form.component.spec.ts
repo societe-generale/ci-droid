@@ -16,7 +16,8 @@ import {
   MatRadioModule,
   MatSelectChange,
   MatSelectModule,
-  MatStepperModule
+  MatStepperModule,
+  MatTooltipModule
 } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MdePopoverModule } from '@material-extended/mde';
@@ -48,7 +49,8 @@ describe('FormComponent', () => {
         MatSelectModule,
         MatRadioModule,
         MdePopoverModule,
-        MatCardModule
+        MatCardModule,
+        MatTooltipModule
       ],
       declarations: [FormComponent, PreviewActionComponent, PreviewGithubInteractionComponent],
       providers: [CiDroidService],
