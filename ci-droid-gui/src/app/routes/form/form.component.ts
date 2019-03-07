@@ -21,6 +21,8 @@ export class FormComponent implements OnInit {
   hide = false;
   fields: Field[];
   enablePreview = false;
+  success;
+  showStatus = false;
   @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
   @ViewChild('stepper') stepper: MatStepper;
   resources = [];
@@ -175,6 +177,20 @@ export class FormComponent implements OnInit {
     this.enablePreview = true;
   }
 
+  showIcons() {
+    this.showStatus = !this.showStatus;
+    setTimeout(() => {
+      this.showStatus = !this.showStatus;
+      this.resetForm();
+    }, 2000);
+  }
+
+  resetForm() {
+    this.ciDroidForm.reset();
+    this.resources = [];
+    this.enablePreview = false;
+  }
+
   createUpdateRequest(): BulkUpdateRequest {
     return {
       gitHubOauthToken: this.token.value,
@@ -210,6 +226,19 @@ export class FormComponent implements OnInit {
   }
 
   performAction() {
-    console.log('request', this.createUpdateRequest());
+    this.enablePreview = false;
+    if (this.ciDroidForm.valid && this.resources.length) {
+      this.ciDroidService.performBulkUpdate(this.createUpdateRequest()).subscribe(
+        res => {
+          this.success = true;
+        },
+        () => {
+          this.success = false;
+        },
+        () => {
+          this.showIcons();
+        }
+      );
+    }
   }
 }

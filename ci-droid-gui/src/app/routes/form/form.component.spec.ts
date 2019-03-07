@@ -433,5 +433,18 @@ describe('FormComponent', () => {
       actionCtrl.setValue({ default: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction' });
       expect(component.createUpdateRequest().email).toBe('dileep.jami@gmail.com');
     });
+
+    it('should reset the form', () => {
+      component.resetForm();
+      expect(component.resources.length).toEqual(0);
+    });
+
+    it('show show the status component', () => {
+      component.showIcons();
+      expect(component.showStatus).toBeTruthy();
+      setTimeout(() => {
+        expect(component.showStatus).toBeFalsy();
+      }, 3000);
+    });
   });
 });

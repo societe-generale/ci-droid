@@ -4,7 +4,7 @@
       <a href="/"><img class="sg-logo" src="assets/img/sg_logo.png" alt="sg_logo"/></a>
     </div>
     <div class="d-flex color-white form-details" *ngIf="ciDroidForm.valid && resources.length">
-      <div class="container-fluid preview">
+      <div class="container-fluid preview" *ngIf="enablePreview">
         <div class="row d-flex flex-row">
           <div class="justify-content-start header-title"><h3>Preview</h3></div>
           <div class="justify-content-end">
@@ -72,7 +72,7 @@
   <div class="right">
     <div class="container-fluid">
       <div class="row title justify-content-end">CI-DROID</div>
-      <div class="row form justify-content-start">
+      <div class="row form justify-content-start" *ngIf="!showStatus">
         <form [formGroup]="ciDroidForm" (submit)="performAction()">
           <div [ngClass]="{ 'd-none': enablePreview }">
             <mat-vertical-stepper linear="true" #stepper>
@@ -234,6 +234,9 @@
             <button mat-raised-button color="primary" type="submit"><mat-icon>check</mat-icon>&nbsp;Submit</button>
           </div>
         </form>
+      </div>
+      <div class="row justify-content-center mt-5" *ngIf="showStatus">
+        <ci-status [success]="success"></ci-status>
       </div>
     </div>
   </div>
