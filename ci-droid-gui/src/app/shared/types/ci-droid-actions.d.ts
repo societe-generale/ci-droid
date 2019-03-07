@@ -22,6 +22,26 @@ declare namespace shared.types {
     label: string;
     value: string;
   }
+
+  interface AbstractGitHubInteraction {
+    '@c': string;
+    branchNameToCreate?: string;
+    pullRequestTitle?: string;
+  }
+
+  interface ActionToReplicate {
+    '@class': string;
+    [key: string]: string;
+  }
+
+  interface BulkUpdateRequest {
+    gitHubOauthToken: string;
+    email: string;
+    commitMessage: string;
+    updateAction: ActionToReplicate;
+    gitHubInteractionType: AbstractGitHubInteraction;
+    resourcesToUpdate: ResourcesToUpdate[];
+  }
 }
 
 declare namespace shared {
