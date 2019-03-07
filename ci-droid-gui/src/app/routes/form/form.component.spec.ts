@@ -403,5 +403,17 @@ describe('FormComponent', () => {
       expect(selectedFields[0].label).toBe('content to overwrite/create');
       expect(selectedFields[0].value).toBe('test');
     });
+
+    it('should update the resources', () => {
+      expect(component.resources.length).toEqual(0);
+      component.updateResources([
+        {
+          repoFullName: 'societe-generale/ci-droid',
+          filePathOnRepo: 'Jenkinsfile',
+          branchName: 'master'
+        }
+      ]);
+      expect(component.resources.length).toEqual(1);
+    });
   });
 });

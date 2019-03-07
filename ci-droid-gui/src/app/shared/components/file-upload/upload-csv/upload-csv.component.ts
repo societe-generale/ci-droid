@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import ResourcesToUpdate = shared.types.ResourcesToUpdate;
 
 const SEMICOLON = ';';
@@ -11,6 +11,7 @@ const SEMICOLON = ';';
 export class UploadCsvComponent {
   fileName;
   resourcesToUpdate: ResourcesToUpdate[] = [];
+  @Output() resources = new EventEmitter();
 
   constructor() {}
 
@@ -18,6 +19,7 @@ export class UploadCsvComponent {
     const csvData = event.target.result;
     this.resourcesToUpdate = this.CSV2JSON(csvData);
     this.resourcesToUpdate = this.resourcesToUpdate.filter(obj => obj.repoFullName !== '');
+    this.resources.emit(this.resourcesToUpdate);
   };
 
   handleDragAndDrop(event) {
