@@ -12,7 +12,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 
 @Configuration
 @EnableBinding(OutgoingEventsToProcess.class)
-@Import({CiDroidControllersConfiguration.class,CiDroidActionsConfiguration.class,SwaggerConfiguration.class})
+@Import({CiDroidActionsConfiguration.class,SwaggerConfiguration.class})
 public class CiDroidAutoConfiguration {
 
     @Bean
