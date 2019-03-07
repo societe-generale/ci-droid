@@ -187,7 +187,7 @@ export class FormComponent implements OnInit {
   }
 
   get updatedActionFields() {
-    let updateAction = {};
+    const updateAction = {};
     const actionClassToSend = this.ciDroidForm.controls['action'].value;
     updateAction['@class'] = actionClassToSend.default;
     const selectedAction = this.actions.find(action => action.actionClassToSend === actionClassToSend.default);
@@ -200,7 +200,7 @@ export class FormComponent implements OnInit {
   }
 
   get gitHubInteractionType() {
-    let abstractGitHubInteraction = {};
+    const abstractGitHubInteraction = {};
     abstractGitHubInteraction['@c'] = this.option.value;
     if (this.option.value === GITHUB_INTERACTION.PullRequest) {
       abstractGitHubInteraction['branchNameToCreate'] = this.branchName.value;
