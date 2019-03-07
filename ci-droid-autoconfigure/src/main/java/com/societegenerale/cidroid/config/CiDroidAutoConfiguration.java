@@ -3,7 +3,6 @@ package com.societegenerale.cidroid.config;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.societegenerale.cidroid.CiDroidProperties;
 import com.societegenerale.cidroid.OutgoingEventsToProcess;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
@@ -25,11 +24,6 @@ public class CiDroidAutoConfiguration {
 
         jsonConverter.setObjectMapper(objectMapper);
         return jsonConverter;
-    }
-
-    @Bean
-    public CiDroidProperties ciDroidProperties() {
-        return new CiDroidProperties();
     }
 
 }
