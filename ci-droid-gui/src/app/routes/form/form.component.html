@@ -3,13 +3,19 @@
     <div class="header">
       <a href="/"><img class="sg-logo" src="assets/img/sg_logo.png" alt="sg_logo"/></a>
     </div>
-    <div class="d-flex color-white form-details" *ngIf="ciDroidForm.valid">
+    <div class="d-flex color-white form-details" *ngIf="ciDroidForm.valid && resources.length">
       <div class="container-fluid preview">
         <div class="row d-flex flex-row">
           <div class="justify-content-start header-title"><h3>Preview</h3></div>
           <div class="justify-content-end">
-            <button mat-raised-button class="m-2" (click)="enablePreview = !enablePreview" [disabled]="!enablePreview">
-              {{ enablePreview ? 'Back' : 'Preview' }}
+            <button
+                mat-icon-button
+                [matTooltip]="enablePreview ? 'edit' : 'show grid'"
+                matTooltipPosition="left"
+                class="m-2"
+                (click)="enablePreview = !enablePreview"
+            >
+              <mat-icon>{{ enablePreview ? 'edit' : 'menu' }}</mat-icon>
             </button>
           </div>
         </div>
@@ -68,19 +74,21 @@
       <div class="row title justify-content-end">CI-DROID</div>
       <div class="row form justify-content-start">
         <form [formGroup]="ciDroidForm">
-          <ng-template [ngIf]="!enablePreview" [ngIfElse]="showPreview">
-            <mat-vertical-stepper #stepper>
+          <div [ngClass]="{ 'd-none': enablePreview }">
+            <mat-vertical-stepper linear="true" #stepper>
               <!-- GitHub Credentials -->
               <mat-step formGroupName="gitHubCredentials" [stepControl]="ciDroidForm.get('gitHubCredentials')">
                 <ng-template matStepLabel>
                   GitHub credentials
-                  <span *ngIf="stepper.selectedIndex !== 0 && ciDroidForm.get('gitHubCredentials').valid" class="mat-step-label-value">
+                  <span *ngIf="stepper.selectedIndex !== 0 && ciDroidForm.get('gitHubCredentials').valid"
+                        class="mat-step-label-value">
                     <mat-icon>visibility_off</mat-icon>
                   </span>
                 </ng-template>
                 <mat-form-field>
-                  <input matInput placeholder="GitHub Token" formControlName="gitHubOauthToken" [type]="hide ? 'text' : 'password'" />
-                  <mat-icon matSuffix (click)="hide = !hide"> {{ hide ? 'visibility' : 'visibility_off' }} </mat-icon>
+                  <input matInput placeholder="GitHub Token" formControlName="gitHubOauthToken"
+                         [type]="hide ? 'text' : 'password'"/>
+                  <mat-icon matSuffix (click)="hide = !hide"> {{ hide ? 'visibility' : 'visibility_off' }}</mat-icon>
                   <mat-error *ngIf="token.hasError('required')"> GitHub Token is <strong>required</strong></mat-error>
                 </mat-form-field>
                 <div class="btn-action">
@@ -96,7 +104,7 @@
                   </span>
                 </ng-template>
                 <mat-form-field>
-                  <input matInput placeholder="Email" formControlName="email" type="email" />
+                  <input matInput placeholder="Email" formControlName="email" type="email"/>
                   <mat-error *ngIf="email.hasError('required')"> Email is <strong>required</strong></mat-error>
                   <mat-error *ngIf="email.hasError('email')">
                     Please enter a valid
@@ -112,37 +120,41 @@
               <mat-step formGroupName="action" [stepControl]="ciDroidForm.get('action')">
                 <ng-template matStepLabel>
                   Action to be performed
-                  <span *ngIf="stepper.selectedIndex !== 2 && ciDroidForm.get('action').valid" class="mat-step-label-value">
+                  <span *ngIf="stepper.selectedIndex !== 2 && ciDroidForm.get('action').valid"
+                        class="mat-step-label-value">
                     <mat-icon
-                      [mdePopoverTriggerFor]="actionDetailsPopover"
-                      [mdePopoverTargetAt]="action"
-                      mdePopoverTriggerOn="hover"
-                      #action
-                      >info</mat-icon
+                        [mdePopoverTriggerFor]="actionDetailsPopover"
+                        [mdePopoverTargetAt]="action"
+                        mdePopoverTriggerOn="hover"
+                        #action
+                    >info</mat-icon
                     >
                     <mde-popover
-                      #actionDetailsPopover="mdePopover"
-                      [mdePopoverOverlapTrigger]="false"
-                      mdePopoverArrowColor="#FFFFFF"
-                      [mdePopoverCloseOnClick]="false"
+                        #actionDetailsPopover="mdePopover"
+                        [mdePopoverOverlapTrigger]="false"
+                        mdePopoverArrowColor="#FFFFFF"
+                        [mdePopoverCloseOnClick]="false"
                     >
                       <ci-preview-action
-                        [selectedAction]="getSelectedActionLabel(defaultAction?.value)"
-                        [fields]="getSelectedFields(defaultAction?.value)"
+                          [selectedAction]="getSelectedActionLabel(defaultAction?.value)"
+                          [fields]="getSelectedFields(defaultAction?.value)"
                       ></ci-preview-action>
                     </mde-popover>
                   </span>
                 </ng-template>
                 <mat-form-field>
-                  <mat-select placeholder="Action" (selectionChange)="onActionChanged($event)" formControlName="default">
-                    <mat-option *ngFor="let action of actions" [value]="action.actionClassToSend"> {{ action.label }} </mat-option>
+                  <mat-select placeholder="Action" (selectionChange)="onActionChanged($event)"
+                              formControlName="default">
+                    <mat-option *ngFor="let action of actions" [value]="action.actionClassToSend"> {{ action.label }}
+                    </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="defaultAction?.hasError('required')"> Action is <strong>required</strong> </mat-error>
+                  <mat-error *ngIf="defaultAction?.hasError('required')"> Action is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
                 <!-- Action fields -->
                 <div *ngFor="let field of fields">
                   <mat-form-field *ngIf="field.fieldType === 'textField'">
-                    <input matInput [placeholder]="field.label" [formControlName]="field.name" />
+                    <input matInput [placeholder]="field.label" [formControlName]="field.name"/>
                     <mat-error *ngIf="ciDroidForm.get('action.' + field.name)?.hasError('required')">
                       {{ field.label }} is <strong>required</strong>
                     </mat-error>
@@ -163,25 +175,26 @@
               <mat-step formGroupName="githubInteraction" [stepControl]="ciDroidForm.get('githubInteraction')">
                 <ng-template matStepLabel>
                   Pull request or push
-                  <span *ngIf="stepper.selectedIndex !== 3 && ciDroidForm.get('githubInteraction').valid" class="mat-step-label-value">
+                  <span *ngIf="stepper.selectedIndex !== 3 && ciDroidForm.get('githubInteraction').valid"
+                        class="mat-step-label-value">
                     <mat-icon
-                      [mdePopoverTriggerFor]="githubInteractionPopover"
-                      [mdePopoverTargetAt]="githubInteraction"
-                      mdePopoverTriggerOn="hover"
-                      #githubInteraction
-                      >info</mat-icon
+                        [mdePopoverTriggerFor]="githubInteractionPopover"
+                        [mdePopoverTargetAt]="githubInteraction"
+                        mdePopoverTriggerOn="hover"
+                        #githubInteraction
+                    >info</mat-icon
                     >
                     <mde-popover
-                      #githubInteractionPopover="mdePopover"
-                      [mdePopoverOverlapTrigger]="false"
-                      mdePopoverArrowColor="#FFFFFF"
-                      [mdePopoverCloseOnClick]="false"
+                        #githubInteractionPopover="mdePopover"
+                        [mdePopoverOverlapTrigger]="false"
+                        mdePopoverArrowColor="#FFFFFF"
+                        [mdePopoverCloseOnClick]="false"
                     >
                       <ci-preview-github-interaction
-                        [githubInteraction]="option.value === '.PullRequestGitHubInteraction' ? 'Pull request' : 'Push'"
-                        [title]="branchName?.value"
-                        [branchName]="branchName?.value"
-                        [commitMessage]="commitMessage.value"
+                          [githubInteraction]="option.value === '.PullRequestGitHubInteraction' ? 'Pull request' : 'Push'"
+                          [title]="branchName?.value"
+                          [branchName]="branchName?.value"
+                          [commitMessage]="commitMessage.value"
                       >
                       </ci-preview-github-interaction>
                     </mde-popover>
@@ -193,17 +206,20 @@
                 </mat-radio-group>
                 <div *ngIf="option.value === pullRequest">
                   <mat-form-field>
-                    <input matInput placeholder="Title" formControlName="pullRequestTitle" />
-                    <mat-error *ngIf="pullRequestTitle.hasError('required')"> Title is <strong>required</strong> </mat-error>
+                    <input matInput placeholder="Title" formControlName="pullRequestTitle"/>
+                    <mat-error *ngIf="pullRequestTitle.hasError('required')"> Title is <strong>required</strong>
+                    </mat-error>
                   </mat-form-field>
                   <mat-form-field>
-                    <input matInput placeholder="Branch name" formControlName="branchName" />
-                    <mat-error *ngIf="branchName.hasError('required')"> Commit message is <strong>required</strong> </mat-error>
+                    <input matInput placeholder="Branch name" formControlName="branchName"/>
+                    <mat-error *ngIf="branchName.hasError('required')"> Commit message is <strong>required</strong>
+                    </mat-error>
                   </mat-form-field>
                 </div>
                 <mat-form-field>
                   <textarea matInput placeholder="Commit message" formControlName="commitMessage"></textarea>
-                  <mat-error *ngIf="commitMessage.hasError('required')"> Commit message is <strong>required</strong> </mat-error>
+                  <mat-error *ngIf="commitMessage.hasError('required')"> Commit message is <strong>required</strong>
+                  </mat-error>
                 </mat-form-field>
                 <div class="btn-action">
                   <button mat-raised-button matStepperPrevious class="btn-previous">Back</button>
@@ -219,10 +235,10 @@
                 </div>
               </mat-step>
             </mat-vertical-stepper>
-          </ng-template>
-          <ng-template #showPreview>
+          </div>
+          <div [ngClass]="{ 'd-none': !enablePreview }">
             <ci-preview-upload *ngIf="enablePreview" [resourcesToUpdate]="resources"></ci-preview-upload>
-          </ng-template>
+          </div>
         </form>
       </div>
     </div>
