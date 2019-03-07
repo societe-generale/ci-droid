@@ -15,14 +15,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CIdroidApplicationTest {
 
     @Autowired
-    ApplicationContext appContext;
+    private ApplicationContext appContext;
 
     @Test
     public void appContextShouldLoad() {
-
         assertThat(appContext).isNotNull();
-
-
     }
 
 }
