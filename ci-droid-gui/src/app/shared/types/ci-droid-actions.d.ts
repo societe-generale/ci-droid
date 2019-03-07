@@ -29,4 +29,19 @@ declare namespace shared {
     Push = '.DirectPushGitHubInteraction',
     PullRequest = '.PullRequestGitHubInteraction'
   }
+
+  export interface CiDroidRequest {
+    gitHubOauthToken: string;
+    email: string;
+    commitMessage: string;
+    updateAction: any;
+    gitHubInteractionType: GitHubInteraction;
+    resourcesToUpdate: Array<any>;
+  }
+
+  export interface GitHubInteraction {
+    '@c': GITHUB_INTERACTION;
+    branchNameToCreate?: string;
+    pullRequestTitle?: string;
+  }
 }

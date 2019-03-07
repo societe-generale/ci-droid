@@ -2,6 +2,7 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { CiDroidService } from './ci-droid.service';
 import Action = shared.types.Action;
+import CiDroidRequest = shared.CiDroidRequest;
 
 describe('CiDroidService', () => {
   let httpMock: HttpTestingController;
@@ -63,5 +64,25 @@ describe('CiDroidService', () => {
     const request = httpMock.expectOne(`/cidroid-actions/availableActions`);
     request.flush(expectedActions);
     expect(request.request.method).toBe('GET');
+  });
+
+  it('should be able to send bulk updates to ci-droid', () => {
+    const ciDroidRequest: CiDroidRequest = {
+      gitHubOauthToken: 'token',
+      email: 'paul58914080@gmail.com',
+      commitMessage: 'testing my commit',
+      updateAction: {},
+      gitHubInteractionType: {
+        '@c': shared.GITHUB_INTERACTION.PullRequest,
+        branchNameToCreate: 'fix/bug',
+        pullRequestTitle: 'fix the issue on ci-droid'
+      },
+      resourcesToUpdate: []
+    };
+    ciDroidService.sendBulkUpdateAction(ciDroidRequest).subscribe();
+    const req = httpMock.expectOne('/cidroid-actions/bulkUpdates');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toBe(ciDroidRequest);
+    req.flush({});
   });
 });
