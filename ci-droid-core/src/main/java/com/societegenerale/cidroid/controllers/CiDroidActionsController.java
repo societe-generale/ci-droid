@@ -86,7 +86,6 @@ public class CiDroidActionsController {
         techEvent.addAttribute("bulkActionType", bulkUpdateCommand.getUpdateAction().getClass().getCanonicalName());
         techEvent.addAttribute("githubInteractionType", bulkUpdateCommand.getGitHubInteractionType().getClass().getCanonicalName());
         techEvent.addAttribute("userToNotify", bulkUpdateCommand.getEmail());
-        techEvent.addAttribute("gitLogin", bulkUpdateCommand.getGitLogin());
         techEvent.publish();
     }
 
