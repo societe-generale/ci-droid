@@ -73,7 +73,7 @@
     <div class="container-fluid">
       <div class="row title justify-content-end">CI-DROID</div>
       <div class="row form justify-content-start" *ngIf="!showStatus">
-        <form [formGroup]="ciDroidForm" (submit)="performAction()">
+        <form [formGroup]="ciDroidForm" (submit)="performBulkUpdate()">
           <div [ngClass]="{ 'd-none': enablePreview }">
             <mat-vertical-stepper linear="true" #stepper>
               <!-- GitHub Credentials -->

@@ -370,6 +370,21 @@ describe('FormComponent', () => {
   describe('preview action', () => {
     let actions: Action[];
 
+    function initializeForm() {
+      const tokenCtrl = component.ciDroidForm.get('gitHubCredentials.gitHubOauthToken');
+      tokenCtrl.setValue('#ABCD1234');
+      const emailCtrl = component.ciDroidForm.get('email');
+      emailCtrl.setValue('dileep.jami@gmail.com');
+      const pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
+      pullRequestTitleCtrl.setValue('test title');
+      const branchNameCtrl = component.ciDroidForm.get('githubInteraction.branchName');
+      branchNameCtrl.setValue('feature/test');
+      const commitMessageCtrl = component.ciDroidForm.get('githubInteraction.commitMessage');
+      commitMessageCtrl.setValue('test commit');
+      const actionCtrl = component.ciDroidForm.get('action');
+      actionCtrl.setValue({ default: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction' });
+    }
+
     beforeEach(() => {
       actions = [
         {
@@ -419,19 +434,22 @@ describe('FormComponent', () => {
     });
 
     it('should create the request for bulk update', () => {
-      const tokenCtrl = component.ciDroidForm.get('gitHubCredentials.gitHubOauthToken');
-      tokenCtrl.setValue('#ABCD1234');
-      const emailCtrl = component.ciDroidForm.get('email');
-      emailCtrl.setValue('dileep.jami@gmail.com');
-      const pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
-      pullRequestTitleCtrl.setValue('test title');
-      const branchNameCtrl = component.ciDroidForm.get('githubInteraction.branchName');
-      branchNameCtrl.setValue('feature/test');
-      const commitMessageCtrl = component.ciDroidForm.get('githubInteraction.commitMessage');
-      commitMessageCtrl.setValue('test commit');
-      const actionCtrl = component.ciDroidForm.get('action');
-      actionCtrl.setValue({ default: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction' });
+      initializeForm();
       expect(component.createUpdateRequest().email).toBe('dileep.jami@gmail.com');
+    });
+
+    it('should create the request for bulk update', () => {
+      spyOn(component, 'performBulkUpdate').and.callThrough();
+      const sendBulkUpdateActionSpy = spyOn(ciDroidService, 'sendBulkUpdateAction');
+      sendBulkUpdateActionSpy.and.returnValue(of(true));
+      component.resources.length = 5;
+      initializeForm();
+      fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+      fixture.detectChanges();
+      expect(component.performBulkUpdate).toHaveBeenCalled();
+      expect(component.email.value).toBe('dileep.jami@gmail.com');
+      expect(ciDroidService.sendBulkUpdateAction).toHaveBeenCalled();
+      expect(component.success).toBeTruthy();
     });
 
     it('should reset the form', () => {

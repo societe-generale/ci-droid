@@ -225,11 +225,11 @@ export class FormComponent implements OnInit {
     return abstractGitHubInteraction;
   }
 
-  performAction() {
+  performBulkUpdate() {
     this.enablePreview = false;
     if (this.ciDroidForm.valid && this.resources.length) {
-      this.ciDroidService.performBulkUpdate(this.createUpdateRequest()).subscribe(
-        res => {
+      this.ciDroidService.sendBulkUpdateAction(this.createUpdateRequest()).subscribe(
+        () => {
           this.success = true;
         },
         () => {
