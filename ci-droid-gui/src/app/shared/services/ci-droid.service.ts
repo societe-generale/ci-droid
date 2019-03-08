@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs/index';
 import Action = shared.types.Action;
 import BulkUpdateRequest = shared.types.BulkUpdateRequest;
-import Action = shared.types.Action;
 import CiDroidRequest = shared.CiDroidRequest;
 
 @Injectable({
