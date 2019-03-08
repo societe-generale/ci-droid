@@ -19,8 +19,8 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-@RestController
 @RequestMapping(value = "/cidroid-webhook")
+@RestController
 public class WebHookController {
 
     private MessageChannel pushOnDefaultBranchChannel;

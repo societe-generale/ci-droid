@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 import static com.societegenerale.cidroid.monitoring.MonitoringEvents.BULK_ACTION_REQUESTED;
 
 @Slf4j
-@RestController
 @RequestMapping(value = "/cidroid-actions")
+@RestController
 public class CiDroidActionsController {
 
     private MessageChannel ciDroidActionsChannel;
@@ -62,7 +62,7 @@ public class CiDroidActionsController {
 
         for (ResourceToUpdate resourceToUpdate : bulkUpdateCommand.getResourcesToUpdate()) {
 
-            BulkUpdateCommand singleResourceUpdateCommand = BulkUpdateCommand.builder().gitLogin(bulkUpdateCommand.getGitLogin())
+            BulkUpdateCommand singleResourceUpdateCommand = BulkUpdateCommand.builder()
                     .gitHubOauthToken(bulkUpdateCommand.getGitHubOauthToken())
                     .email(bulkUpdateCommand.getEmail())
                     .gitHubInteractionType(bulkUpdateCommand.getGitHubInteractionType())
@@ -86,7 +86,6 @@ public class CiDroidActionsController {
         techEvent.addAttribute("bulkActionType", bulkUpdateCommand.getUpdateAction().getClass().getCanonicalName());
         techEvent.addAttribute("githubInteractionType", bulkUpdateCommand.getGitHubInteractionType().getClass().getCanonicalName());
         techEvent.addAttribute("userToNotify", bulkUpdateCommand.getEmail());
-        techEvent.addAttribute("gitLogin", bulkUpdateCommand.getGitLogin());
         techEvent.publish();
     }
 
