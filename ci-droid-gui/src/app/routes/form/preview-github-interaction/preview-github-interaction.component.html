@@ -1,0 +1,29 @@
+<mat-card>
+  <mat-card-subtitle>{{ githubInteraction }}</mat-card-subtitle>
+  <mat-card-content>
+    <div *ngIf="title" class="section-block">
+      <div>
+        <h6>Title</h6>
+      </div>
+      <div class="section-value">
+        <samp>{{ title }}</samp>
+      </div>
+    </div>
+    <div *ngIf="branchName" class="section-block">
+      <div>
+        <h6>Branch name</h6>
+      </div>
+      <div class="section-value">
+        <samp>{{ branchName }}</samp>
+      </div>
+    </div>
+    <div class="section-block">
+      <div>
+        <h6>Commit message</h6>
+      </div>
+      <div class="section-value">
+        <samp>{{ commitMessage }}</samp>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

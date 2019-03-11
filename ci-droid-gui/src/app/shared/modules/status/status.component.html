@@ -1,0 +1,67 @@
+<div *ngIf="success == true">
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+    <circle
+      fill="none"
+      stroke="#35bd5b"
+      stroke-width="6"
+      [@circle]="state"
+      (@circle.done)="reset()"
+      stroke-miterlimit="10"
+      cx="65.1"
+      cy="65.1"
+      r="62.1"
+    />
+    <polyline
+      fill="none"
+      stroke="#35bd5b"
+      stroke-width="6"
+      [@tick]="state"
+      (@tick.done)="reset()"
+      stroke-linecap="round"
+      stroke-miterlimit="10"
+      points="100.2,40.2 51.5,88.8 29.8,67.5 "
+    />
+  </svg>
+</div>
+
+<div *ngIf="success == false">
+  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+    <circle
+      fill="none"
+      stroke="#e60028"
+      stroke-width="6"
+      [@circle]="state"
+      (@circle.done)="reset()"
+      stroke-miterlimit="10"
+      cx="65.1"
+      cy="65.1"
+      r="62.1"
+    />
+    <line
+      fill="none"
+      stroke="#e60028"
+      stroke-width="6"
+      [@line]="state"
+      (@line.done)="reset()"
+      stroke-linecap="round"
+      stroke-miterlimit="10"
+      x1="34.4"
+      y1="37.9"
+      x2="95.8"
+      y2="92.3"
+    />
+    <line
+      fill="none"
+      stroke="#e60028"
+      stroke-width="6"
+      [@line]="state"
+      (@line.done)="reset()"
+      stroke-linecap="round"
+      stroke-miterlimit="10"
+      x1="95.8"
+      y1="38"
+      x2="34.4"
+      y2="92.2"
+    />
+  </svg>
+</div>

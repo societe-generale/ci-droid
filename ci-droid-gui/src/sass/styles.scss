@@ -1,12 +1,17 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,800,900');
+@import url('//fonts.googleapis.com/icon?family=Material+Icons');
 @import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+$custom-typography: mat-typography-config(
+  $font-family: 'Montserrat' sans-serif
+);
+@include mat-core($custom-typography);
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
@@ -60,15 +65,10 @@ $ci-droid-gui-theme: mat-light-theme($ci-droid-gui-primary, $ci-droid-gui-accent
 
 @import '~bootstrap/scss/bootstrap';
 @import 'variables';
-@import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,800,900');
 
 html,
 body {
   width: 100vw;
   height: 100vh;
-  font-family: 'Montserrat', sans-serif;
-}
-body [class^='mat-'],
-body [class*='mat-'] {
   font-family: 'Montserrat', sans-serif;
 }

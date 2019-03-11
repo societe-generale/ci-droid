@@ -1,0 +1,16 @@
+:host {
+  .resources {
+    max-height: 650px;
+    overflow: auto;
+  }
+
+  table {
+    width: 100%;
+    .mat-column-repoFullName {
+      max-width: 175px;
+    }
+    .mat-column-branchName {
+      max-width: 50px;
+    }
+  }
+}
