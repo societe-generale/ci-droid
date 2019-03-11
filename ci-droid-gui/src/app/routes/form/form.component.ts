@@ -21,7 +21,7 @@ export class FormComponent implements OnInit {
   hide = false;
   fields: Field[];
   enablePreview = false;
-  success;
+  success: boolean;
   showStatus = false;
   @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
   @ViewChild('stepper') stepper: MatStepper;

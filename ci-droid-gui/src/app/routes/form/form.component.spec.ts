@@ -435,7 +435,11 @@ describe('FormComponent', () => {
 
     it('should create the request for bulk update', () => {
       initializeForm();
+      const updateRequest = component.createUpdateRequest();
       expect(component.createUpdateRequest().email).toBe('dileep.jami@gmail.com');
+      expect(updateRequest.email).toBe('dileep.jami@gmail.com');
+      expect(updateRequest.gitHubOauthToken).toBe('#ABCD1234');
+      expect(updateRequest.commitMessage).toBe('test commit');
     });
 
     it('should create the request for bulk update and the action is a success', () => {
@@ -447,15 +451,14 @@ describe('FormComponent', () => {
       fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
       fixture.detectChanges();
       expect(component.performBulkUpdate).toHaveBeenCalled();
-      expect(component.email.value).toBe('dileep.jami@gmail.com');
-      expect(ciDroidService.sendBulkUpdateAction).toHaveBeenCalled();
+      expect(ciDroidService.sendBulkUpdateAction).toHaveBeenCalledWith(component.createUpdateRequest());
       expect(component.success).toBeTruthy();
     });
 
-    it('2should create the request for bulk update and the action is a failure', () => {
+    it('should create the request for bulk update and the action is a failure', () => {
       spyOn(component, 'performBulkUpdate').and.callThrough();
       const sendBulkUpdateActionSpy = spyOn(ciDroidService, 'sendBulkUpdateAction');
-      sendBulkUpdateActionSpy.and.returnValue(throwError(new Error('test')));
+      sendBulkUpdateActionSpy.and.returnValue(throwError(new Error('Unable to perform the bulk update')));
       component.resources.length = 5;
       initializeForm();
       component.performBulkUpdate();
