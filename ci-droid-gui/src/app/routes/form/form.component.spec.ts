@@ -438,7 +438,7 @@ describe('FormComponent', () => {
       expect(component.createUpdateRequest().email).toBe('dileep.jami@gmail.com');
     });
 
-    it('should create the request for bulk update', () => {
+    it('should create the request for bulk update and the action is a success', () => {
       spyOn(component, 'performBulkUpdate').and.callThrough();
       const sendBulkUpdateActionSpy = spyOn(ciDroidService, 'sendBulkUpdateAction');
       sendBulkUpdateActionSpy.and.returnValue(of(true));
@@ -452,14 +452,25 @@ describe('FormComponent', () => {
       expect(component.success).toBeTruthy();
     });
 
+    it('2should create the request for bulk update and the action is a failure', () => {
+      spyOn(component, 'performBulkUpdate').and.callThrough();
+      const sendBulkUpdateActionSpy = spyOn(ciDroidService, 'sendBulkUpdateAction');
+      sendBulkUpdateActionSpy.and.returnValue(throwError(new Error('test')));
+      component.resources.length = 5;
+      initializeForm();
+      component.performBulkUpdate();
+      expect(ciDroidService.sendBulkUpdateAction).toHaveBeenCalled();
+      expect(component.success).toBeFalsy();
+    });
+
     it('should reset the form', () => {
       component.resetForm();
       expect(component.resources.length).toEqual(0);
     });
 
     it('show show the status component', () => {
-      component.showIcons();
-      expect(component.showStatus).toBeTruthy();
+      component.showStatus = true;
+      component.displayStatus();
       setTimeout(() => {
         expect(component.showStatus).toBeFalsy();
       }, 3000);

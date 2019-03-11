@@ -67,6 +67,19 @@ export class FormComponent implements OnInit {
     });
   }
 
+  resetForm() {
+    this.ciDroidForm.reset({
+      githubInteraction: {
+        option: GITHUB_INTERACTION.PullRequest
+      }
+    });
+    this.resources = [];
+    if (this.uploadCsvComponent) {
+      this.uploadCsvComponent.resetFile();
+    }
+    this.enablePreview = false;
+  }
+
   get token() {
     return this.ciDroidForm.get('gitHubCredentials.gitHubOauthToken') as FormGroup;
   }
@@ -177,18 +190,11 @@ export class FormComponent implements OnInit {
     this.enablePreview = true;
   }
 
-  showIcons() {
-    this.showStatus = !this.showStatus;
+  displayStatus() {
     setTimeout(() => {
-      this.showStatus = !this.showStatus;
+      this.showStatus = false;
       this.resetForm();
     }, 2000);
-  }
-
-  resetForm() {
-    this.ciDroidForm.reset();
-    this.resources = [];
-    this.enablePreview = false;
   }
 
   createUpdateRequest(): BulkUpdateRequest {
@@ -226,17 +232,17 @@ export class FormComponent implements OnInit {
   }
 
   performBulkUpdate() {
-    this.enablePreview = false;
     if (this.ciDroidForm.valid && this.resources.length) {
+      this.enablePreview = false;
+      this.showStatus = true;
       this.ciDroidService.sendBulkUpdateAction(this.createUpdateRequest()).subscribe(
         () => {
           this.success = true;
+          this.displayStatus();
         },
         () => {
           this.success = false;
-        },
-        () => {
-          this.showIcons();
+          this.displayStatus();
         }
       );
     }
