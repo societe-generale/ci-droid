@@ -433,15 +433,6 @@ describe('FormComponent', () => {
       expect(component.resources.length).toEqual(1);
     });
 
-    it('should create the request for bulk update', () => {
-      initializeForm();
-      const updateRequest = component.createUpdateRequest();
-      expect(component.createUpdateRequest().email).toBe('dileep.jami@gmail.com');
-      expect(updateRequest.email).toBe('dileep.jami@gmail.com');
-      expect(updateRequest.gitHubOauthToken).toBe('#ABCD1234');
-      expect(updateRequest.commitMessage).toBe('test commit');
-    });
-
     it('should create the request for bulk update and the action is a success', () => {
       spyOn(component, 'performBulkUpdate').and.callThrough();
       const sendBulkUpdateActionSpy = spyOn(ciDroidService, 'sendBulkUpdateAction');
