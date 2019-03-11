@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/index';
 import Action = shared.types.Action;
-import CiDroidRequest = shared.CiDroidRequest;
+import BulkUpdateRequest = shared.types.BulkUpdateRequest;
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class CiDroidService {
     return this.http.get<Action[]>(CiDroidService.url.availableActions);
   }
 
-  sendBulkUpdateAction(req: CiDroidRequest): Observable<CiDroidRequest> {
-    return this.http.post<CiDroidRequest>(CiDroidService.url.sendBulkActions, req);
+  sendBulkUpdateAction(req: BulkUpdateRequest): Observable<BulkUpdateRequest> {
+    return this.http.post<BulkUpdateRequest>(CiDroidService.url.sendBulkActions, req);
   }
 }

@@ -369,6 +369,43 @@ describe('FormComponent', () => {
 
   describe('preview action', () => {
     let actions: Action[];
+    const resources = [
+      {
+        repoFullName: 'societe-generale/ci-droid',
+        filePathOnRepo: 'Jenkinsfile',
+        branchName: 'master'
+      }
+    ];
+
+    const bulkRequest = {
+      gitHubOauthToken: '#ABCD1234',
+      email: 'dileep.jami@gmail.com',
+      commitMessage: 'test commit',
+      updateAction: {
+        '@class': 'com.societegenerale.cidroid.extensions.actionToReplicate.OverwriteStaticFileAction'
+      },
+      gitHubInteractionType: {
+        '@c': GITHUB_INTERACTION.PullRequest,
+        branchNameToCreate: 'feature/test',
+        pullRequestTitle: 'test title'
+      },
+      resourcesToUpdate: resources
+    };
+
+    function initializeForm() {
+      const tokenCtrl = component.ciDroidForm.get('gitHubCredentials.gitHubOauthToken');
+      tokenCtrl.setValue(bulkRequest.gitHubOauthToken);
+      const emailCtrl = component.ciDroidForm.get('email');
+      emailCtrl.setValue(bulkRequest.email);
+      const pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
+      pullRequestTitleCtrl.setValue(bulkRequest.gitHubInteractionType.pullRequestTitle);
+      const branchNameCtrl = component.ciDroidForm.get('githubInteraction.branchName');
+      branchNameCtrl.setValue(bulkRequest.gitHubInteractionType.branchNameToCreate);
+      const commitMessageCtrl = component.ciDroidForm.get('githubInteraction.commitMessage');
+      commitMessageCtrl.setValue(bulkRequest.commitMessage);
+      const actionCtrl = component.ciDroidForm.get('action');
+      actionCtrl.setValue({ default: bulkRequest.updateAction['@class'] });
+    }
 
     beforeEach(() => {
       actions = [
@@ -408,14 +445,54 @@ describe('FormComponent', () => {
 
     it('should update the resources', () => {
       expect(component.resources.length).toEqual(0);
-      component.updateResources([
-        {
-          repoFullName: 'societe-generale/ci-droid',
-          filePathOnRepo: 'Jenkinsfile',
-          branchName: 'master'
-        }
-      ]);
+      component.updateResources(resources);
       expect(component.resources.length).toEqual(1);
+    });
+
+    it('should create the request for bulk update', () => {
+      initializeForm();
+      const updateRequest = component.createUpdateRequest();
+      expect(updateRequest.email).toBe(bulkRequest.email);
+      expect(updateRequest.gitHubOauthToken).toBe(bulkRequest.gitHubOauthToken);
+      expect(updateRequest.commitMessage).toBe(bulkRequest.commitMessage);
+      expect(updateRequest.gitHubInteractionType).toEqual(bulkRequest.gitHubInteractionType);
+    });
+
+    it('should create the request for bulk update and the action is a success', () => {
+      spyOn(component, 'performBulkUpdate').and.callThrough();
+      const sendBulkUpdateActionSpy = spyOn(ciDroidService, 'sendBulkUpdateAction');
+      sendBulkUpdateActionSpy.and.returnValue(of(true));
+      component.resources = resources;
+      initializeForm();
+      fixture.nativeElement.querySelector('form').dispatchEvent(new Event('submit'));
+      fixture.detectChanges();
+      expect(component.performBulkUpdate).toHaveBeenCalled();
+      expect(ciDroidService.sendBulkUpdateAction).toHaveBeenCalledWith(bulkRequest);
+      expect(component.success).toBeTruthy();
+    });
+
+    it('should create the request for bulk update and the action is a failure', () => {
+      spyOn(component, 'performBulkUpdate').and.callThrough();
+      const sendBulkUpdateActionSpy = spyOn(ciDroidService, 'sendBulkUpdateAction');
+      sendBulkUpdateActionSpy.and.returnValue(throwError(new Error('Unable to perform the bulk update')));
+      component.resources.length = 5;
+      initializeForm();
+      component.performBulkUpdate();
+      expect(ciDroidService.sendBulkUpdateAction).toHaveBeenCalled();
+      expect(component.success).toBeFalsy();
+    });
+
+    it('should reset the form', () => {
+      component.resetForm();
+      expect(component.resources.length).toEqual(0);
+    });
+
+    it('show show the status component', () => {
+      component.showStatus = true;
+      component.displayStatus();
+      setTimeout(() => {
+        expect(component.showStatus).toBeFalsy();
+      }, 3000);
     });
   });
 });

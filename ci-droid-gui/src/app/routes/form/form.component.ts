@@ -8,6 +8,7 @@ import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 import Field = shared.types.Field;
 import SelectedField = shared.types.SelectedField;
+import BulkUpdateRequest = shared.types.BulkUpdateRequest;
 
 @Component({
   selector: 'ci-form',
@@ -20,6 +21,8 @@ export class FormComponent implements OnInit {
   hide = false;
   fields: Field[];
   enablePreview = false;
+  success: boolean;
+  showStatus = false;
   @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
   @ViewChild('stepper') stepper: MatStepper;
   resources = [];
@@ -62,6 +65,19 @@ export class FormComponent implements OnInit {
         commitMessage: ['', [Validators.required]]
       })
     });
+  }
+
+  resetForm() {
+    this.ciDroidForm.reset({
+      githubInteraction: {
+        option: GITHUB_INTERACTION.PullRequest
+      }
+    });
+    this.resources = [];
+    if (this.uploadCsvComponent) {
+      this.uploadCsvComponent.resetFile();
+    }
+    this.enablePreview = false;
   }
 
   get token() {
@@ -172,5 +188,63 @@ export class FormComponent implements OnInit {
   updateResources(resources) {
     this.resources = resources;
     this.enablePreview = true;
+  }
+
+  displayStatus() {
+    setTimeout(() => {
+      this.showStatus = false;
+      this.resetForm();
+    }, 2000);
+  }
+
+  createUpdateRequest(): BulkUpdateRequest {
+    return {
+      gitHubOauthToken: this.token.value,
+      email: this.email.value,
+      commitMessage: this.commitMessage.value,
+      updateAction: this.updatedActionFields,
+      gitHubInteractionType: this.gitHubInteractionType,
+      resourcesToUpdate: this.resources
+    } as BulkUpdateRequest;
+  }
+
+  get updatedActionFields() {
+    const updateAction = {};
+    const actionClassToSend = this.ciDroidForm.controls['action'].value;
+    updateAction['@class'] = actionClassToSend.default;
+    const selectedAction = this.actions.find(action => action.actionClassToSend === actionClassToSend.default);
+    if (selectedAction) {
+      selectedAction.expectedFields.forEach(field => {
+        updateAction[field.name] = actionClassToSend[field.name];
+      });
+    }
+    return updateAction;
+  }
+
+  get gitHubInteractionType() {
+    const abstractGitHubInteraction = {};
+    abstractGitHubInteraction['@c'] = this.option.value;
+    if (this.option.value === GITHUB_INTERACTION.PullRequest) {
+      abstractGitHubInteraction['branchNameToCreate'] = this.branchName.value;
+      abstractGitHubInteraction['pullRequestTitle'] = this.pullRequestTitle.value;
+    }
+    return abstractGitHubInteraction;
+  }
+
+  performBulkUpdate() {
+    if (this.ciDroidForm.valid && this.resources.length) {
+      this.enablePreview = false;
+      this.showStatus = true;
+      this.ciDroidService.sendBulkUpdateAction(this.createUpdateRequest()).subscribe(
+        () => {
+          this.success = true;
+          this.displayStatus();
+        },
+        () => {
+          this.success = false;
+          this.displayStatus();
+        }
+      );
+    }
   }
 }
