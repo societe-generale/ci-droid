@@ -9,7 +9,7 @@
 
 ### Changed
 
-- [BREAKING] PR #19 : Upgrade to Spring Boot 2.1.2 - some properties name have changed
+- [BREAKING] PR #19 : Upgrade to Spring Boot 2.1.3 - some properties name have changed
 
 ### Deprecated
 
