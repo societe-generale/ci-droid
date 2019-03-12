@@ -10,6 +10,7 @@ import ResourcesToUpdate = shared.types.ResourcesToUpdate;
 })
 export class PreviewUploadComponent implements OnInit {
   @Input() resourcesToUpdate: ResourcesToUpdate[] = [];
+  @Input() selectedRows: ResourcesToUpdate[] = [];
 
   constructor() {}
 
@@ -19,7 +20,7 @@ export class PreviewUploadComponent implements OnInit {
 
   ngOnInit() {
     this.dataSource.data = this.resourcesToUpdate;
-    this.selectAll();
+    this.selectCheckedResources();
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -27,6 +28,10 @@ export class PreviewUploadComponent implements OnInit {
     const numSelected = this.selectedResources.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
+  }
+
+  selectCheckedResources() {
+    this.selectedRows.forEach(resource => this.selectedResources.select(resource));
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selectedResources. */

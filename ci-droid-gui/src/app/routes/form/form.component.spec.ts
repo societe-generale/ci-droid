@@ -32,6 +32,50 @@ describe('FormComponent', () => {
   let fixture: ComponentFixture<FormComponent>;
   let ciDroidService: CiDroidService;
   let logger: NGXLoggerMock;
+  const actions = [
+    {
+      expectedFields: [
+        {
+          '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea',
+          name: 'staticContent',
+          label: 'content to overwrite/create',
+          fieldType: 'textArea'
+        }
+      ],
+      actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction',
+      label: 'overwrite/create a file with given content'
+    },
+    {
+      expectedFields: [
+        {
+          '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+          name: 'initialValue',
+          label: 'old value, to replace',
+          fieldType: 'textField'
+        },
+        {
+          '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+          name: 'newValue',
+          label: 'new value',
+          fieldType: 'textField'
+        }
+      ],
+      actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction',
+      label: 'simple replace in the file'
+    },
+    {
+      expectedFields: [
+        {
+          '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
+          name: 'groupId',
+          label: 'The groupId of the plugin or dependency to remove (optional)',
+          fieldType: 'textField'
+        }
+      ],
+      actionClassToSend: 'com.societegenerale.cidroid.extensions.actionToReplicate.RemoveMavenDependencyOrPluginAction',
+      label: 'Remove a dependency or plugin in pom.xml, depending on provided artifactId'
+    }
+  ];
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -71,43 +115,11 @@ describe('FormComponent', () => {
   });
 
   it('should get Actions when it is initialized', () => {
-    const expectedActions: Action[] = [
-      {
-        expectedFields: [
-          {
-            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea',
-            name: 'staticContent',
-            label: 'content to overwrite/create',
-            fieldType: 'textArea'
-          }
-        ],
-        actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction',
-        label: 'overwrite/create a file with given content'
-      },
-      {
-        expectedFields: [
-          {
-            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
-            name: 'initialValue',
-            label: 'old value, to replace',
-            fieldType: 'textField'
-          },
-          {
-            '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
-            name: 'newValue',
-            label: 'new value',
-            fieldType: 'textField'
-          }
-        ],
-        actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction',
-        label: 'simple replace in the file'
-      }
-    ];
-    spyOn(ciDroidService, 'getActions').and.returnValue(of(expectedActions));
+    spyOn(ciDroidService, 'getActions').and.returnValue(of(actions));
     expect(component.actions).toBeUndefined();
     component.ngOnInit();
     expect(ciDroidService.getActions).toHaveBeenCalled();
-    expect(component.actions.length).toBe(2);
+    expect(component.actions.length).toBe(3);
   });
 
   it('should throw error when it fails to fetch actions', () => {
@@ -151,53 +163,7 @@ describe('FormComponent', () => {
   });
 
   describe('action', () => {
-    let actions: Action[];
-
     beforeEach(() => {
-      actions = [
-        {
-          expectedFields: [
-            {
-              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea',
-              name: 'staticContent',
-              label: 'content to overwrite/create',
-              fieldType: 'textArea'
-            }
-          ],
-          actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction',
-          label: 'overwrite/create a file with given content'
-        },
-        {
-          expectedFields: [
-            {
-              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
-              name: 'initialValue',
-              label: 'old value, to replace',
-              fieldType: 'textField'
-            },
-            {
-              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
-              name: 'newValue',
-              label: 'new value',
-              fieldType: 'textField'
-            }
-          ],
-          actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.SimpleReplaceAction',
-          label: 'simple replace in the file'
-        },
-        {
-          expectedFields: [
-            {
-              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextField',
-              name: 'groupId',
-              label: 'The groupId of the plugin or dependency to remove (optional)',
-              fieldType: 'textField'
-            }
-          ],
-          actionClassToSend: 'com.societegenerale.cidroid.extensions.actionToReplicate.RemoveMavenDependencyOrPluginAction',
-          label: 'Remove a dependency or plugin in pom.xml, depending on provided artifactId'
-        }
-      ];
       component.actions = actions;
     });
 
@@ -232,6 +198,16 @@ describe('FormComponent', () => {
           expect(errors['required']).toBeTruthy();
         });
       }
+    });
+
+    it('should get fields', () => {
+      const expectedAction = {
+        '@class': actions[0].actionClassToSend,
+        staticContent: undefined
+      };
+      const actionCtrl = component.ciDroidForm.controls['action'];
+      actionCtrl.setValue({ default: actions[0].actionClassToSend });
+      expect(component.updatedActionFields).toEqual(expectedAction);
     });
 
     it('should add validations when you chose a particular action with optional field ', () => {
@@ -368,7 +344,6 @@ describe('FormComponent', () => {
   });
 
   describe('preview action', () => {
-    let actions: Action[];
     const resources = [
       {
         repoFullName: 'societe-generale/ci-droid',
@@ -405,23 +380,17 @@ describe('FormComponent', () => {
       commitMessageCtrl.setValue(bulkRequest.commitMessage);
       const actionCtrl = component.ciDroidForm.get('action');
       actionCtrl.setValue({ default: bulkRequest.updateAction['@class'] });
+      initializePreviewComponent();
+    }
+    function initializePreviewComponent() {
+      component.previewUploadComponent = {
+        selectedResources: {
+          selected: resources
+        }
+      } as any;
     }
 
     beforeEach(() => {
-      actions = [
-        {
-          expectedFields: [
-            {
-              '@class': 'com.societegenerale.cidroid.api.actionToReplicate.fields.TextArea',
-              name: 'staticContent',
-              label: 'content to overwrite/create',
-              fieldType: 'textArea'
-            }
-          ],
-          actionClassToSend: 'com.societegenerale.cidroid.api.actionToReplicate.OverwriteStaticFileAction',
-          label: 'overwrite/create a file with given content'
-        }
-      ];
       component.actions = actions;
     });
 
@@ -447,6 +416,13 @@ describe('FormComponent', () => {
       expect(component.resources.length).toEqual(0);
       component.updateResources(resources);
       expect(component.resources.length).toEqual(1);
+    });
+
+    it('should updated the selected resources when the preview is toggled', () => {
+      component.enablePreview = true;
+      initializePreviewComponent();
+      component.togglePreview();
+      expect(component.enablePreview).toBeFalsy();
     });
 
     it('should create the request for bulk update', () => {
