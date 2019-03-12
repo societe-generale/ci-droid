@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { PreviewUploadComponent } from '../../shared/components/file-upload/preview-upload/preview-upload.component';
 import { UploadCsvComponent } from '../../shared/components/file-upload/upload-csv/upload-csv.component';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -23,9 +24,12 @@ export class FormComponent implements OnInit {
   enablePreview = false;
   success: boolean;
   showStatus = false;
-  @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
-  @ViewChild('stepper') stepper: MatStepper;
   resources = [];
+  selectedResources = [];
+
+  @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
+  @ViewChild(PreviewUploadComponent) previewUploadComponent: PreviewUploadComponent;
+  @ViewChild('stepper') stepper: MatStepper;
 
   readonly pullRequest = shared.GITHUB_INTERACTION.PullRequest;
   readonly push = shared.GITHUB_INTERACTION.Push;
@@ -187,6 +191,7 @@ export class FormComponent implements OnInit {
 
   updateResources(resources) {
     this.resources = resources;
+    this.selectedResources = resources;
     this.enablePreview = true;
   }
 
@@ -197,6 +202,11 @@ export class FormComponent implements OnInit {
     }, 2000);
   }
 
+  togglePreview() {
+    this.enablePreview = !this.enablePreview;
+    this.selectedResources = this.previewUploadComponent.selectedResources.selected;
+  }
+
   createUpdateRequest(): BulkUpdateRequest {
     return {
       gitHubOauthToken: this.token.value,
@@ -204,7 +214,7 @@ export class FormComponent implements OnInit {
       commitMessage: this.commitMessage.value,
       updateAction: this.updatedActionFields,
       gitHubInteractionType: this.gitHubInteractionType,
-      resourcesToUpdate: this.resources
+      resourcesToUpdate: this.previewUploadComponent.selectedResources.selected
     } as BulkUpdateRequest;
   }
 
@@ -232,7 +242,7 @@ export class FormComponent implements OnInit {
   }
 
   performBulkUpdate() {
-    if (this.ciDroidForm.valid && this.resources.length) {
+    if (this.ciDroidForm.valid && this.previewUploadComponent && this.previewUploadComponent.selectedResources.selected.length) {
       this.enablePreview = false;
       this.showStatus = true;
       this.ciDroidService.sendBulkUpdateAction(this.createUpdateRequest()).subscribe(

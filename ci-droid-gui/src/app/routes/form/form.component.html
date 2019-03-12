@@ -13,7 +13,7 @@
               [matTooltip]="enablePreview ? 'edit' : 'show grid'"
               matTooltipPosition="left"
               class="m-2"
-              (click)="enablePreview = !enablePreview"
+              (click)="togglePreview()"
             >
               <mat-icon>{{ enablePreview ? 'edit' : 'menu' }}</mat-icon>
             </button>
@@ -227,7 +227,7 @@
             </mat-vertical-stepper>
           </div>
           <div [ngClass]="{ 'd-none': !enablePreview }">
-            <ci-preview-upload *ngIf="enablePreview" [resourcesToUpdate]="resources"></ci-preview-upload>
+            <ci-preview-upload *ngIf="enablePreview" [resourcesToUpdate]="resources" [selectedRows]="selectedResources"></ci-preview-upload>
           </div>
           <div class="mt-3">
             <button type="button" mat-raised-button class="btn-previous" (click)="resetForm()">

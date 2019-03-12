@@ -405,6 +405,14 @@ describe('FormComponent', () => {
       commitMessageCtrl.setValue(bulkRequest.commitMessage);
       const actionCtrl = component.ciDroidForm.get('action');
       actionCtrl.setValue({ default: bulkRequest.updateAction['@class'] });
+      initializePreviewComponent();
+    }
+    function initializePreviewComponent() {
+      component.previewUploadComponent = {
+        selectedResources: {
+          selected: resources
+        }
+      } as any;
     }
 
     beforeEach(() => {
@@ -447,6 +455,13 @@ describe('FormComponent', () => {
       expect(component.resources.length).toEqual(0);
       component.updateResources(resources);
       expect(component.resources.length).toEqual(1);
+    });
+
+    it('should updated the selected resources when the preview is toggled', () => {
+      component.enablePreview = true;
+      initializePreviewComponent();
+      component.togglePreview();
+      expect(component.enablePreview).toBeFalsy();
     });
 
     it('should create the request for bulk update', () => {
