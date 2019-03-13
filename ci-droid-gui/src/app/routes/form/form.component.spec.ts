@@ -468,7 +468,7 @@ describe('FormComponent', () => {
       component.displayStatus();
       setTimeout(() => {
         expect(component.showStatus).toBeFalsy();
-      }, 3000);
+      }, 5000);
     });
   });
 });
