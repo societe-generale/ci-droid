@@ -4,17 +4,25 @@
 
 ### Added
 
-- proper UI code, with everything to build and test it
-- PR #17 : now monitoring the incoming bulk actions
-- upgraded to CI-droid extensions 1.0.8 : now DeleteResourceAction is available
-
 ### Changed
-
-- [BREAKING] PR #19 : Upgrade to Spring Boot 2.1.3 - some properties name have changed
 
 ### Deprecated
 
 ### Removed
+
+### Fixed
+
+## [1.1.0] - 2019-03-13
+
+### Added
+
+- proper UI code, with everything to build and test it
+- PR #17 : now monitoring the incoming bulk actions
+- upgraded to CI-droid extensions 1.0.9 : now DeleteResourceAction is available
+
+### Changed
+
+- [BREAKING] PR #19 : Upgrade to Spring Boot 2.1.3 - some properties name have changed
 
 ### Fixed
 
