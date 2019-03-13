@@ -55,7 +55,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <spring-cloud.version>Greenwich.RC2</spring-cloud.version>
+        <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
 
         <lombok.version>1.18.4</lombok.version>
         <logback-classic.version>1.2.3</logback-classic.version>
