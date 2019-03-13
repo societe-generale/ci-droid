@@ -6,6 +6,7 @@
 
 - proper UI code, with everything to build and test it
 - PR #17 : now monitoring the incoming bulk actions
+- upgraded to CI-droid extensions 1.0.8 : now DeleteResourceAction is available
 
 ### Changed
 
