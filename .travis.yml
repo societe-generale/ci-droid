@@ -13,6 +13,8 @@ cache:
   yarn: true
   directories:
     - ci-droid-gui/node_modules
+    - .autoconf
+    - $HOME/.m2
 
 script:
   - mvn verify jacoco:report
