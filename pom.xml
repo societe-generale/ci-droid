@@ -4,7 +4,7 @@
 
     <groupId>com.societegenerale.ci-droid</groupId>
     <artifactId>ci-droid-parent</artifactId>
-    <version>1.1.0-SNAPSHOT</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
 
     <name>CI droid parent</name>
@@ -79,7 +79,7 @@
         <url>https://github.com/societe-generale/ci-droid</url>
         <connection>scm:git:git@github.com:societe-generale/ci-droid.git</connection>
         <developerConnection>scm:git:git@github.com:societe-generale/ci-droid.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>cidroid_1.1.0</tag>
     </scm>
 
     <distributionManagement>
