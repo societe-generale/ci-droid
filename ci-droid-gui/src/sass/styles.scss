@@ -9,7 +9,9 @@
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 $custom-typography: mat-typography-config(
-  $font-family: 'Montserrat' sans-serif
+  $font-family: 'Montserrat',
+  'Roboto',
+  sans-serif
 );
 @include mat-core($custom-typography);
 
@@ -70,5 +72,5 @@ html,
 body {
   width: 100vw;
   height: 100vh;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Montserrat', 'Roboto', sans-serif;
 }
