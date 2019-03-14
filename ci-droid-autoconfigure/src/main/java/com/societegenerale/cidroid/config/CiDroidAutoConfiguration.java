@@ -3,16 +3,19 @@ package com.societegenerale.cidroid.config;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.societegenerale.cidroid.CiDroidProperties;
 import com.societegenerale.cidroid.OutgoingEventsToProcess;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @Configuration
 @EnableBinding(OutgoingEventsToProcess.class)
-@Import({CiDroidActionsConfiguration.class,SwaggerConfiguration.class})
+@Import({CiDroidActionsConfiguration.class,SwaggerConfiguration.class, CiDroidProperties.class })
+@ComponentScan({"com.societegenerale.cidroid.controllers"})
 public class CiDroidAutoConfiguration {
 
     @Bean
