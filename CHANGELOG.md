@@ -18,6 +18,7 @@
 
 - issue #36 : now controllers start when using starter
 - issue #37 : adding a controller to enable proper refresh of UI
+- issue #39 : fixing fonts in UI
 
 ## [1.1.0] - 2019-03-13
 
