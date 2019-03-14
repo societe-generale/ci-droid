@@ -12,6 +12,13 @@
 
 ### Fixed
 
+## [1.1.1] - 2019-03-14
+
+### Fixed
+
+- issue #36 : now controllers start when using starter
+- issue #37 : adding a controller to enable proper refresh of UI
+
 ## [1.1.0] - 2019-03-13
 
 ### Added
