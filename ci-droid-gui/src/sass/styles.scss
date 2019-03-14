@@ -8,8 +8,9 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
+$global-font-family: 'Montserrat', 'Roboto', sans-serif;
 $custom-typography: mat-typography-config(
-  $font-family: 'Montserrat' sans-serif
+  $font-family: $global-font-family
 );
 @include mat-core($custom-typography);
 
@@ -70,5 +71,5 @@ html,
 body {
   width: 100vw;
   height: 100vh;
-  font-family: 'Montserrat', sans-serif;
+  font-family: $global-font-family;
 }
