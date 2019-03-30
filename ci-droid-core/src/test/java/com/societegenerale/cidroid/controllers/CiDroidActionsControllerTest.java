@@ -10,8 +10,8 @@ import com.societegenerale.cidroid.api.gitHubInteractions.DirectPushGitHubIntera
 import com.societegenerale.cidroid.extensions.actionToReplicate.SimpleReplaceAction;
 import com.societegenerale.cidroid.model.BulkUpdateCommand;
 import com.societegenerale.cidroid.monitoring.TestAppender;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -30,7 +30,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.societegenerale.cidroid.TestUtils.readFromInputStream;
+import static com.societegenerale.cidroid.model.BulkUpdateCommand.BulkUpdateCommandBuilder;
+import static com.societegenerale.cidroid.model.BulkUpdateCommand.builder;
 import static com.societegenerale.cidroid.monitoring.MonitoringEvents.BULK_ACTION_REQUESTED;
+import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -39,22 +42,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(CiDroidActionsController.class)
-public class CiDroidActionsControllerTest {
+class CiDroidActionsControllerTest {
 
     private static final String SOME_OAUTH_TOKEN = "abcdef123456";
 
     private static final String SOME_EMAIL = "someEmail@someDomain.com";
 
-    private static final String COMMIT_MESSAGE= "some commit message";
+    private static final String COMMIT_MESSAGE = "some commit message";
 
     @Autowired
     private MockMvc mvc;
 
     @Autowired
-    CiDroidActionsController ciDroidActionsController;
+    private CiDroidActionsController ciDroidActionsController;
 
     @MockBean(name = "actions-to-perform")
     private MessageChannel ciDroidActionsToPerformChannel;
@@ -65,33 +67,33 @@ public class CiDroidActionsControllerTest {
     @MockBean(name = "mockAvailableAction2")
     private ActionToReplicate mockAvailableAction2;
 
-    private BulkUpdateCommand.BulkUpdateCommandBuilder baseBatchUpdateCommandBuilder=BulkUpdateCommand.builder()
-                                                                                        .gitHubOauthToken(SOME_OAUTH_TOKEN)
-                                                                                        .email(SOME_EMAIL);
+    private BulkUpdateCommandBuilder baseBatchUpdateCommandBuilder = builder()
+            .gitHubOauthToken(SOME_OAUTH_TOKEN)
+            .email(SOME_EMAIL);
 
-    private ObjectMapper objectMapper=new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-    private ResourceToUpdate resourceToUpdateOnMaster=new ResourceToUpdate("someRepo","jenkinsFile","master",null);
-    private ResourceToUpdate resourceToUpdateOnSomeBranch=new ResourceToUpdate("someRepo","jenkinsFile","someBranch",null);
+    private ResourceToUpdate resourceToUpdateOnMaster = new ResourceToUpdate("someRepo", "jenkinsFile", "master", null);
+    private ResourceToUpdate resourceToUpdateOnSomeBranch = new ResourceToUpdate("someRepo", "jenkinsFile", "someBranch", null);
 
-    List<ResourceToUpdate> resourcesToUpdate= Arrays.asList(resourceToUpdateOnMaster, resourceToUpdateOnSomeBranch);
+    private List<ResourceToUpdate> resourcesToUpdate = Arrays.asList(resourceToUpdateOnMaster, resourceToUpdateOnSomeBranch);
 
-    ActionToReplicate replaceAction=new SimpleReplaceAction("from","to");
+    private ActionToReplicate replaceAction = new SimpleReplaceAction("from", "to");
 
     @Captor
-    ArgumentCaptor<Message> sentMessage;
+    private ArgumentCaptor<Message> sentMessage;
 
     @Test
-    public void shouldSplitResourcesIntoIndividualMessages() throws Exception {
+    void shouldSplitResourcesIntoIndividualMessages() throws Exception {
 
-        TestAppender testAppender=new TestAppender();
+        TestAppender testAppender = new TestAppender();
 
         LoggerContext logCtx = (LoggerContext) LoggerFactory.getILoggerFactory();
         Logger log = logCtx.getLogger("Main");
         log.addAppender(testAppender);
 
 
-        BulkUpdateCommand bulkUpdateCommand =baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
+        BulkUpdateCommand bulkUpdateCommand = baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
                 .commitMessage(COMMIT_MESSAGE)
                 .resourcesToUpdate(resourcesToUpdate)
                 .updateAction(replaceAction)
@@ -104,15 +106,15 @@ public class CiDroidActionsControllerTest {
 
         verify(ciDroidActionsToPerformChannel, times(2)).send(sentMessage.capture());
 
-        List<Message> actualMessages=sentMessage.getAllValues();
+        List<Message> actualMessages = sentMessage.getAllValues();
 
         assertThat(actualMessages).hasSize(2);
 
-        List<BulkUpdateCommand> actualBulkUpdateCommands =actualMessages.stream().map( m -> (BulkUpdateCommand)m.getPayload()).collect(toList());
+        List<BulkUpdateCommand> actualBulkUpdateCommands = actualMessages.stream().map(m -> (BulkUpdateCommand) m.getPayload()).collect(toList());
 
-        List<ResourceToUpdate> actualSentResourcesToUpdate=new ArrayList<>();
+        List<ResourceToUpdate> actualSentResourcesToUpdate = new ArrayList<>();
 
-        for(BulkUpdateCommand actualBulkUpdateCommand : actualBulkUpdateCommands){
+        for (BulkUpdateCommand actualBulkUpdateCommand : actualBulkUpdateCommands) {
 
             assertThat(actualBulkUpdateCommand.getGitHubOauthToken()).as("OAuth token" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_OAUTH_TOKEN);
             assertThat(actualBulkUpdateCommand.getEmail()).as("email" + getAssertionMessage(actualBulkUpdateCommand)).isEqualTo(SOME_EMAIL);
@@ -126,7 +128,7 @@ public class CiDroidActionsControllerTest {
             actualSentResourcesToUpdate.add(actualBulkUpdateCommand.getResourcesToUpdate().get(0));
         }
 
-        assertThat(actualSentResourcesToUpdate).containsExactlyInAnyOrder(resourceToUpdateOnMaster,resourceToUpdateOnSomeBranch);
+        assertThat(actualSentResourcesToUpdate).containsExactlyInAnyOrder(resourceToUpdateOnMaster, resourceToUpdateOnSomeBranch);
 
 
         assertThat(testAppender.events.stream()
@@ -135,25 +137,25 @@ public class CiDroidActionsControllerTest {
     }
 
     @Test
-    public void shouldReturnAllExistingActionsAsAvailableActionsForUI() throws Exception {
+    void shouldReturnAllExistingActionsAsAvailableActionsForUI() throws Exception {
 
-        when(mockAvailableAction1.getExpectedUIFields()).thenReturn(Arrays.asList(new TextArea("staticContent1", "content1 to overwrite/create")));
-        when(mockAvailableAction2.getExpectedUIFields()).thenReturn(Arrays.asList(new TextArea("staticContent2", "content2 to overwrite/create")));
+        when(mockAvailableAction1.getExpectedUIFields()).thenReturn(singletonList(new TextArea("staticContent1", "content1 to overwrite/create")));
+        when(mockAvailableAction2.getExpectedUIFields()).thenReturn(singletonList(new TextArea("staticContent2", "content2 to overwrite/create")));
 
         ciDroidActionsController.init();
 
-        MvcResult result=mvc.perform(get("/cidroid-actions/availableActions"))
+        MvcResult result = mvc.perform(get("/cidroid-actions/availableActions"))
                 .andExpect(status().is2xxSuccessful())
                 .andReturn();
 
-        String responseAsString=result.getResponse().getContentAsString();
+        String responseAsString = result.getResponse().getContentAsString();
 
-        List actualActionsForUi=objectMapper.readValue(responseAsString, List.class);
+        List actualActionsForUi = objectMapper.readValue(responseAsString, List.class);
 
         assertThat(actualActionsForUi).hasSize(2);
 
         //can't easily deserialize action for UI, so keeping it as Object, then Maps
-        for(Object actualActionForUi : actualActionsForUi) {
+        for (Object actualActionForUi : actualActionsForUi) {
 
             LinkedHashMap actualActionForUiAsMap = (LinkedHashMap) actualActionForUi;
             assertThat(actualActionForUiAsMap.keySet()).containsExactlyInAnyOrder("label", "actionClassToSend", "expectedFields");
@@ -165,9 +167,9 @@ public class CiDroidActionsControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestIfOAuthTokenIsNotProvided() throws Exception {
+    void shouldReturnBadRequestIfOAuthTokenIsNotProvided() throws Exception {
 
-        BulkUpdateCommand invalidBulkUpdateCommand_noToken =BulkUpdateCommand.builder()
+        BulkUpdateCommand invalidBulkUpdateCommand_noToken = builder()
                 .email(SOME_EMAIL)
                 .gitHubInteractionType(new DirectPushGitHubInteraction())
                 .commitMessage(COMMIT_MESSAGE)
@@ -181,9 +183,9 @@ public class CiDroidActionsControllerTest {
 
 
     @Test
-    public void shouldReturnBadRequestIfEmailDoesntHaveProperFormat() throws Exception {
+    void shouldReturnBadRequestIfEmailDoesntHaveProperFormat() throws Exception {
 
-        BulkUpdateCommand invalidBulkUpdateCommand_incorrectEmailFormat =BulkUpdateCommand.builder()
+        BulkUpdateCommand invalidBulkUpdateCommand_incorrectEmailFormat = builder()
                 .gitHubOauthToken(SOME_OAUTH_TOKEN)
                 .email("some.incorrectEmail.com")
                 .gitHubInteractionType(new DirectPushGitHubInteraction())
@@ -197,9 +199,9 @@ public class CiDroidActionsControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestIfGitHubInteractionIsInvalid() throws Exception {
+    void shouldReturnBadRequestIfGitHubInteractionIsInvalid() throws Exception {
 
-        BulkUpdateCommand bulkUpdateCommand_invalidgitHubInteraction =baseBatchUpdateCommandBuilder
+        BulkUpdateCommand bulkUpdateCommand_invalidgitHubInteraction = baseBatchUpdateCommandBuilder
                 //gitHubInteraction is left null
                 .resourcesToUpdate(resourcesToUpdate)
                 .updateAction(replaceAction)
@@ -210,9 +212,9 @@ public class CiDroidActionsControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestIfUpdateActionIsInvalid() throws Exception {
+    void shouldReturnBadRequestIfUpdateActionIsInvalid() throws Exception {
 
-        BulkUpdateCommand bulkUpdateCommand_invalidUpdateAction =baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
+        BulkUpdateCommand bulkUpdateCommand_invalidUpdateAction = baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
                 .resourcesToUpdate(resourcesToUpdate)
                 //updateAction is left null
                 .build();
@@ -222,9 +224,9 @@ public class CiDroidActionsControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestIfResourceToUpdateIsInvalid() throws Exception {
+    void shouldReturnBadRequestIfResourceToUpdateIsInvalid() throws Exception {
 
-        BulkUpdateCommand bulkUpdateCommand_invalidResourceToUpdate =baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
+        BulkUpdateCommand bulkUpdateCommand_invalidResourceToUpdate = baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
                 //resourceToUpdate is left null
                 .updateAction(replaceAction)
                 .build();
@@ -232,7 +234,7 @@ public class CiDroidActionsControllerTest {
         postAndAssert4xxClientError(bulkUpdateCommand_invalidResourceToUpdate);
 
 
-        bulkUpdateCommand_invalidResourceToUpdate =baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
+        bulkUpdateCommand_invalidResourceToUpdate = baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
                 //resourceToUpdate is empty
                 .resourcesToUpdate(new ArrayList<>())
                 .updateAction(replaceAction)
@@ -243,15 +245,14 @@ public class CiDroidActionsControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestIfGitHubInteractionTypeIsInvalid() throws Exception {
+    void shouldReturnBadRequestIfGitHubInteractionTypeIsInvalid() throws Exception {
         String directPushBulkUpdateCommandAsString = readFromInputStream(getClass().getResourceAsStream("/bulkUpdate_pullRequest_noBranch_Command.json"));
 
-        BulkUpdateCommand bulkUpdateCommand_invalidInteraction=objectMapper.readValue(directPushBulkUpdateCommandAsString,BulkUpdateCommand.class);
+        BulkUpdateCommand bulkUpdateCommand_invalidInteraction = objectMapper.readValue(directPushBulkUpdateCommandAsString, BulkUpdateCommand.class);
 
         postAndAssert4xxClientError(bulkUpdateCommand_invalidInteraction);
 
     }
-
 
 
     private void postAndAssert4xxClientError(BulkUpdateCommand invalidBulkUpdateCommand) throws Exception {
@@ -266,7 +267,7 @@ public class CiDroidActionsControllerTest {
     }
 
     private String getAssertionMessage(BulkUpdateCommand actualBulkUpdateCommand) {
-        return " doesn't match for " +BulkUpdateCommand.class + " " + actualBulkUpdateCommand;
+        return " doesn't match for " + BulkUpdateCommand.class + " " + actualBulkUpdateCommand;
     }
 
 
