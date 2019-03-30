@@ -3,10 +3,9 @@ package com.societegenerale.cidroid.controllers;
 import com.societegenerale.cidroid.AdditionalTestConfig;
 import com.societegenerale.cidroid.CiDroidProperties;
 import com.societegenerale.cidroid.TestUtils;
-import com.societegenerale.cidroid.controllers.WebHookController;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
@@ -26,30 +25,30 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(WebHookController.class)
 @Import(AdditionalTestConfig.class)
-public class WebHookControllerTest {
+class WebHookControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean(name = "push-on-default-branch")
-    MessageChannel pushOnDefaultBranchOutputChannel;
+    private MessageChannel pushOnDefaultBranchOutputChannel;
 
     @MockBean(name = "pull-request-event")
-    MessageChannel pullRequestEventChannel;
+    private MessageChannel pullRequestEventChannel;
 
     @Autowired
-    CiDroidProperties ciDroidProperties;
+    private CiDroidProperties ciDroidProperties;
 
     @Captor
-    ArgumentCaptor<Message> sentMessage;
+    private ArgumentCaptor<Message> sentMessage;
 
-    String pushEventAsString;
+    private String pushEventAsString;
 
-    @Before
-    public void loadEventAndConfigureMock() throws IOException {
+    @BeforeEach
+    void loadEventAndConfigureMock() throws IOException {
         pushEventAsString = TestUtils.readFromInputStream(getClass().getResourceAsStream("/pushEvent.json"));
 
         ciDroidProperties.getExcluded().clear();
@@ -57,7 +56,7 @@ public class WebHookControllerTest {
     }
 
     @Test
-    public void forwardEventToDefaultBranchOutputChannel_whenPushOnDefaultBranch() throws Exception {
+    void forwardEventToDefaultBranchOutputChannel_whenPushOnDefaultBranch() throws Exception {
 
         performPOSTandExpectSuccess(pushEventAsString);
 
@@ -69,7 +68,7 @@ public class WebHookControllerTest {
     }
 
     @Test
-    public void dontForwardAnything_ifPushEventNotOnDefaultBranch() throws Exception {
+    void dontForwardAnything_ifPushEventNotOnDefaultBranch() throws Exception {
 
         String pushEventOnBranchAsString = pushEventAsString.replaceAll("refs/heads/master", "refs/heads/someOtherBranch");
 
@@ -80,7 +79,7 @@ public class WebHookControllerTest {
     }
 
     @Test
-    public void dontForwardAnything_ifRepoIsExcluded() throws Exception {
+    void dontForwardAnything_ifRepoIsExcluded() throws Exception {
 
         ciDroidProperties.getExcluded().add("public-repo");
 
@@ -95,7 +94,7 @@ public class WebHookControllerTest {
     }
 
     @Test
-    public void dontForwardAnythingIfRepoNotIncluded() throws Exception {
+    void dontForwardAnythingIfRepoNotIncluded() throws Exception {
 
         ciDroidProperties.getIncluded().add("someIncludedRepo");
 
@@ -107,7 +106,7 @@ public class WebHookControllerTest {
     }
 
     @Test
-    public void forwardEventTo_pullRequestEventChannel_whenPullRequestEvent() throws Exception {
+    void forwardEventTo_pullRequestEventChannel_whenPullRequestEvent() throws Exception {
 
         String pullRequestEventAsString = TestUtils.readFromInputStream(getClass().getResourceAsStream("/pullRequestEvent.json"));
 
