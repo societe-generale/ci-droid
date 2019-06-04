@@ -2,7 +2,7 @@ language: java
 jdk:
   - openjdk8
 node_js:
-  - "8.11"
+  - "12"
 addons:
   chrome: stable
 
