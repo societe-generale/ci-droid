@@ -1,13 +1,14 @@
 language: java
 jdk:
   - openjdk8
-node_js:node_js:
+node_js:
   - "11.0"
   - "10.13"
 addons:
   chrome: stable
 
 before_script:
+  - echo node -v
   - yarn global add @angular/cli
 
 cache:
