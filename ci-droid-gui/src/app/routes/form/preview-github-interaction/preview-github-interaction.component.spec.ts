@@ -32,13 +32,13 @@ describe('PreviewGithubInteractionComponent', () => {
   initContext(PreviewGithubInteractionComponent, TesteePreviewGitHubInteractionComponent, moduleMetaData);
 
   it('should create', function(this: Context) {
-    this.detectChanges();
+    this.fixture.detectChanges();
     expect(this.hostComponent).toBeTruthy();
     expect(this.testedComponent).toBeTruthy();
   });
 
   it('should have an input for github interaction, commit message, title and branch name', function(this: Context) {
-    this.detectChanges();
+    this.fixture.detectChanges();
     expect(this.testedComponent.githubInteraction).toBe('Pull request');
     expect(this.testedComponent.title).toBe('fix pom for version change');
     expect(this.testedComponent.branchName).toBe('fix/pom');
@@ -48,7 +48,7 @@ describe('PreviewGithubInteractionComponent', () => {
     this.hostComponent.commitMessage = 'fixed the null pointer issue';
     this.hostComponent.title = undefined;
     this.hostComponent.branchName = undefined;
-    this.detectChanges();
+    this.fixture.detectChanges();
     expect(this.testedComponent.githubInteraction).toBe('Push');
     expect(this.testedComponent.commitMessage).toBe('fixed the null pointer issue');
     expect(this.testedComponent.title).toBeUndefined();

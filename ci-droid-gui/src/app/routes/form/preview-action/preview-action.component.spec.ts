@@ -30,13 +30,13 @@ describe('PreviewActionComponent', () => {
   initContext(PreviewActionComponent, TesteePreviewActionComponent, moduleMetaData);
 
   it('should create', function(this: Context) {
-    this.detectChanges();
+    this.fixture.detectChanges();
     expect(this.hostComponent).toBeTruthy();
     expect(this.testedComponent).toBeTruthy();
   });
 
   it('should have an input for the selected action and the content of the action to be performed ', function(this: Context) {
-    this.detectChanges();
+    this.fixture.detectChanges();
     expect(this.testedComponent.selectedAction).toBe('Content to overwrite/create');
     expect(this.testedComponent.fields).toEqual([
       {
@@ -56,7 +56,7 @@ describe('PreviewActionComponent', () => {
         label: 'new value'
       }
     ];
-    this.detectChanges();
+    this.fixture.detectChanges();
     expect(this.testedComponent.selectedAction).toBe('simple replace in the file');
     expect(this.testedComponent.fields).toEqual([
       {
