@@ -1,5 +1,5 @@
 import { PreviewActionComponent } from './preview-action.component';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
 import { Component } from '@angular/core';
 import { initContext, TestContext } from '../../../../testing/test.context';
 

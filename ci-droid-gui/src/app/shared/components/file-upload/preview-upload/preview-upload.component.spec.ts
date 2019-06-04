@@ -1,7 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatCheckboxModule, MatTableModule } from '@angular/material';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
 import { PreviewUploadComponent } from './preview-upload.component';
 
 import ResourcesToUpdate = shared.types.ResourcesToUpdate;
