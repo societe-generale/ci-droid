@@ -16,12 +16,6 @@
     "format:prettier": "pretty-quick --staged",
     "format:all": "run-s format:prettier format:lint"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run format:all",
-      "pre-push": "npm test"
-    }
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "~8.0.0",
