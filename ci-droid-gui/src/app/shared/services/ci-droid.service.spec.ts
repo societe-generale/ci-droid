@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { CiDroidService } from './ci-droid.service';
 import Action = shared.types.Action;
 import BulkUpdateRequest = shared.types.BulkUpdateRequest;
+import { Type } from '@angular/core';
 
 describe('CiDroidService', () => {
   let httpMock: HttpTestingController;
@@ -14,7 +15,7 @@ describe('CiDroidService', () => {
       providers: [CiDroidService]
     });
     ciDroidService = TestBed.get(CiDroidService);
-    httpMock = TestBed.get(HttpTestingController);
+    httpMock = TestBed.get(HttpTestingController as Type<HttpTestingController>);
   });
 
   afterEach(() => {

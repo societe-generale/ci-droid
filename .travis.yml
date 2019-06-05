@@ -1,31 +1,28 @@
 language: java
 jdk:
   - openjdk8
-node_js:
-  - "12"
+env:
+  - NODE_VERSION=12 CC=clang CXX=clang++
+before_install:
+  - nvm install $NODE_VERSION
 addons:
   chrome: stable
-
 before_script:
   - yarn global add @angular/cli
-
 cache:
   yarn: true
   directories:
     - ci-droid-gui/node_modules
     - .autoconf
     - $HOME/.m2
-
 script:
   - mvn verify jacoco:report
 after_success:
   - mvn coveralls:report
-
 before_deploy:
   - release/createReleaseProperties.sh
   - echo $GPG_SECRET_KEYS | base64 --decode | gpg --import
   - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
-
 deploy:
   provider: script
   script: mvn release:perform --settings release/mvnsettings.xml -Darguments="-DskipTests"
