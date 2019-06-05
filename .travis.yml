@@ -1,38 +1,37 @@
-matrix:
-  include:
-    - language: java
-      jdk:
-        - openjdk8
-      script:
-        - mvn verify jacoco:report
-      after_success:
-        - mvn coveralls:report
-      before_deploy:
-        - release/createReleaseProperties.sh
-        - echo $GPG_SECRET_KEYS | base64 --decode | gpg --import
-        - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
-      deploy:
-        provider: script
-        script: mvn release:perform --settings release/mvnsettings.xml -Darguments="-DskipTests"
-        skip_cleanup: true
-        on:
-          tags: true
-      cache:
-        directories:
-          - .autoconf
-          - $HOME/.m2
-    - language: node_js
-      node_js:
-        - 'lts/*'
-      addons:
-        chrome: stable
-      before_install:
-        - echo $TRAVIS_NODE_VERSION
-      before_script:
-        - yarn global add @angular/cli
-      cache:
-        yarn: true
-        directories:
-          - ci-droid-gui/node_modules
-          - .autoconf
-          - $HOME/.m2
+language: node_js
+jdk:
+  - openjdk8
+node_js: "node"
+
+addons:
+  chrome: stable
+
+before_install:
+  - echo $TRAVIS_NODE_VERSION
+
+before_script:
+  - yarn global add @angular/cli
+
+cache:
+  yarn: true
+  directories:
+    - ci-droid-gui/node_modules
+    - .autoconf
+    - $HOME/.m2
+
+script:
+  - mvn verify jacoco:report
+after_success:
+  - mvn coveralls:report
+
+before_deploy:
+  - release/createReleaseProperties.sh
+  - echo $GPG_SECRET_KEYS | base64 --decode | gpg --import
+  - echo $GPG_OWNERTRUST | base64 --decode | gpg --import-ownertrust
+
+deploy:
+  provider: script
+  script: mvn release:perform --settings release/mvnsettings.xml -Darguments="-DskipTests"
+  skip_cleanup: true
+  on:
+    tags: true
