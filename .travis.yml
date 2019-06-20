@@ -15,6 +15,11 @@ cache:
     - ci-droid-gui/node_modules
     - .autoconf
     - $HOME/.m2
+# only build for commits/pr targeted to master branch
+# this avoid duplicate builds for push+PR
+branches:
+  only:
+    - master
 script:
   - mvn verify jacoco:report
 after_success:
