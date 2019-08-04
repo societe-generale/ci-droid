@@ -33,8 +33,10 @@ The main actions that we can take care when there's a push on default branch dea
 When a pull request event happens (either creating or updating a pull request), CI-droid can then assist the dev team by providing comments in the PR.
 We configure a map associating a file pattern to a small best practice document (ideally, the URL of a .md file), and if any of the file in the PR matches the pattern, the content of the best practice document will be "pasted" in the PR as a comment by CI-droid.
 
-This feature makes the best practices more "alive", compared to a static document written once, refered initialy, but then rarely updated/remembered : it's very easy to add new pattern / best practice documents mapping, and to update them.
+This feature makes the best practices more "alive", compared to a static document written once, referred initially, but then rarely updated/remembered : it's very easy to add new pattern / best practice documents mapping, and to update them.
 It also enables team to save time, as the review comment is immediate and the developer can take actions before the reviewer starts reviewing.
+
+A distinct component to configure enables to give developers a comment on their pull request if it contains too many files. Big pull requests are usually difficult to review, so we can give a hint to the developer that it would be better to try to split the PR if he/she wants it to be reviewed quickly.
 
 #### ad-hoc "bulk" actions
 
