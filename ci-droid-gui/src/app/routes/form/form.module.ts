@@ -4,16 +4,14 @@ import { FileUploadModule } from '../../shared/components/file-upload/file-uploa
 import { StatusModule } from '../../shared/modules/status/status.module';
 import { FormComponent } from './form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatButtonModule,
-  MatCardModule,
-  MatIconModule,
-  MatInputModule,
-  MatRadioModule,
-  MatSelectModule,
-  MatStepperModule,
-  MatTooltipModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MdePopoverModule } from '@material-extended/mde';
 import { PreviewActionComponent } from './preview-action/preview-action.component';
 import { PreviewGithubInteractionComponent } from './preview-github-interaction/preview-github-interaction.component';

@@ -4,7 +4,9 @@ import { PreviewUploadComponent } from '../../shared/components/file-upload/prev
 import { UploadCsvComponent } from '../../shared/components/file-upload/upload-csv/upload-csv.component';
 import { CiDroidService } from '../../shared/services/ci-droid.service';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatRadioChange, MatSelectChange, MatStepper } from '@angular/material';
+import { MatRadioChange } from '@angular/material/radio';
+import { MatSelectChange } from '@angular/material/select';
+import { MatStepper } from '@angular/material/stepper';
 import Action = shared.types.Action;
 import GITHUB_INTERACTION = shared.GITHUB_INTERACTION;
 import Field = shared.types.Field;
@@ -27,9 +29,9 @@ export class FormComponent implements OnInit {
   resources = [];
   selectedResources = [];
 
-  @ViewChild(UploadCsvComponent) uploadCsvComponent: UploadCsvComponent;
-  @ViewChild(PreviewUploadComponent) previewUploadComponent: PreviewUploadComponent;
-  @ViewChild('stepper') stepper: MatStepper;
+  @ViewChild(UploadCsvComponent, { static: false }) uploadCsvComponent: UploadCsvComponent;
+  @ViewChild(PreviewUploadComponent, { static: false }) previewUploadComponent: PreviewUploadComponent;
+  @ViewChild('stepper', { static: false }) stepper: MatStepper;
 
   readonly pullRequest = shared.GITHUB_INTERACTION.PullRequest;
   readonly push = shared.GITHUB_INTERACTION.Push;

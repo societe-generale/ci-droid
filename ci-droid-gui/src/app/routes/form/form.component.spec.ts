@@ -8,17 +8,13 @@ import { CiDroidService } from '../../shared/services/ci-droid.service';
 
 import { FormComponent } from './form.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {
-  MatCardModule,
-  MatIconModule,
-  MatInputModule,
-  MatRadioChange,
-  MatRadioModule,
-  MatSelectChange,
-  MatSelectModule,
-  MatStepperModule,
-  MatTooltipModule
-} from '@angular/material';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MdePopoverModule } from '@material-extended/mde';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
