@@ -5,8 +5,11 @@ import com.societegenerale.cidroid.CiDroidProperties;
 import com.societegenerale.cidroid.model.github.GitHubEvent;
 import com.societegenerale.cidroid.model.github.PullRequestEvent;
 import com.societegenerale.cidroid.model.github.PushEvent;
+import com.societegenerale.cidroid.model.gitlab.GitLabEvent;
+import com.societegenerale.cidroid.model.gitlab.GitLabPushEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +24,8 @@ import java.util.List;
 @Slf4j
 @RequestMapping(value = "/cidroid-webhook")
 @RestController
-public class WebHookController {
+@Profile("!gitHub")
+public class GitLabWebHookController {
 
     private MessageChannel pushOnDefaultBranchChannel;
 
@@ -33,9 +37,9 @@ public class WebHookController {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public WebHookController(@Qualifier("push-on-default-branch") MessageChannel pushOnDefaultBranchChannel,
-                             @Qualifier("pull-request-event") MessageChannel pullRequestEventChannel,
-                             CiDroidProperties properties) {
+    public GitLabWebHookController(@Qualifier("push-on-default-branch") MessageChannel pushOnDefaultBranchChannel,
+                                   @Qualifier("pull-request-event") MessageChannel pullRequestEventChannel,
+                                   CiDroidProperties properties) {
         this.pushOnDefaultBranchChannel = pushOnDefaultBranchChannel;
         this.pullRequestEventChannel = pullRequestEventChannel;
 
@@ -44,36 +48,37 @@ public class WebHookController {
         repositoriesToInclude = properties.getIncluded();
     }
 
-    @PostMapping(headers = "X-Github-Event=ping")
+
+    @PostMapping(headers = "X-Gitlab-Event=ping")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public void onGitHubPingEvent() {
     }
 
 
-    @PostMapping(headers = "X-Github-Event=push")
+    @PostMapping(headers = "X-Gitlab-Event=Push Hook")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> onGitHubPushEvent(HttpEntity<String> rawPushEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
-        PushEvent pushEvent = mapTo(PushEvent.class, rawPushEvent);
+        GitLabPushEvent pushEvent = mapTo(GitLabPushEvent.class, rawPushEvent);
 
         if (shouldNotProcess(pushEvent)) {
             return ResponseEntity.accepted().build();
         }
 
-        String repoDefaultBranch = pushEvent.getRepository().getDefaultBranch();
+        String repoDefaultBranch = pushEvent.getProject().getDefaultBranch();
         String eventRef = pushEvent.getRef();
 
         Message rawPushEventMessage = MessageBuilder.withPayload(rawPushEvent.getBody()).build();
 
         if (eventRef.endsWith(repoDefaultBranch)) {
-            log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getFullName());
+            log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getProject().getFullName());
 
             pushOnDefaultBranchChannel.send(rawPushEventMessage);
         } else {
-            log.info("Not sending pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getFullName());
+            log.info("Not sending pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getProject().getFullName());
         }
 
         return ResponseEntity.accepted().build();
@@ -90,40 +95,19 @@ public class WebHookController {
         return null;
     }
 
-    @PostMapping(headers = "X-Github-Event=pull_request")
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> onGitHubPullRequestEvent(HttpEntity<String> rawPullRequestEvent) {
+    private boolean shouldNotProcess(GitLabEvent gitLabEvent) {
 
-        //Mapping the event manually, because we need to forward the original message at the end
-        PullRequestEvent pullRequestEvent = mapTo(PullRequestEvent.class, rawPullRequestEvent);
-
-        if (shouldNotProcess(pullRequestEvent)) {
-            return ResponseEntity.accepted().build();
-        }
-
-        Message rawPullRequestEventMessage = MessageBuilder.withPayload(rawPullRequestEvent.getBody()).build();
-
-        log.info("sending to consumers : PullRequestEvent for PR #{} on repo {}", pullRequestEvent.getPrNumber(), pullRequestEvent.getRepository().getFullName());
-
-        pullRequestEventChannel.send(rawPullRequestEventMessage);
-
-        return ResponseEntity.accepted().build();
-    }
-
-    private boolean shouldNotProcess(GitHubEvent gitHubEvent) {
-
-        if (gitHubEvent == null) {
+        if (gitLabEvent == null) {
             return true;
         }
 
-        if (!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(gitHubEvent.getRepository().getName())) {
-            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel", gitHubEvent.getRepository().getName());
+        if (!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(gitLabEvent.getProject().getName())) {
+            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel", gitLabEvent.getProject().getName());
             return true;
         }
 
-        if (!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(gitHubEvent.getRepository().getName())) {
-            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel", gitHubEvent.getRepository().getName());
+        if (!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(gitLabEvent.getProject().getName())) {
+            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel", gitLabEvent.getProject().getName());
             return true;
         }
 

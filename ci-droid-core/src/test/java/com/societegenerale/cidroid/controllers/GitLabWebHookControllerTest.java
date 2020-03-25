@@ -1,5 +1,6 @@
 package com.societegenerale.cidroid.controllers;
 
+
 import com.societegenerale.cidroid.AdditionalTestConfig;
 import com.societegenerale.cidroid.CiDroidProperties;
 import com.societegenerale.cidroid.TestUtils;
@@ -14,21 +15,26 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(WebHookController.class)
+@WebMvcTest(GitLabWebHookController.class)
 @Import(AdditionalTestConfig.class)
-class WebHookControllerTest {
+@ActiveProfiles("gitLab")
+public class GitLabWebHookControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -49,7 +55,7 @@ class WebHookControllerTest {
 
     @BeforeEach
     void loadEventAndConfigureMock() throws IOException {
-        pushEventAsString = TestUtils.readFromInputStream(getClass().getResourceAsStream("/pushEvent.json"));
+        pushEventAsString = TestUtils.readFromInputStream(getClass().getResourceAsStream("/pushEventGitLab.json"));
 
         ciDroidProperties.getExcluded().clear();
         ciDroidProperties.getIncluded().clear();
@@ -58,7 +64,7 @@ class WebHookControllerTest {
     @Test
     void forwardEventToDefaultBranchOutputChannel_whenPushOnDefaultBranch() throws Exception {
 
-        performPOSTandExpectSuccess(pushEventAsString);
+        performPOSTandExpectSuccess(pushEventAsString, "Push Hook");
 
         verify(pushOnDefaultBranchOutputChannel, times(1)).send(sentMessage.capture());
 
@@ -67,12 +73,13 @@ class WebHookControllerTest {
         verify(pullRequestEventChannel, never()).send(any(Message.class));
     }
 
+
     @Test
     void dontForwardAnything_ifPushEventNotOnDefaultBranch() throws Exception {
 
         String pushEventOnBranchAsString = pushEventAsString.replaceAll("refs/heads/master", "refs/heads/someOtherBranch");
 
-        performPOSTandExpectSuccess(pushEventOnBranchAsString);
+        performPOSTandExpectSuccess(pushEventOnBranchAsString, "Push Hook");
 
         verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
         verify(pullRequestEventChannel, never()).send(any(Message.class));
@@ -84,9 +91,9 @@ class WebHookControllerTest {
         ciDroidProperties.getExcluded().add("public-repo");
 
         String pushEventOnBranchAsString = pushEventAsString.replaceAll("refs/heads/master", "refs/heads/someOtherBranch");
-        performPOSTandExpectSuccess(pushEventOnBranchAsString);
+        performPOSTandExpectSuccess(pushEventOnBranchAsString, "Push Hook");
 
-        performPOSTandExpectSuccess(pushEventAsString);
+        performPOSTandExpectSuccess(pushEventAsString, "Push Hook");
 
         verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
         verify(pullRequestEventChannel, never()).send(any(Message.class));
@@ -98,7 +105,7 @@ class WebHookControllerTest {
 
         ciDroidProperties.getIncluded().add("someIncludedRepo");
 
-        performPOSTandExpectSuccess(pushEventAsString);
+        performPOSTandExpectSuccess(pushEventAsString, "Push Hook");
 
         verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
         verify(pullRequestEventChannel, never()).send(any(Message.class));
@@ -108,13 +115,9 @@ class WebHookControllerTest {
     @Test
     void forwardEventTo_pullRequestEventChannel_whenPullRequestEvent() throws Exception {
 
-        String pullRequestEventAsString = TestUtils.readFromInputStream(getClass().getResourceAsStream("/pullRequestEvent.json"));
+        String pullRequestEventAsString = TestUtils.readFromInputStream(getClass().getResourceAsStream("/mergeRequestHookGitLab.json"));
 
-        mvc.perform(post("/cidroid-webhook")
-                .header("X-Github-Event", "pull_request")
-                .contentType(APPLICATION_JSON)
-                .content(pullRequestEventAsString))
-                .andExpect(status().is2xxSuccessful());
+        performPOSTandExpectSuccess(pullRequestEventAsString, "Merge Request Hook");
 
         verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
         verify(pullRequestEventChannel, times(1)).send(sentMessage.capture());
@@ -125,13 +128,11 @@ class WebHookControllerTest {
 
     }
 
-    private void performPOSTandExpectSuccess(String requestBodyContent) throws Exception {
+    private void performPOSTandExpectSuccess(String requestBodyContent, String headerValues) throws Exception {
         mvc.perform(post("/cidroid-webhook")
-                .header("X-Github-Event", "push")
+                .header("X-Gitlab-Event", headerValues)
                 .contentType(APPLICATION_JSON)
                 .content(requestBodyContent))
-
                 .andExpect(status().is2xxSuccessful());
     }
-
 }
