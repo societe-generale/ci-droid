@@ -6,16 +6,12 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Project {
+public class GitLabRepository {
 
+    @JsonProperty("url")
     private String url;
 
-    private String name;
-
-    @JsonProperty("default_branch")
-    private String defaultBranch;
-
     @JsonProperty("name")
-    private String fullName;
+    private String name;
 
 }

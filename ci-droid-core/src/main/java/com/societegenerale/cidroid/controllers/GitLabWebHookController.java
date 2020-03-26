@@ -1,11 +1,10 @@
 package com.societegenerale.cidroid.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.societegenerale.cidroid.CiDroidProperties;
-import com.societegenerale.cidroid.model.github.GitHubEvent;
-import com.societegenerale.cidroid.model.github.PullRequestEvent;
-import com.societegenerale.cidroid.model.github.PushEvent;
 import com.societegenerale.cidroid.model.gitlab.GitLabEvent;
+import com.societegenerale.cidroid.model.gitlab.GitLabMergeRequestHookEvent;
 import com.societegenerale.cidroid.model.gitlab.GitLabPushEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -74,11 +73,11 @@ public class GitLabWebHookController {
         Message rawPushEventMessage = MessageBuilder.withPayload(rawPushEvent.getBody()).build();
 
         if (eventRef.endsWith(repoDefaultBranch)) {
-            log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getProject().getFullName());
+            log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
 
             pushOnDefaultBranchChannel.send(rawPushEventMessage);
         } else {
-            log.info("Not sending pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getProject().getFullName());
+            log.info("Not sending pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
         }
 
         return ResponseEntity.accepted().build();
@@ -101,17 +100,39 @@ public class GitLabWebHookController {
             return true;
         }
 
-        if (!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(gitLabEvent.getProject().getName())) {
-            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel", gitLabEvent.getProject().getName());
+        if (!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(gitLabEvent.getRepository().getName())) {
+            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel", gitLabEvent.getRepository().getName());
             return true;
         }
 
-        if (!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(gitLabEvent.getProject().getName())) {
-            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel", gitLabEvent.getProject().getName());
+        if (!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(gitLabEvent.getRepository().getName())) {
+            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel", gitLabEvent.getRepository().getName());
             return true;
         }
+        else {
+            return false;
+        }
+    }
 
-        return false;
+    @PostMapping(headers = "X-Gitlab-Event=Merge Request Hook")
+    @ResponseBody
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> onGitHubPullRequestEvent(HttpEntity<String> rawPullRequestEvent){
+
+        //Mapping the event manually, because we need to forward the original message at the end
+        GitLabMergeRequestHookEvent gitLabMergeRequestHookEvent = mapTo(GitLabMergeRequestHookEvent.class, rawPullRequestEvent);
+
+        if (shouldNotProcess(gitLabMergeRequestHookEvent)) {
+            return ResponseEntity.accepted().build();
+        }
+
+        Message rawPullRequestEventMessage = MessageBuilder.withPayload(rawPullRequestEvent.getBody()).build();
+
+        log.info("sending to consumers : PullRequestEvent for PR #{} on repo {}", gitLabMergeRequestHookEvent.getObjectKind(), gitLabMergeRequestHookEvent.getRepository().getName());
+
+        pullRequestEventChannel.send(rawPullRequestEventMessage);
+
+        return ResponseEntity.accepted().build();
     }
 
 }

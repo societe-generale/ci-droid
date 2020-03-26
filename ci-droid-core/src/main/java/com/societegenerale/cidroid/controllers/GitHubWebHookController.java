@@ -68,6 +68,7 @@ public class GitHubWebHookController {
 
         Message rawPushEventMessage = MessageBuilder.withPayload(rawPushEvent.getBody()).build();
 
+        Boolean endsWith = eventRef.endsWith(repoDefaultBranch);
         if (eventRef.endsWith(repoDefaultBranch)) {
             log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getFullName());
 

@@ -88,9 +88,10 @@ public class GitLabWebHookControllerTest {
     @Test
     void dontForwardAnything_ifRepoIsExcluded() throws Exception {
 
-        ciDroidProperties.getExcluded().add("public-repo");
+        ciDroidProperties.getExcluded().add("Diaspora");
 
         String pushEventOnBranchAsString = pushEventAsString.replaceAll("refs/heads/master", "refs/heads/someOtherBranch");
+
         performPOSTandExpectSuccess(pushEventOnBranchAsString, "Push Hook");
 
         performPOSTandExpectSuccess(pushEventAsString, "Push Hook");

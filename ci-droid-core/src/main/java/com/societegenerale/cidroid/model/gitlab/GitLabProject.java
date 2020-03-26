@@ -2,17 +2,19 @@ package com.societegenerale.cidroid.model.gitlab;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.societegenerale.cidroid.model.github.Repository;
 import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GitLabPushEvent implements GitLabEvent{
+public class GitLabProject {
 
-    @JsonProperty("ref")
-    private String ref;
+    @JsonProperty("url")
+    private String url;
 
-    private GitLabProject project;
+    @JsonProperty("name")
+    private String name;
 
-    private GitLabRepository repository;
+    @JsonProperty("default_branch")
+    private String defaultBranch;
+
 }

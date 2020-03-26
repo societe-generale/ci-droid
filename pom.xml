@@ -243,7 +243,7 @@
                 <version>2.5.3</version>
                 <configuration>
                     <stagingRepository>https://oss.sonatype.org/service/local/staging/deploy/maven2</stagingRepository>
-                    <tagNameFormat>cidroid_@{project.version}</tagNameFormat>
+                    <tagNameFormat>cidroid_@{gitLabProject.version}</tagNameFormat>
                     <localCheckout>true</localCheckout>
                     <pushChanges>false</pushChanges>
                     <useReleaseProfile>false</useReleaseProfile>

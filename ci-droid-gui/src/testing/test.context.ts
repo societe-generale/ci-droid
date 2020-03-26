@@ -48,7 +48,7 @@ export function initContext<T, H>(testedType: Type<T>, hostType: Type<H>, module
     this.fixture.detectChanges();
     this.hostComponent = this.fixture.componentInstance;
     const testedDebugElement = this.fixture.debugElement.query(By.directive(testedType));
-    // On larger project, it would be recommended to throw an error here if the tested directive can't be found.
+    // On larger gitLabProject, it would be recommended to throw an error here if the tested directive can't be found.
     this.tested = testedDebugElement;
     this.testedComponent = testedDebugElement.injector.get(testedType);
     this.testedElement = testedDebugElement.nativeElement;
