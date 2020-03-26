@@ -1,9 +1,8 @@
 package com.societegenerale.cidroid.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.societegenerale.cidroid.CiDroidProperties;
-import com.societegenerale.cidroid.model.gitlab.GitLabEvent;
+import com.societegenerale.cidroid.model.SourceControlEvent;
 import com.societegenerale.cidroid.model.gitlab.GitLabMergeRequestHookEvent;
 import com.societegenerale.cidroid.model.gitlab.GitLabPushEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +27,8 @@ public class GitLabWebHookController {
 
     private MessageChannel pushOnDefaultBranchChannel;
 
+    private MessageChannel pushOnNonDefaultBranchChannel;
+
     private MessageChannel pullRequestEventChannel;
 
     private List<String> repositoriesToExclude;
@@ -36,15 +37,20 @@ public class GitLabWebHookController {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    private boolean processNonDefaultBranchEvents;
+
     public GitLabWebHookController(@Qualifier("push-on-default-branch") MessageChannel pushOnDefaultBranchChannel,
                                    @Qualifier("pull-request-event") MessageChannel pullRequestEventChannel,
+                                   @Qualifier("push-on-default-branch") MessageChannel pushOnNonDefaultBranchChannel,
                                    CiDroidProperties properties) {
         this.pushOnDefaultBranchChannel = pushOnDefaultBranchChannel;
+        this.pushOnNonDefaultBranchChannel = pushOnNonDefaultBranchChannel;
         this.pullRequestEventChannel = pullRequestEventChannel;
-
 
         repositoriesToExclude = properties.getExcluded();
         repositoriesToInclude = properties.getIncluded();
+
+        processNonDefaultBranchEvents = properties.isProcessNonDefaultBranchEvents();
     }
 
 
@@ -76,7 +82,12 @@ public class GitLabWebHookController {
             log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
 
             pushOnDefaultBranchChannel.send(rawPushEventMessage);
-        } else {
+        } else if (processNonDefaultBranchEvents) {
+            log.info("sending to consumers : Pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
+
+            pushOnNonDefaultBranchChannel.send(rawPushEventMessage);
+        }
+        else{
             log.info("Not sending pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
         }
 
@@ -94,7 +105,7 @@ public class GitLabWebHookController {
         return null;
     }
 
-    private boolean shouldNotProcess(GitLabEvent gitLabEvent) {
+    private boolean shouldNotProcess(SourceControlEvent gitLabEvent) {
 
         if (gitLabEvent == null) {
             return true;

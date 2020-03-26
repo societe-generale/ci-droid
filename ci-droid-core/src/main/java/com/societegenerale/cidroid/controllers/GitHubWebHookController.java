@@ -2,7 +2,7 @@ package com.societegenerale.cidroid.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.societegenerale.cidroid.CiDroidProperties;
-import com.societegenerale.cidroid.model.github.GitHubEvent;
+import com.societegenerale.cidroid.model.SourceControlEvent;
 import com.societegenerale.cidroid.model.github.PullRequestEvent;
 import com.societegenerale.cidroid.model.github.PushEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -112,7 +112,7 @@ public class GitHubWebHookController {
         return ResponseEntity.accepted().build();
     }
 
-    private boolean shouldNotProcess(GitHubEvent gitHubEvent) {
+    private boolean shouldNotProcess(SourceControlEvent gitHubEvent) {
 
         if (gitHubEvent == null) {
             return true;
