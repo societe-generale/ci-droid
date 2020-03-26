@@ -113,14 +113,14 @@ starting with version 1.1.1, CI-droid comes with a GUI ! just hit http://localho
 Both CI-droid and CI-droid-tasks-consumer are packaged the same way. For both, we build :
 
 - a "fat jar", that you can run "as is" from command line, providing your own config file on the side
-- a starter, that you can use as a dependency in your custom gitLabProject.
+- a starter, that you can use as a dependency in your custom project.
 
 For instance, to create your own CI-droid-tasks-consumer, leveraging on the starter, you can start with this config :
 
 ```xml
     <properties>
-        <gitLabProject.build.sourceEncoding>UTF-8</gitLabProject.build.sourceEncoding>
-        <gitLabProject.reporting.outputEncoding>UTF-8</gitLabProject.reporting.outputEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <ci-droid-tasks-consumer.version>1.1.1</ci-droid-tasks-consumer.version>
     </properties>

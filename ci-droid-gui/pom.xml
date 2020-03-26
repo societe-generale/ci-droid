@@ -53,7 +53,7 @@
               <outputDirectory>../ci-droid-core/src/main/resources/static</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${gitLabProject.basedir}/dist/ci-droid-gui</directory>
+                  <directory>${project.basedir}/dist/ci-droid-gui</directory>
                 </resource>
               </resources>
             </configuration>

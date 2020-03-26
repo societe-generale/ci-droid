@@ -18,7 +18,7 @@ Please check options that are relevant.
 <!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
 <!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
 
-- [ ] My code follows the style guidelines of this gitLabProject
+- [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my own code
 - [ ] My changes generate no new warnings
 - [ ] I have added tests that prove my fix is effective or that my feature works

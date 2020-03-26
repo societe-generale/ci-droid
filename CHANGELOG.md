@@ -84,7 +84,7 @@
 
 ### Fixed
 
-- mainClass in spring-boot-maven-plugin config was incorrect (was a copy/paste mistake from another gitLabProject)
+- mainClass in spring-boot-maven-plugin config was incorrect (was a copy/paste mistake from another project)
 
 ## [1.0.3] - 2018-07-13
 
