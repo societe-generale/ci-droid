@@ -10,7 +10,7 @@ public class  AdditionalTestConfig{
 
     @Bean
     public CiDroidProperties ciDroidProperties() {
-        return new CiDroidProperties(new ArrayList<>(),new ArrayList<>());
+        return new CiDroidProperties(new ArrayList<>(),new ArrayList<>(), true);
     }
 
 }

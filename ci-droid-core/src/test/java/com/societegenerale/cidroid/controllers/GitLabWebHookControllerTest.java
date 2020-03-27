@@ -39,11 +39,14 @@ public class GitLabWebHookControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean(name = "push-on-non-default-branch")
+    private MessageChannel pushOnNonDefaultBranchOutputChannel;
+
     @MockBean(name = "push-on-default-branch")
     private MessageChannel pushOnDefaultBranchOutputChannel;
 
-    @MockBean(name = "pull-request-event")
-    private MessageChannel pullRequestEventChannel;
+    @MockBean(name = "merge-request-event")
+    private MessageChannel mergeRequestEventChannel;
 
     @Autowired
     private CiDroidProperties ciDroidProperties;
@@ -62,6 +65,22 @@ public class GitLabWebHookControllerTest {
     }
 
     @Test
+    void forwardEventToNonDefaultBranchOutputChannel_whenPushOnNonDefaultBranch() throws Exception {
+
+        String pushEventOnBranchAsString = pushEventAsString.replaceAll("refs/heads/master", "refs/heads/someOtherBranch");
+
+        performPOSTandExpectSuccess(pushEventOnBranchAsString, "Push Hook");
+
+        verify(pushOnNonDefaultBranchOutputChannel, times(1)).send(sentMessage.capture());
+
+        assertThat(sentMessage.getValue().getPayload()).isEqualTo(pushEventOnBranchAsString);
+
+        verify(mergeRequestEventChannel, never()).send(any(Message.class));
+        verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
+
+    }
+
+    @Test
     void forwardEventToDefaultBranchOutputChannel_whenPushOnDefaultBranch() throws Exception {
 
         performPOSTandExpectSuccess(pushEventAsString, "Push Hook");
@@ -70,19 +89,21 @@ public class GitLabWebHookControllerTest {
 
         assertThat(sentMessage.getValue().getPayload()).isEqualTo(pushEventAsString);
 
-        verify(pullRequestEventChannel, never()).send(any(Message.class));
+        verify(mergeRequestEventChannel, never()).send(any(Message.class));
     }
 
 
     @Test
-    void dontForwardAnything_ifPushEventNotOnDefaultBranch() throws Exception {
+    void dontForwardAnything_ifPushEventNotOnDefaultBranchAndProcessNonDefaultBranchesIsFalse() throws Exception {
 
         String pushEventOnBranchAsString = pushEventAsString.replaceAll("refs/heads/master", "refs/heads/someOtherBranch");
 
         performPOSTandExpectSuccess(pushEventOnBranchAsString, "Push Hook");
 
+        //Has to be tested to, but how to set processNonDefaultBranch to false again?
+        //verify(pushOnNonDefaultBranchOutputChannel, never()).send(any(Message.class));
         verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
-        verify(pullRequestEventChannel, never()).send(any(Message.class));
+        verify(mergeRequestEventChannel, never()).send(any(Message.class));
     }
 
     @Test
@@ -97,7 +118,7 @@ public class GitLabWebHookControllerTest {
         performPOSTandExpectSuccess(pushEventAsString, "Push Hook");
 
         verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
-        verify(pullRequestEventChannel, never()).send(any(Message.class));
+        verify(mergeRequestEventChannel, never()).send(any(Message.class));
 
     }
 
@@ -109,7 +130,7 @@ public class GitLabWebHookControllerTest {
         performPOSTandExpectSuccess(pushEventAsString, "Push Hook");
 
         verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
-        verify(pullRequestEventChannel, never()).send(any(Message.class));
+        verify(mergeRequestEventChannel, never()).send(any(Message.class));
 
     }
 
@@ -121,7 +142,7 @@ public class GitLabWebHookControllerTest {
         performPOSTandExpectSuccess(pullRequestEventAsString, "Merge Request Hook");
 
         verify(pushOnDefaultBranchOutputChannel, never()).send(any(Message.class));
-        verify(pullRequestEventChannel, times(1)).send(sentMessage.capture());
+        verify(mergeRequestEventChannel, times(1)).send(sentMessage.capture());
 
         assertThat(sentMessage.getValue().getPayload()).isEqualTo(pullRequestEventAsString);
 

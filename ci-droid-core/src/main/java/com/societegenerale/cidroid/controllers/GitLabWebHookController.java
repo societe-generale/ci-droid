@@ -40,8 +40,8 @@ public class GitLabWebHookController {
     private boolean processNonDefaultBranchEvents;
 
     public GitLabWebHookController(@Qualifier("push-on-default-branch") MessageChannel pushOnDefaultBranchChannel,
-                                   @Qualifier("pull-request-event") MessageChannel pullRequestEventChannel,
-                                   @Qualifier("push-on-default-branch") MessageChannel pushOnNonDefaultBranchChannel,
+                                   @Qualifier("merge-request-event") MessageChannel pullRequestEventChannel,
+                                   @Qualifier("push-on-non-default-branch") MessageChannel pushOnNonDefaultBranchChannel,
                                    CiDroidProperties properties) {
         this.pushOnDefaultBranchChannel = pushOnDefaultBranchChannel;
         this.pushOnNonDefaultBranchChannel = pushOnNonDefaultBranchChannel;
@@ -139,7 +139,7 @@ public class GitLabWebHookController {
 
         Message rawPullRequestEventMessage = MessageBuilder.withPayload(rawPullRequestEvent.getBody()).build();
 
-        log.info("sending to consumers : PullRequestEvent for PR #{} on repo {}", gitLabMergeRequestHookEvent.getObjectKind(), gitLabMergeRequestHookEvent.getRepository().getName());
+        log.info("sending to consumers : MergeRequestEvent for PR #{} on repo {}", gitLabMergeRequestHookEvent.getObjectKind(), gitLabMergeRequestHookEvent.getRepository().getName());
 
         pullRequestEventChannel.send(rawPullRequestEventMessage);
 
