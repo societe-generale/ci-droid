@@ -12,6 +12,4 @@ public class GitLabMergeRequestEvent extends PullRequestEvent {
     @JsonProperty("object_kind.id")
     private int prNumber;
 
-    private GitLabProject project;
-
 }
