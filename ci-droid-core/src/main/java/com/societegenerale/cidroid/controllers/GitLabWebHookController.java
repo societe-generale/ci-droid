@@ -40,7 +40,7 @@ public class GitLabWebHookController {
     private boolean processNonDefaultBranchEvents;
 
     public GitLabWebHookController(@Qualifier("push-on-default-branch") MessageChannel pushOnDefaultBranchChannel,
-                                   @Qualifier("merge-request-event") MessageChannel pullRequestEventChannel,
+                                   @Qualifier("pull-request-event") MessageChannel pullRequestEventChannel,
                                    @Qualifier("push-on-non-default-branch") MessageChannel pushOnNonDefaultBranchChannel,
                                    CiDroidProperties properties) {
         this.pushOnDefaultBranchChannel = pushOnDefaultBranchChannel;

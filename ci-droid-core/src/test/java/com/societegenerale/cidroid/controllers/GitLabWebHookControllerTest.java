@@ -45,7 +45,7 @@ public class GitLabWebHookControllerTest {
     @MockBean(name = "push-on-default-branch")
     private MessageChannel pushOnDefaultBranchOutputChannel;
 
-    @MockBean(name = "merge-request-event")
+    @MockBean(name = "pull-request-event")
     private MessageChannel mergeRequestEventChannel;
 
     @Autowired
