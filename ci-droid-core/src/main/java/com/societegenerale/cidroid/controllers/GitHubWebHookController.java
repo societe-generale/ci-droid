@@ -20,13 +20,16 @@ public class GitHubWebHookController extends AbstractSourceControlWebHookControl
 
     public GitHubWebHookController(@Qualifier("push-on-default-branch") MessageChannel pushOnDefaultBranchChannel,
                                    @Qualifier("pull-request-event") MessageChannel pullRequestEventChannel,
+                                   @Qualifier("push-on-non-default-branch") MessageChannel pushOnNonDefaultBranchChannel,
                                    CiDroidProperties properties) {
         this.pushOnDefaultBranchChannel = pushOnDefaultBranchChannel;
         this.pullRequestEventChannel = pullRequestEventChannel;
-
+        this.pushOnNonDefaultBranchChannel = pushOnNonDefaultBranchChannel;
 
         repositoriesToExclude = properties.getExcluded();
         repositoriesToInclude = properties.getIncluded();
+
+        processNonDefaultBranchEvents = properties.isProcessNonDefaultBranchEvents();
     }
 
     @PostMapping(headers = "X-Github-Event=ping")

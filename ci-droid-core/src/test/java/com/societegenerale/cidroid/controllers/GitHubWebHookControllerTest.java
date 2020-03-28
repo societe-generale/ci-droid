@@ -36,6 +36,9 @@ class GitHubWebHookControllerTest {
     @MockBean(name = "push-on-default-branch")
     private MessageChannel pushOnDefaultBranchOutputChannel;
 
+    @MockBean(name = "push-on-non-default-branch")
+    private MessageChannel pushOnNonDefaultBranchOutputChannel;
+
     @MockBean(name = "pull-request-event")
     private MessageChannel pullRequestEventChannel;
 
