@@ -23,6 +23,8 @@ public abstract class AbstractSourceControlWebHookController {
 
     List<String> repositoriesToInclude;
 
+    boolean processNonDefaultBranchEvents;
+
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public abstract ResponseEntity<?> onPushEvent(HttpEntity<String> rawPushEvent);

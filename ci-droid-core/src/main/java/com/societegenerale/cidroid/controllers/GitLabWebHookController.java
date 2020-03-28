@@ -20,9 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @Profile("!gitHub")
 public class GitLabWebHookController extends AbstractSourceControlWebHookController{
 
-
-    private boolean processNonDefaultBranchEvents;
-
     public GitLabWebHookController(@Qualifier("push-on-default-branch") MessageChannel pushOnDefaultBranchChannel,
                                    @Qualifier("pull-request-event") MessageChannel pullRequestEventChannel,
                                    @Qualifier("push-on-non-default-branch") MessageChannel pushOnNonDefaultBranchChannel,
