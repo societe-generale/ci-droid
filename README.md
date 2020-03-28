@@ -20,6 +20,11 @@ If it is configured to process the events (there are some filters), it then forw
 
 Several instances of [CI-droid tasks-consumer](https://github.com/societe-generale/ci-droid-tasks-consumer) service are listening and processing the events on the other side of the channels.
 
+#### Presentation 
+
+Reading the documentation below is probably faster, but if you want to get an idea of the services CI-doird can provide, you can have a look at [this presentation given during Agile India 2019](https://www.youtube.com/watch?v=myBnYjYOPbo) 
+
+
 #### push on default branch
 
 The main actions that we can take care when there's a push on default branch deal with the impacts on the open pull requests for the repository :
