@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.util.StdConverter;
 import com.societegenerale.cidroid.model.PushEvent;
-import com.societegenerale.cidroid.model.Repository;
 import lombok.Data;
 
 @Data
@@ -14,10 +13,7 @@ public class GitLabPushEvent extends PushEvent {
 
     private String ref;
 
-    private Repository repository;
-
     private GitLabProject project;
-
 
     static class GitLabPushEventSanitizer extends StdConverter<GitLabPushEvent,GitLabPushEvent> {
 

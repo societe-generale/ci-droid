@@ -3,7 +3,6 @@ package com.societegenerale.cidroid.model.github;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.societegenerale.cidroid.model.PullRequestEvent;
-import com.societegenerale.cidroid.model.Repository;
 import lombok.Data;
 
 @Data
@@ -14,9 +13,5 @@ public class GitHubPullRequestEvent extends PullRequestEvent {
 
     @JsonProperty("number")
     private int prNumber;
-
-    private Repository repository;
-
-
 
 }

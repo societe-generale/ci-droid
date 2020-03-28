@@ -8,6 +8,6 @@ public abstract class SourceControlEvent {
 
     HttpEntity<String> rawMessage;
 
-    public abstract Repository getRepository();
+    Repository repository;
 
 }

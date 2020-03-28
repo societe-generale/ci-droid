@@ -3,7 +3,6 @@ package com.societegenerale.cidroid.model.gitlab;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.societegenerale.cidroid.model.PullRequestEvent;
-import com.societegenerale.cidroid.model.Repository;
 import lombok.Data;
 
 @Data
@@ -14,7 +13,5 @@ public class GitLabMergeRequestEvent extends PullRequestEvent {
     private int prNumber;
 
     private GitLabProject project;
-
-    private Repository repository;
 
 }
