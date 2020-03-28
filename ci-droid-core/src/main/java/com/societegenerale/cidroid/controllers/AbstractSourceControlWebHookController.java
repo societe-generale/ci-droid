@@ -2,6 +2,7 @@ package com.societegenerale.cidroid.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.societegenerale.cidroid.model.PullRequestEvent;
+import com.societegenerale.cidroid.model.PushEvent;
 import com.societegenerale.cidroid.model.SourceControlEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -50,7 +51,33 @@ public abstract class AbstractSourceControlWebHookController {
 
      }
 
+    protected ResponseEntity<?> processPushEvent(PushEvent pushEvent) {
+        if (shouldNotProcess(pushEvent)) {
+            return ResponseEntity.accepted().build();
+        }
 
+        String repoDefaultBranch = pushEvent.getRepository().getDefaultBranch();
+        String eventRef = pushEvent.getRef();
+
+        Message rawPushEventMessage = MessageBuilder.withPayload(pushEvent.getRawMessage().getBody()).build();
+
+        Boolean endsWith = eventRef.endsWith(repoDefaultBranch);
+        if (eventRef.endsWith(repoDefaultBranch)) {
+            log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getFullName());
+
+            pushOnDefaultBranchChannel.send(rawPushEventMessage);
+        }
+        else if (processNonDefaultBranchEvents) {
+            log.info("sending to consumers : Pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
+
+            pushOnNonDefaultBranchChannel.send(rawPushEventMessage);
+        }
+        else{
+            log.info("Not sending pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getFullName());
+        }
+
+        return ResponseEntity.accepted().build();
+    }
 
     <T> T mapTo(Class<T> targetClass, HttpEntity<String> rawEvent) {
 

@@ -11,9 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -51,30 +49,9 @@ public class GitLabWebHookController extends AbstractSourceControlWebHookControl
 
         //Mapping the event manually, because we need to forward the original message at the end
         PushEvent pushEvent = mapTo(GitLabPushEvent.class, rawPushEvent);
+        pushEvent.setRawMessage(rawPushEvent);
 
-        if (shouldNotProcess(pushEvent)) {
-            return ResponseEntity.accepted().build();
-        }
-
-        String repoDefaultBranch = pushEvent.getRepository().getDefaultBranch();
-        String eventRef = pushEvent.getRef();
-
-        Message rawPushEventMessage = MessageBuilder.withPayload(rawPushEvent.getBody()).build();
-
-        if (eventRef.endsWith(repoDefaultBranch)) {
-            log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
-
-            pushOnDefaultBranchChannel.send(rawPushEventMessage);
-        } else if (processNonDefaultBranchEvents) {
-            log.info("sending to consumers : Pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
-
-            pushOnNonDefaultBranchChannel.send(rawPushEventMessage);
-        }
-        else{
-            log.info("Not sending pushevent on NON default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getName());
-        }
-
-        return ResponseEntity.accepted().build();
+        return processPushEvent(pushEvent);
     }
 
     @PostMapping(headers = "X-Gitlab-Event=Merge Request Hook")
