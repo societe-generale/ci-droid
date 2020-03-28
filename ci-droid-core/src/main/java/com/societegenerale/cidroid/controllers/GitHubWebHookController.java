@@ -1,8 +1,10 @@
 package com.societegenerale.cidroid.controllers;
 
 import com.societegenerale.cidroid.CiDroidProperties;
-import com.societegenerale.cidroid.model.github.PullRequestEvent;
-import com.societegenerale.cidroid.model.github.PushEvent;
+import com.societegenerale.cidroid.model.PullRequestEvent;
+import com.societegenerale.cidroid.model.PushEvent;
+import com.societegenerale.cidroid.model.github.GitHubPullRequestEvent;
+import com.societegenerale.cidroid.model.github.GitHubPushEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
@@ -42,7 +44,7 @@ public class GitHubWebHookController extends AbstractSourceControlWebHookControl
     public ResponseEntity<?> onPushEvent(HttpEntity<String> rawPushEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
-        PushEvent pushEvent = mapTo(PushEvent.class, rawPushEvent);
+        PushEvent pushEvent = mapTo(GitHubPushEvent.class, rawPushEvent);
 
         if (shouldNotProcess(pushEvent)) {
             return ResponseEntity.accepted().build();
@@ -73,21 +75,10 @@ public class GitHubWebHookController extends AbstractSourceControlWebHookControl
     public ResponseEntity<?> onPullRequestEvent(HttpEntity<String> rawPullRequestEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
-        PullRequestEvent pullRequestEvent = mapTo(PullRequestEvent.class, rawPullRequestEvent);
+        PullRequestEvent pullRequestEvent = mapTo(GitHubPullRequestEvent.class, rawPullRequestEvent);
+        pullRequestEvent.setRawMessage(rawPullRequestEvent);
 
-        if (shouldNotProcess(pullRequestEvent)) {
-            return ResponseEntity.accepted().build();
-        }
-
-        Message rawPullRequestEventMessage = MessageBuilder.withPayload(rawPullRequestEvent.getBody()).build();
-
-        log.info("sending to consumers : PullRequestEvent for PR #{} on repo {}", pullRequestEvent.getPrNumber(), pullRequestEvent.getRepository().getFullName());
-
-        pullRequestEventChannel.send(rawPullRequestEventMessage);
-
-        return ResponseEntity.accepted().build();
+        return processPullRequestEvent(pullRequestEvent);
     }
-
-
 
 }

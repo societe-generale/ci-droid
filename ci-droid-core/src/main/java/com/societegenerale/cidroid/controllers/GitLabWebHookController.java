@@ -1,7 +1,9 @@
 package com.societegenerale.cidroid.controllers;
 
 import com.societegenerale.cidroid.CiDroidProperties;
-import com.societegenerale.cidroid.model.gitlab.GitLabMergeRequestHookEvent;
+import com.societegenerale.cidroid.model.PullRequestEvent;
+import com.societegenerale.cidroid.model.PushEvent;
+import com.societegenerale.cidroid.model.gitlab.GitLabMergeRequestEvent;
 import com.societegenerale.cidroid.model.gitlab.GitLabPushEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -48,13 +50,13 @@ public class GitLabWebHookController extends AbstractSourceControlWebHookControl
     public ResponseEntity<?> onPushEvent(HttpEntity<String> rawPushEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
-        GitLabPushEvent pushEvent = mapTo(GitLabPushEvent.class, rawPushEvent);
+        PushEvent pushEvent = mapTo(GitLabPushEvent.class, rawPushEvent);
 
         if (shouldNotProcess(pushEvent)) {
             return ResponseEntity.accepted().build();
         }
 
-        String repoDefaultBranch = pushEvent.getProject().getDefaultBranch();
+        String repoDefaultBranch = pushEvent.getRepository().getDefaultBranch();
         String eventRef = pushEvent.getRef();
 
         Message rawPushEventMessage = MessageBuilder.withPayload(rawPushEvent.getBody()).build();
@@ -81,19 +83,12 @@ public class GitLabWebHookController extends AbstractSourceControlWebHookControl
     public ResponseEntity<?> onPullRequestEvent(HttpEntity<String> rawPullRequestEvent){
 
         //Mapping the event manually, because we need to forward the original message at the end
-        GitLabMergeRequestHookEvent gitLabMergeRequestHookEvent = mapTo(GitLabMergeRequestHookEvent.class, rawPullRequestEvent);
+        PullRequestEvent gitLabMergeRequestHookEvent = mapTo(GitLabMergeRequestEvent.class, rawPullRequestEvent);
+        gitLabMergeRequestHookEvent.setRawMessage(rawPullRequestEvent);
 
-        if (shouldNotProcess(gitLabMergeRequestHookEvent)) {
-            return ResponseEntity.accepted().build();
-        }
+        return processPullRequestEvent(gitLabMergeRequestHookEvent);
 
-        Message rawPullRequestEventMessage = MessageBuilder.withPayload(rawPullRequestEvent.getBody()).build();
-
-        log.info("sending to consumers : MergeRequestEvent for PR #{} on repo {}", gitLabMergeRequestHookEvent.getObjectKind(), gitLabMergeRequestHookEvent.getRepository().getName());
-
-        pullRequestEventChannel.send(rawPullRequestEventMessage);
-
-        return ResponseEntity.accepted().build();
     }
+
 
 }

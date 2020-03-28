@@ -1,6 +1,13 @@
 package com.societegenerale.cidroid.model;
 
-public interface SourceControlEvent {
+import lombok.Data;
+import org.springframework.http.HttpEntity;
 
-    Repository getRepository();
+@Data
+public abstract class SourceControlEvent {
+
+    HttpEntity<String> rawMessage;
+
+    public abstract Repository getRepository();
+
 }

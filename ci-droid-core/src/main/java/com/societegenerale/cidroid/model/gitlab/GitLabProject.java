@@ -8,7 +8,7 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GitLabProject {
 
-    @JsonProperty("url")
+    @JsonProperty("git_http_url")
     private String url;
 
     @JsonProperty("name")

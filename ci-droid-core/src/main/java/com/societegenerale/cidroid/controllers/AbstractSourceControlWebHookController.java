@@ -1,11 +1,14 @@
 package com.societegenerale.cidroid.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.societegenerale.cidroid.model.PullRequestEvent;
 import com.societegenerale.cidroid.model.SourceControlEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,11 +34,30 @@ public abstract class AbstractSourceControlWebHookController {
 
     public abstract ResponseEntity<?> onPullRequestEvent(HttpEntity<String> rawPullRequestEvent);
 
+     ResponseEntity<?> processPullRequestEvent(PullRequestEvent pullRequestEvent) {
+
+         if (shouldNotProcess(pullRequestEvent)) {
+             return ResponseEntity.accepted().build();
+         }
+
+         Message rawPullRequestEventMessage = MessageBuilder.withPayload(pullRequestEvent.getRawMessage().getBody()).build();
+
+         log.info("sending to consumers : MergeRequestEvent for PR #{} on repo {}", pullRequestEvent.getPrNumber(), pullRequestEvent.getRepository().getName());
+
+         pullRequestEventChannel.send(rawPullRequestEventMessage);
+
+         return ResponseEntity.accepted().build();
+
+     }
+
+
 
     <T> T mapTo(Class<T> targetClass, HttpEntity<String> rawEvent) {
 
         try {
-            return objectMapper.readValue(rawEvent.getBody(), targetClass);
+            T sourceControlEvent = objectMapper.readValue(rawEvent.getBody(), targetClass);
+
+            return sourceControlEvent;
         } catch (IOException e) {
             log.warn("unable to read the incoming {} {}", targetClass.getName(), rawEvent, e);
         }
@@ -43,22 +65,25 @@ public abstract class AbstractSourceControlWebHookController {
         return null;
     }
 
-    boolean shouldNotProcess(SourceControlEvent gitHubEvent) {
+    boolean shouldNotProcess(SourceControlEvent sourceControlEvent) {
 
-        if (gitHubEvent == null) {
+        if (sourceControlEvent == null) {
             return true;
         }
 
-        if (!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(gitHubEvent.getRepository().getName())) {
-            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel", gitHubEvent.getRepository().getName());
+        if (!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(sourceControlEvent.getRepository().getName())) {
+            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel", sourceControlEvent.getRepository().getName());
             return true;
         }
 
-        if (!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(gitHubEvent.getRepository().getName())) {
-            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel", gitHubEvent.getRepository().getName());
+        if (!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(sourceControlEvent.getRepository().getName())) {
+            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel", sourceControlEvent.getRepository().getName());
             return true;
         }
 
         return false;
     }
+
+
+
 }

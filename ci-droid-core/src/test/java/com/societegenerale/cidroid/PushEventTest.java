@@ -1,7 +1,7 @@
 package com.societegenerale.cidroid;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.societegenerale.cidroid.model.github.PushEvent;
+import com.societegenerale.cidroid.model.github.GitHubPushEvent;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ class PushEventTest {
 
         String pushEventAsString = TestUtils.readFromInputStream(getClass().getResourceAsStream("/pushEvent.json"));
 
-        PushEvent pushEvent = objectMapper.readValue(pushEventAsString, PushEvent.class);
+        GitHubPushEvent pushEvent = objectMapper.readValue(pushEventAsString, GitHubPushEvent.class);
 
         assertThat(pushEvent).isNotNull();
 
