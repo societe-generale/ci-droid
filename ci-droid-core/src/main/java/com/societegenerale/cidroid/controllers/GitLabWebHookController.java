@@ -1,8 +1,6 @@
 package com.societegenerale.cidroid.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.societegenerale.cidroid.CiDroidProperties;
-import com.societegenerale.cidroid.model.SourceControlEvent;
 import com.societegenerale.cidroid.model.gitlab.GitLabMergeRequestHookEvent;
 import com.societegenerale.cidroid.model.gitlab.GitLabPushEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -16,26 +14,12 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.List;
-
 @Slf4j
 @RequestMapping(value = "/cidroid-webhook")
 @RestController
 @Profile("!gitHub")
-public class GitLabWebHookController {
+public class GitLabWebHookController extends AbstractSourceControlWebHookController{
 
-    private MessageChannel pushOnDefaultBranchChannel;
-
-    private MessageChannel pushOnNonDefaultBranchChannel;
-
-    private MessageChannel pullRequestEventChannel;
-
-    private List<String> repositoriesToExclude;
-
-    private List<String> repositoriesToInclude;
-
-    private ObjectMapper objectMapper = new ObjectMapper();
 
     private boolean processNonDefaultBranchEvents;
 
@@ -64,7 +48,7 @@ public class GitLabWebHookController {
     @PostMapping(headers = "X-Gitlab-Event=Push Hook")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> onGitHubPushEvent(HttpEntity<String> rawPushEvent) {
+    public ResponseEntity<?> onPushEvent(HttpEntity<String> rawPushEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
         GitLabPushEvent pushEvent = mapTo(GitLabPushEvent.class, rawPushEvent);
@@ -94,41 +78,10 @@ public class GitLabWebHookController {
         return ResponseEntity.accepted().build();
     }
 
-    private <T> T mapTo(Class<T> targetClass, HttpEntity<String> rawEvent) {
-
-        try {
-            return objectMapper.readValue(rawEvent.getBody(), targetClass);
-        } catch (IOException e) {
-            log.warn("unable to read the incoming {} {}", targetClass.getName(), rawEvent, e);
-        }
-
-        return null;
-    }
-
-    private boolean shouldNotProcess(SourceControlEvent gitLabEvent) {
-
-        if (gitLabEvent == null) {
-            return true;
-        }
-
-        if (!repositoriesToExclude.isEmpty() && repositoriesToExclude.contains(gitLabEvent.getRepository().getName())) {
-            log.debug("received an event for repo {}, which is configured as excluded -> not forwarding it to any channel", gitLabEvent.getRepository().getName());
-            return true;
-        }
-
-        if (!repositoriesToInclude.isEmpty() && !repositoriesToInclude.contains(gitLabEvent.getRepository().getName())) {
-            log.debug("received an event for repo {}, which is not configured as included -> not forwarding it to any channel", gitLabEvent.getRepository().getName());
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
     @PostMapping(headers = "X-Gitlab-Event=Merge Request Hook")
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> onGitHubPullRequestEvent(HttpEntity<String> rawPullRequestEvent){
+    public ResponseEntity<?> onPullRequestEvent(HttpEntity<String> rawPullRequestEvent){
 
         //Mapping the event manually, because we need to forward the original message at the end
         GitLabMergeRequestHookEvent gitLabMergeRequestHookEvent = mapTo(GitLabMergeRequestHookEvent.class, rawPullRequestEvent);
