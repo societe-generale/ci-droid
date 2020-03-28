@@ -1,4 +1,4 @@
-package com.societegenerale.cidroid.model.github;
+package com.societegenerale.cidroid.model.gitlab;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,16 +6,9 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Repository {
-
-    private String url;
-
-    private String name;
+public class GitLabProject {
 
     @JsonProperty("default_branch")
     private String defaultBranch;
-
-    @JsonProperty("full_name")
-    private String fullName;
 
 }

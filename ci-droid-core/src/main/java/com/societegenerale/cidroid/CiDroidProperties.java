@@ -21,6 +21,13 @@ public class CiDroidProperties {
 
     private List<String> included;
 
+    private boolean processNonDefaultBranchEvents = false;
+
+    public CiDroidProperties(List<String> excluded, List<String> included) {
+        this.excluded = excluded;
+        this.included = included;
+    }
+
     @PostConstruct
     public void validate() {
 

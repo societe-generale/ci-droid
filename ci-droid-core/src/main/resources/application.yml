@@ -15,6 +15,9 @@ spring:
         push-on-default-branch:
           destination: ${user.name}.ci-droid.github-push-events.default-branch.v1
           content-type: application/json
+        push-on-non-default-branch:
+          destination: ${user.name}.ci-droid.github-push-events.non-default-branch.v1
+          content-type: application/json
         pull-request-event:
           destination: ${user.name}.ci-droid.github-pull-request-events.v1
           content-type: application/json

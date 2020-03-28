@@ -8,6 +8,8 @@ public interface OutgoingEventsToProcess {
     @Output("push-on-default-branch")
     MessageChannel pushOnDefaultBranch();
 
+    @Output("push-on-non-default-branch")
+    MessageChannel pushOnNonDefaultBranch();
 
     @Output("pull-request-event")
     MessageChannel pullRequestEvent();

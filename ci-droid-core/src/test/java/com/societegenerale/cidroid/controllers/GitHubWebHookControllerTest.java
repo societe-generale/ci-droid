@@ -26,15 +26,18 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(WebHookController.class)
+@WebMvcTest(GitHubWebHookController.class)
 @Import(AdditionalTestConfig.class)
-class WebHookControllerTest {
+class GitHubWebHookControllerTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean(name = "push-on-default-branch")
     private MessageChannel pushOnDefaultBranchOutputChannel;
+
+    @MockBean(name = "push-on-non-default-branch")
+    private MessageChannel pushOnNonDefaultBranchOutputChannel;
 
     @MockBean(name = "pull-request-event")
     private MessageChannel pullRequestEventChannel;
