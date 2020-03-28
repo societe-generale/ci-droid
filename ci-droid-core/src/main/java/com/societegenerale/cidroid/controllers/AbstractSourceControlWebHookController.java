@@ -61,7 +61,6 @@ public abstract class AbstractSourceControlWebHookController {
 
         Message rawPushEventMessage = MessageBuilder.withPayload(pushEvent.getRawMessage().getBody()).build();
 
-        Boolean endsWith = eventRef.endsWith(repoDefaultBranch);
         if (eventRef.endsWith(repoDefaultBranch)) {
             log.info("sending to consumers : Pushevent on default branch {} on repo {}", repoDefaultBranch, pushEvent.getRepository().getFullName());
 
