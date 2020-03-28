@@ -1,8 +1,10 @@
 package com.societegenerale.cidroid.model;
 
+import lombok.Data;
 
+@Data
 public abstract class PushEvent extends SourceControlEvent {
 
-    public abstract String getRef();
+    private String ref;
 
 }

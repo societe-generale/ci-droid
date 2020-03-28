@@ -8,6 +8,4 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GitHubPushEvent extends PushEvent {
 
-    private String ref;
-
 }

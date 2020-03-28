@@ -11,8 +11,6 @@ import lombok.Data;
 @JsonDeserialize(converter = GitLabPushEvent.GitLabPushEventSanitizer.class)
 public class GitLabPushEvent extends PushEvent {
 
-    private String ref;
-
     private GitLabProject project;
 
     static class GitLabPushEventSanitizer extends StdConverter<GitLabPushEvent,GitLabPushEvent> {
