@@ -1,14 +1,14 @@
-package com.societegenerale.cidroid;
+package com.societegenerale.cidroid.model.github;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.societegenerale.cidroid.model.github.GitHubPushEvent;
+import com.societegenerale.cidroid.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PushEventTest {
+class GitHubPushEventTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -22,7 +22,6 @@ class PushEventTest {
         assertThat(pushEvent).isNotNull();
 
         assertThat(pushEvent.getRepository()).isNotNull();
-
     }
 
 }
