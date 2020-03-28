@@ -44,9 +44,7 @@ public class GitHubWebHookController extends AbstractSourceControlWebHookControl
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> onPushEvent(HttpEntity<String> rawPushEvent) {
 
-        //Mapping the event manually, because we need to forward the original message at the end
-        PushEvent pushEvent = mapTo(GitHubPushEvent.class, rawPushEvent);
-        pushEvent.setRawMessage(rawPushEvent);
+        PushEvent pushEvent = mapToPushEvent(GitHubPushEvent.class, rawPushEvent);
 
         return processPushEvent(pushEvent);
     }
@@ -57,8 +55,7 @@ public class GitHubWebHookController extends AbstractSourceControlWebHookControl
     public ResponseEntity<?> onPullRequestEvent(HttpEntity<String> rawPullRequestEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
-        PullRequestEvent pullRequestEvent = mapTo(GitHubPullRequestEvent.class, rawPullRequestEvent);
-        pullRequestEvent.setRawMessage(rawPullRequestEvent);
+        PullRequestEvent pullRequestEvent = mapToPullRequestEvent(GitHubPullRequestEvent.class, rawPullRequestEvent);
 
         return processPullRequestEvent(pullRequestEvent);
     }

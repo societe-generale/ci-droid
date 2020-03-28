@@ -78,18 +78,36 @@ public abstract class AbstractSourceControlWebHookController {
         return ResponseEntity.accepted().build();
     }
 
-    <T> T mapTo(Class<T> targetClass, HttpEntity<String> rawEvent) {
+    <T> PullRequestEvent mapToPullRequestEvent(Class<? extends PullRequestEvent> targetClass, HttpEntity<String> rawEvent) {
 
         try {
-            T sourceControlEvent = objectMapper.readValue(rawEvent.getBody(), targetClass);
+            PullRequestEvent pullRequestEvent = objectMapper.readValue(rawEvent.getBody(), targetClass);
+            pullRequestEvent.setRawMessage(rawEvent);
 
-            return sourceControlEvent;
+            return pullRequestEvent;
         } catch (IOException e) {
             log.warn("unable to read the incoming {} {}", targetClass.getName(), rawEvent, e);
         }
 
         return null;
     }
+
+    //TODO find a way to refactor the 2 toMapX methods ?
+    <T> PushEvent mapToPushEvent(Class<? extends PushEvent> targetClass, HttpEntity<String> rawEvent) {
+
+        try {
+            PushEvent pushEvent = objectMapper.readValue(rawEvent.getBody(), targetClass);
+            pushEvent.setRawMessage(rawEvent);
+
+            return pushEvent;
+        } catch (IOException e) {
+            log.warn("unable to read the incoming {} {}", targetClass.getName(), rawEvent, e);
+        }
+
+        return null;
+    }
+
+
 
     boolean shouldNotProcess(SourceControlEvent sourceControlEvent) {
 

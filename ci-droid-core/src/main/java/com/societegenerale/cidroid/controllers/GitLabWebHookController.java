@@ -48,8 +48,7 @@ public class GitLabWebHookController extends AbstractSourceControlWebHookControl
     public ResponseEntity<?> onPushEvent(HttpEntity<String> rawPushEvent) {
 
         //Mapping the event manually, because we need to forward the original message at the end
-        PushEvent pushEvent = mapTo(GitLabPushEvent.class, rawPushEvent);
-        pushEvent.setRawMessage(rawPushEvent);
+        PushEvent pushEvent = mapToPushEvent(GitLabPushEvent.class, rawPushEvent);
 
         return processPushEvent(pushEvent);
     }
@@ -60,8 +59,7 @@ public class GitLabWebHookController extends AbstractSourceControlWebHookControl
     public ResponseEntity<?> onPullRequestEvent(HttpEntity<String> rawPullRequestEvent){
 
         //Mapping the event manually, because we need to forward the original message at the end
-        PullRequestEvent gitLabMergeRequestHookEvent = mapTo(GitLabMergeRequestEvent.class, rawPullRequestEvent);
-        gitLabMergeRequestHookEvent.setRawMessage(rawPullRequestEvent);
+        PullRequestEvent gitLabMergeRequestHookEvent = mapToPullRequestEvent(GitLabMergeRequestEvent.class, rawPullRequestEvent);
 
         return processPullRequestEvent(gitLabMergeRequestHookEvent);
 
