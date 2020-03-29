@@ -4,6 +4,12 @@
 
 The dev team best buddy, taking care of all the housekeeping for your repositories and giving tips to developers !
 
+
+### Presentation 
+
+Reading the documentation below is probably faster, but if you want to get an idea of the services CI-doird can provide, you can have a look at [this presentation given during Agile India 2019](https://www.youtube.com/watch?v=myBnYjYOPbo) 
+
+
 ### Overall architecture
 
 ![Overall architecture](./docs/overallArchitecture.png)
@@ -19,10 +25,6 @@ If it is configured to process the events (there are some filters), it then forw
 - on another branch than the default branch - typically for a PR
 
 Several instances of [CI-droid tasks-consumer](https://github.com/societe-generale/ci-droid-tasks-consumer) service are listening and processing the events on the other side of the channels.
-
-#### Presentation 
-
-Reading the documentation below is probably faster, but if you want to get an idea of the services CI-doird can provide, you can have a look at [this presentation given during Agile India 2019](https://www.youtube.com/watch?v=myBnYjYOPbo) 
 
 
 #### push on default branch
