@@ -12,6 +12,21 @@
 
 ### Fixed
 
+## [1.2.0] - 2020-04-04
+
+### Added
+
+- GitLab compatibility
+
+### Changed
+
+- upgraded to Spring Boot 2.2.6
+- migrated tests to Junit 5
+
+### Fixed
+
+- upgraded some UI dependencies to fix vulnerabilities
+
 ## [1.1.1] - 2019-03-14
 
 ### Fixed
