@@ -7,7 +7,7 @@ The dev team best buddy, taking care of all the housekeeping for your repositori
 
 ### Presentation 
 
-Reading the documentation below is probably faster, but if you want to get an idea of the services CI-doird can provide, you can have a look at [this presentation given during Agile India 2019](https://www.youtube.com/watch?v=myBnYjYOPbo) 
+Reading the documentation below is probably faster, but if you want to get an idea of the services CI-droid can provide, you can have a look at [this presentation given during Agile India 2019](https://www.youtube.com/watch?v=myBnYjYOPbo) 
 
 
 ### Overall architecture
