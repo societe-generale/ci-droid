@@ -351,6 +351,7 @@ describe('FormComponent', () => {
     const bulkRequest = {
       gitHubOauthToken: '#ABCD1234',
       email: 'dileep.jami@gmail.com',
+      gitLogin: 'testUser',
       commitMessage: 'test commit',
       updateAction: {
         '@class': 'com.societegenerale.cidroid.extensions.actionToReplicate.OverwriteStaticFileAction'
@@ -366,6 +367,8 @@ describe('FormComponent', () => {
     function initializeForm() {
       const tokenCtrl = component.ciDroidForm.get('gitHubCredentials.gitHubOauthToken');
       tokenCtrl.setValue(bulkRequest.gitHubOauthToken);
+      const userName = component.ciDroidForm.get('userLogin.gitLogin');
+      userName.setValue(bulkRequest.gitLogin);
       const emailCtrl = component.ciDroidForm.get('email');
       emailCtrl.setValue(bulkRequest.email);
       const pullRequestTitleCtrl = component.ciDroidForm.get('githubInteraction.pullRequestTitle');
@@ -426,6 +429,7 @@ describe('FormComponent', () => {
       const updateRequest = component.createUpdateRequest();
       expect(updateRequest.email).toBe(bulkRequest.email);
       expect(updateRequest.gitHubOauthToken).toBe(bulkRequest.gitHubOauthToken);
+      expect(updateRequest.gitLogin).toBe(bulkRequest.gitLogin);
       expect(updateRequest.commitMessage).toBe(bulkRequest.commitMessage);
       expect(updateRequest.gitHubInteractionType).toEqual(bulkRequest.gitHubInteractionType);
     });

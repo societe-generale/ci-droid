@@ -95,6 +95,7 @@ class CiDroidActionsControllerTest {
 
         BulkUpdateCommand bulkUpdateCommand = baseBatchUpdateCommandBuilder.gitHubInteractionType(new DirectPushGitHubInteraction())
                 .commitMessage(COMMIT_MESSAGE)
+                .gitLogin("testLogin")
                 .resourcesToUpdate(resourcesToUpdate)
                 .updateAction(replaceAction)
                 .build();

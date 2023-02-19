@@ -60,6 +60,9 @@ export class FormComponent implements OnInit {
       gitHubCredentials: this.formBuilder.group({
         gitHubOauthToken: ['', [Validators.required]]
       }),
+      userLogin: this.formBuilder.group({
+        gitLogin: ['', [Validators.required]]
+      }),
       email: ['', [Validators.required, Validators.email]],
       action: this.formBuilder.group({
         default: ['', [Validators.required]]
@@ -88,6 +91,10 @@ export class FormComponent implements OnInit {
 
   get token() {
     return this.ciDroidForm.get('gitHubCredentials.gitHubOauthToken') as FormGroup;
+  }
+
+  get userName() {
+    return this.ciDroidForm.get('userLogin.gitLogin') as FormGroup;
   }
 
   get email() {
@@ -212,6 +219,7 @@ export class FormComponent implements OnInit {
   createUpdateRequest(): BulkUpdateRequest {
     return {
       gitHubOauthToken: this.token.value,
+      gitLogin: this.userName.value,
       email: this.email.value,
       commitMessage: this.commitMessage.value,
       updateAction: this.updatedActionFields,

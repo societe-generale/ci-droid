@@ -93,6 +93,25 @@
                   <button type="button" mat-raised-button color="primary" matStepperNext>Next</button>
                 </div>
               </mat-step>
+
+              <!-- Git Login -->
+              <mat-step formGroupName="userLogin" [stepControl]="ciDroidForm.get('userLogin')">
+                <ng-template matStepLabel>
+                  Git Login
+                  <span *ngIf="stepper.selectedIndex !== 0 && ciDroidForm.get('userLogin').valid" class="mat-step-label-value">
+                    <mat-icon>visibility_off</mat-icon>
+                  </span>
+                </ng-template>
+                <mat-form-field>
+                  <input matInput placeholder="GitHub Token" formControlName="gitLogin" [type]="hide ? 'text' : 'password'" />
+                  <mat-icon matSuffix (click)="hide = !hide"> {{ hide ? 'visibility' : 'visibility_off' }}</mat-icon>
+                  <mat-error *ngIf="token.hasError('required')"> Git User name is <strong>required</strong></mat-error>
+                </mat-form-field>
+                <div class="btn-action">
+                  <button type="button" mat-raised-button color="primary" matStepperNext>Next</button>
+                </div>
+              </mat-step>
+
               <!-- Email -->
               <mat-step [stepControl]="email">
                 <ng-template matStepLabel>
