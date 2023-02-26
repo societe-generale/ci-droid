@@ -36,6 +36,7 @@ declare namespace shared.types {
 
   export interface BulkUpdateRequest {
     gitHubOauthToken: string;
+    gitLogin: string;
     email: string;
     commitMessage: string;
     updateAction: ActionToReplicate;

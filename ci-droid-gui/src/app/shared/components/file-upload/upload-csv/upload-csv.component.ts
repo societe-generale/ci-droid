@@ -48,13 +48,13 @@ export class UploadCsvComponent {
   }
 
   CSV2JSON(csv) {
-    const displayedColumns = ['select', 'repoFullName', 'filePathOnRepo', 'branchName'];
+    const displayedColumns = ['select', 'repoFullName', 'filePathOnRepo', 'branchName', 'placeHolderValue'];
     const rows = csv.split('\r\n');
     const result = [];
     let headers = rows[0].split(SEMICOLON);
-    const position = JSON.stringify(displayedColumns.slice(1, 4)) === JSON.stringify(headers) ? 1 : 0;
+    const position = JSON.stringify(displayedColumns.slice(1, 5)) === JSON.stringify(headers) ? 1 : 0;
     if (position === 0) {
-      headers = displayedColumns.slice(1, 4);
+      headers = displayedColumns.slice(1, 5);
     }
     rows.slice(position, rows.length).forEach(row => {
       const obj = {};

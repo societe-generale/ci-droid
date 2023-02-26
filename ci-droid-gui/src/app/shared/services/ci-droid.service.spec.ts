@@ -70,6 +70,7 @@ describe('CiDroidService', () => {
   it('should be able to send bulk updates to ci-droid', () => {
     const bulkUpdateRequest: BulkUpdateRequest = {
       gitHubOauthToken: 'token',
+      gitLogin: 'testUser',
       email: 'paul58914080@gmail.com',
       commitMessage: 'testing my commit',
       updateAction: null,
